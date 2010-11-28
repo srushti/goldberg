@@ -1,0 +1,6 @@
+.DS_Store
+.bundle
+log/*
+tmp/*
+.rvmrc
+tags

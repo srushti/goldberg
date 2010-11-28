@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+load "#{File.dirname(__FILE__)}/lib/goldberg/init.rb"
+Goldberg::Init.new.run
+
