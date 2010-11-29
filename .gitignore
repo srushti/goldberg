@@ -4,3 +4,4 @@ log/*
 tmp/*
 tags
 *.gemspec
+projects/*

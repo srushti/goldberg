@@ -1,9 +1,11 @@
+require File.join(File.dirname(__FILE__), 'job')
+
 class Init
   def run
-    puts "You tried to run with #{ARGV}"
+    send(ARGV[0])
   end
 
   def add
-    Job.add(:url => ARGV[0], :name => ARGV[1])
+    Job.add(:url => ARGV[1], :name => ARGV[2])
   end
 end
