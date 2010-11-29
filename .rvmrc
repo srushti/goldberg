@@ -1,0 +1,7 @@
+
+if [[ -d "${rvm_path:-$HOME/.rvm}/environments" \
+  && -s "${rvm_path:-$HOME/.rvm}/environments/ruby-1.9.2-p0" ]] ; then
+  \. "${rvm_path:-$HOME/.rvm}/environments/ruby-1.9.2-p0"
+else
+  rvm --create  "ruby-1.9.2-p0"
+fi
