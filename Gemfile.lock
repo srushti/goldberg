@@ -2,8 +2,27 @@ GEM
   remote: http://rubygems.org/
   specs:
     activesupport (3.0.3)
+    archive-tar-minitar (0.5.2)
+    columnize (0.3.2)
     git (1.2.5)
+    jeweler (1.5.1)
+      bundler (~> 1.0.0)
+      git (>= 1.2.5)
+      rake
+    linecache19 (0.5.11)
+      ruby_core_source (>= 0.1.4)
     rack (1.2.1)
+    rake (0.8.7)
+    ruby-debug-base19 (0.11.24)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.4)
+      archive-tar-minitar (>= 0.5.2)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
@@ -21,5 +40,7 @@ PLATFORMS
 
 DEPENDENCIES
   git
+  jeweler
+  ruby-debug19
   sinatra (= 1.1.0)
   sinatra_more

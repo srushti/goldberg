@@ -6,4 +6,5 @@ gem 'git'
 
 group :development do
   gem 'jeweler'
+  gem 'ruby-debug19'
 end
