@@ -7,4 +7,12 @@ gem 'git'
 group :development do
   gem 'jeweler'
   gem 'ruby-debug19'
+  gem 'bundler'
 end
+
+group :test, :development do
+  gem 'rspec'
+  gem 'rcov'
+  gem 'rack-test'
+end
+

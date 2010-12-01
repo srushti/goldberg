@@ -1,21 +1,39 @@
-require 'rubygems'
+require 'rake'
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "goldberg"
-    gem.email = "srushti@c42.in"
-    gem.homepage = "http://c42.in/open_source"
-    gem.authors = "Srushti Ambekallu"
-    gem.files = Dir.glob("{bin/**/*,lib/**/*.rb}")
-    # gem.test_files = FileList["test/*.rb"]
-    gem.extra_rdoc_files = ["README"]
+require 'jeweler'
+Jeweler::Tasks.new do |gem|
+  gem.name = "goldberg"
+  gem.email = "srushti@c42.in"
+  gem.homepage = "http://c42.in/open_source"
+  gem.authors = "Srushti Ambekallu"
+  gem.files = Dir.glob("{bin/**/*,lib/**/*.rb}")
+  # gem.test_files = FileList["test/*.rb"]
+  gem.extra_rdoc_files = ["README"]
+end
+Jeweler::RubygemsDotOrgTasks.new
 
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = "spec/**/*_spec.rb"
+end
 
-  Jeweler::RubyforgeTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
+require 'rcov/rcovtask'
+Rcov::RcovTask.new do |spec|
+  spec.libs << 'spec'
+  spec.pattern = 'spec/**/spec*.rb'
+  spec.verbose = true
+end
+
+task :default => :spec
+
+require 'rake/rdoctask'
+Rake::RDocTask.new do |rdoc|
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title = "something-new #{version}"
+  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
