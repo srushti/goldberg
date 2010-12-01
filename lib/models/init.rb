@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'job')
+require File.join(File.dirname(__FILE__), 'project')
 
 class Init
   def run
@@ -6,6 +6,6 @@ class Init
   end
 
   def add
-    Job.add(:url => ARGV[1], :name => ARGV[2])
+    Project.add(:url => ARGV[1], :name => ARGV[2])
   end
 end
