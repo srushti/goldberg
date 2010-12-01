@@ -2,10 +2,19 @@ require File.join(File.dirname(__FILE__), 'project')
 
 class Init
   def run
-    send(ARGV[0])
+    send(CommandLine.argv[0])
   end
 
   def add
-    Project.add(:url => ARGV[1], :name => ARGV[2])
+    Project.add(:url => CommandLine.argv[1], :name => CommandLine.argv[2])
   end
 end
+
+module CommandLine
+  class << self
+    def argv
+      ARGV
+    end
+  end
+end
+
