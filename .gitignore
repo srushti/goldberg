@@ -1,7 +1,10 @@
+.#*
 .DS_Store
 .bundle
+*.swp
+*.tmproj
+*.gem
 log/*
 tmp/*
 tags
-*.gemspec
 projects/*

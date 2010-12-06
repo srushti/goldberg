@@ -1,17 +1,5 @@
 require 'rake'
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  gem.name = "goldberg"
-  gem.email = "srushti@c42.in"
-  gem.homepage = "http://c42.in/open_source"
-  gem.authors = "Srushti Ambekallu"
-  gem.files = Dir.glob("{bin/**/*,lib/**/*.rb}")
-  # gem.test_files = FileList["test/*.rb"]
-  gem.extra_rdoc_files = ["README"]
-end
-Jeweler::RubygemsDotOrgTasks.new
-
 require 'rspec/core'
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec) do |t|

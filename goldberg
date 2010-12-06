@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-load File.join(File.dirname(__FILE__), "lib", "models", "init.rb")
-Init.new.run
-
