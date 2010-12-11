@@ -25,3 +25,12 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
+desc "Start a console"
+task :console do
+  system "irb -Ilib -r lib/goldberg"
+end
+
+desc "Start server at port 3000 in development mode"
+task :server do
+  system "rackup -E development -p 3000 config.ru"
+end
