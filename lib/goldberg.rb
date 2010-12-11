@@ -14,7 +14,7 @@ module Goldberg
 end
 
 ['/goldberg/**/*.rb'].each do |directory|
-  Dir["#{File.expand_path(File.dirname(__FILE__) + directory)}"] do { |file|
+  Dir["#{File.expand_path(File.dirname(__FILE__) + directory)}"].each do |file|
     require file
   end
 end
