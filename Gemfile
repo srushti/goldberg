@@ -7,12 +7,12 @@ group :web do
 end
 
 group :development do
-  gem 'ruby-debug19'
+  gem 'ruby-debug19', '~> 0.11.6'
 end
 
 group :test, :development do
-  gem 'rspec'
-  gem 'rcov'
-  gem 'rack-test'
+  gem 'rspec', '~> 2.2.0'
+  gem 'rcov', '~> 0.9.9'
+  gem 'rack-test', '~> 0.5.6'
 end
 
