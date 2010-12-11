@@ -4,6 +4,7 @@
 *.swp
 *.tmproj
 *.gem
+Gemfile.lock
 log/*
 tmp/*
 tags
