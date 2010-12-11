@@ -1,12 +1,13 @@
 source "http://rubygems.org"
 
-gem 'sinatra', '~> 1.1.0'
-gem 'sinatra_more', :require => ''
 gem 'git'
+
+group :web do
+  gem 'sinatra', '~> 1.1.0'
+end
 
 group :development do
   gem 'ruby-debug19'
-  gem 'bundler'
 end
 
 group :test, :development do
