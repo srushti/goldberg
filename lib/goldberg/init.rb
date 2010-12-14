@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'project')
 module Goldberg
   class Init
     def run
-      send(CommandLine.argv[0])
+      send(CommandLine.argv[0]) if CommandLine.argv.size > 0
     end
 
     def add
