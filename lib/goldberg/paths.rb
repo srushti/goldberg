@@ -28,9 +28,6 @@ module Env
     def [](variable_name)
       ENV[variable_name]
     end
-
-    def home
-      ["HOME"]
-    end
   end
 end
+
