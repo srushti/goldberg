@@ -4,6 +4,7 @@ module Goldberg
 
     def initialize(name)
       @name = name
+      @logger = Logger.new
     end
 
     def self.add(options)
@@ -17,12 +18,14 @@ module Goldberg
     end
 
     def update
-      g = Git.open(File.join(Paths.projects, @name), :log => Logger.new)
+      @logger.info "Updating #{name}"
+      g = Git.open(File.join(Paths.projects, @name), :log => @logger)
       g.pull != "Already up-to-date."
     end
 
     def build(task = :default)
-      Environment.system("cd #{File.join(Paths.projects, @name)} ; rake #{task.to_s}").tap{|result| Logger.new.info "Build status #{result}"}
+      @logger.info "Building #{name}"
+      Environment.system("cd #{File.join(Paths.projects, @name)} ; rake #{task.to_s}").tap{|result| @logger.info "Build status #{result}"}
     end
 
     def self.all
