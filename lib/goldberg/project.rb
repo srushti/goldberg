@@ -1,3 +1,5 @@
+require "fileutils"
+
 module Goldberg
   class Project
     attr_reader :url, :name
@@ -13,6 +15,10 @@ module Goldberg
       end
     end
 
+    def self.remove(name)
+      FileUtils.rm_rf(File.join(Paths.projects, name))
+    end
+
     def checkout(url)
       Git.clone(url, @name, :path => Paths.projects)
     end
@@ -20,7 +26,10 @@ module Goldberg
     def update
       @logger.info "Updating #{name}"
       g = Git.open(File.join(Paths.projects, @name), :log => @logger)
-      g.pull != "Already up-to-date."
+      fetch_result = g.fetch('origin')
+      (!fetch_result.empty?).tap do |fetched_changes|
+        g.merge('master', 'origin pull') if fetched_changes
+      end
     end
 
     def build(task = :default)

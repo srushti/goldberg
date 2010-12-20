@@ -10,6 +10,14 @@ module Goldberg
       Project.add(:url => Environment.argv[1], :name => Environment.argv[2])
     end
 
+    def remove
+      Project.remove(Environment.argv[1])
+    end
+
+    def list
+      Project.all.map(&:name).each{|name| puts name}
+    end
+
     def start
       while true
         Project.all.each do |p|
