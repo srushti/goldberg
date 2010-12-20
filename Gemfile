@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem 'git'
+gem 'rake'
 
 group :web do
   gem 'sinatra', '~> 1.1.0'

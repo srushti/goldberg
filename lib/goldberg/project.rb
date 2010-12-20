@@ -18,7 +18,11 @@ module Goldberg
 
     def update
       g = Git.open(File.join(Paths.projects, @name), :log => Logger.new)
-      g.pull
+      g.pull != "Already up-to-date."
+    end
+
+    def build(task = :default)
+      Environment.system("cd #{File.join(Paths.projects, @name)} ; rake #{task.to_s}").tap{|result| Logger.new.info "Build status #{result}"}
     end
 
     def self.all
