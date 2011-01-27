@@ -1,0 +1,2 @@
+#all_projects
+  %strong= Goldberg::Project.all.each.map{|p| "#{p.name} #{p.status}" }.join(' ')

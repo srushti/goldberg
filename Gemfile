@@ -1,10 +1,11 @@
 source "http://rubygems.org"
 
-gem 'git'
+gem 'git', '~> 1.2.5'
 gem 'rake'
 
 group :web do
   gem 'sinatra', '~> 1.1.0'
+  gem 'haml', '~> 3.0.25'
 end
 
 group :development do
