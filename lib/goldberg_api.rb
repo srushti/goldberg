@@ -6,10 +6,21 @@ Bundler.require(:web)
 
 set :views, File.join(File.dirname(__FILE__), 'views')
 
+helpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+end
+
 module GoldbergApi
   class Application < Sinatra::Application
     get '/' do
-      haml :index
+      haml :index, :locals => { :projects => Goldberg::Project.all }
+    end
+
+    Goldberg::Project.all.each do |project|
+      get "/#{project.name}/?" do
+        haml :project, :locals => { :project => project }
+      end
     end
   end
 end
