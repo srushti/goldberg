@@ -20,7 +20,13 @@ module Goldberg
       end
 
       def read_file(path)
-        text = File.open(path, 'r').gets
+        data = ''
+        f = File.open(path, "r") do |f|
+          f.each_line do |line|
+            data += "#{line}\n"
+          end
+        end
+        data
       end
     end
   end

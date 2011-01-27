@@ -14,8 +14,9 @@ module Goldberg
     end
 
     it "updates but doesn't yield if there are no updates" do
+      File.stub!(:exist?).and_return(true)
       Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('Already up-to-date.')
-      Project.new('name'){|p| true.should_not be}.update
+      Project.new('name').update{|p| true.should_not be}
     end
 
     it "updates and yields if there are updates" do
@@ -26,7 +27,7 @@ module Goldberg
     end
 
     it "builds the default target" do
-      Environment.should_receive(:system).with('cd some_path/name ; rake default').and_return(true)
+      Environment.should_receive(:system).with('cd some_path/name ; rake default > some_path/name.log').and_return(true)
       Environment.stub!(:write_file).with('some_path/name.status', true)
       Project.new('name').build
     end

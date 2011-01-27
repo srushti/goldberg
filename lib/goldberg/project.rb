@@ -25,7 +25,7 @@ module Goldberg
 
     def update
       @logger.info "Updating #{name}"
-      if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.')
+      if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.') || !File.exist?(build_status_file_path) || !File.exist?("#{code_path}.log")
         yield self
       end
     rescue Exception => e
@@ -42,7 +42,7 @@ module Goldberg
 
     def build(task = :default)
       @logger.info "Building #{name}"
-      Environment.system("cd #{code_path} ; rake #{task.to_s}").tap do |result|
+      Environment.system("cd #{code_path} ; rake #{task.to_s} > #{code_path}.log").tap do |result|
         @logger.info "Build status #{result}"
         Environment.write_file(build_status_file_path, result)
       end
@@ -58,6 +58,10 @@ module Goldberg
       else
         "unknown"
       end
+    end
+
+    def build_log
+      Environment.read_file("#{code_path}.log")
     end
   end
 end

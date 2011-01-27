@@ -1,2 +1,4 @@
 #all_projects
-  = Goldberg::Project.all.each.map{|p| "#{p.name} #{p.status}" }.join(' ')
+  - Goldberg::Project.all.each do |p|
+    = "#{p.name} #{p.status}"
+    = p.build_log
