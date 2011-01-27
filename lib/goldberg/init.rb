@@ -26,7 +26,9 @@ module Goldberg
       while true
         Project.all.each do |p|
           if p.update
-            p.build
+            exit_value = p.build
+            build_status = exit_value ? "passed" : "failed"
+            Environment.puts "Build #{build_status}!"
           end
         end
         Environment.sleep(20)

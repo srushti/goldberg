@@ -36,13 +36,28 @@ module Goldberg
       end
     end
 
+    def build_status_file_path
+      File.join(Paths.projects, "#{@name}.status")
+    end
+
     def build(task = :default)
       @logger.info "Building #{name}"
-      Environment.system("cd #{File.join(Paths.projects, @name)} ; rake #{task.to_s}").tap{|result| @logger.info "Build status #{result}"}
+      Environment.system("cd #{File.join(Paths.projects, @name)} ; rake #{task.to_s}").tap do |result|
+        @logger.info "Build status #{result}"
+        Environment.write_file(build_status_file_path, result)
+      end
     end
 
     def self.all
       (Dir.entries(Paths.projects) - ['.', '..']).select{|entry| File.directory?(File.join(Paths.projects, entry))}.map{|entry| Project.new(entry)}
+    end
+
+    def status
+      if File.exist?(build_status_file_path)
+        contents = Environment.read_file(build_status_file_path)
+      else
+        "unknown"
+      end
     end
   end
 end

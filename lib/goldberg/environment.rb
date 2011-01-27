@@ -10,6 +10,14 @@ module Goldberg
           super(args)
         end
       end
+
+      def write_file(path, text)
+        File.open(path, 'w'){|f| f.write text}
+      end
+
+      def read_file(path)
+        text = File.open(path, 'r').gets
+      end
     end
   end
 end
