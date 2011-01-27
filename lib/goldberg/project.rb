@@ -24,7 +24,7 @@ module Goldberg
     end
 
     def update
-      @logger.info "Updating #{name}"
+      @logger.info "Checking #{name}"
       if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.') || !File.exist?(build_status_file_path) || !File.exist?("#{code_path}.log")
         yield self
       end
@@ -54,7 +54,7 @@ module Goldberg
 
     def status
       if File.exist?(build_status_file_path)
-        contents = Environment.read_file(build_status_file_path)
+        Environment.read_file(build_status_file_path)[0]
       else
         "unknown"
       end

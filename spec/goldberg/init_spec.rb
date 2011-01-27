@@ -5,6 +5,7 @@ module Goldberg
     it "adds a new project" do
       Environment.stub!(:argv).and_return(['add', 'url', 'name'])
       Project.should_receive(:add).with(:url => 'url', :name => 'name')
+      Environment.should_receive(:puts).with('name successfully added.')
       Init.new.run
     end
 
@@ -13,6 +14,7 @@ module Goldberg
       project = mock(Goldberg::Project)
       Project.should_receive(:new).with('name').and_return(project)
       project.should_receive(:remove)
+      Environment.should_receive(:puts).with('name successfully removed.')
       Init.new.run
     end
 

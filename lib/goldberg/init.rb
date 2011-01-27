@@ -12,11 +12,21 @@ module Goldberg
     end
 
     def add
-      Project.add(:url => Environment.argv[1], :name => Environment.argv[2])
+      if Environment.argv.size == 3
+        Project.add(:url => Environment.argv[1], :name => Environment.argv[2])
+        Environment.puts "#{Environment.argv[2]} successfully added."
+      else
+        Environment.puts "Usage 'bin/goldberg add <url> <name>'"
+      end
     end
 
     def remove
-      Project.new(Environment.argv[1]).remove
+      if Environment.argv.size == 2
+        Project.new(Environment.argv[1]).remove
+        Environment.puts "#{Environment.argv[1]} successfully removed."
+      else
+        Environment.puts "Usage 'bin/goldberg remove <name>'"
+      end
     end
 
     def list
