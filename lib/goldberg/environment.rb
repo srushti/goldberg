@@ -5,8 +5,10 @@ module Goldberg
         ARGV
       end
 
-      def system(command)
-        super(command)
+      [:system, :puts, :sleep].each do |method_name|
+        define_method method_name do |args|
+          super(args)
+        end
       end
     end
   end
