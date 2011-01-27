@@ -4,7 +4,7 @@ gem 'git', '~> 1.2.5'
 gem 'rake'
 
 group :web do
-  gem 'sinatra', '~> 1.1.0'
+  gem 'sinatra', '~> 1.1.2'
   gem 'haml', '~> 3.0.25'
 end
 
