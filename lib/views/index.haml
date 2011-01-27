@@ -1,4 +1,6 @@
 #all_projects
   - Goldberg::Project.all.each do |p|
-    = "#{p.name} #{p.status}"
-    = p.build_log
+    %p
+      %strong= "#{p.name} #{p.status}"
+      - p.build_log.each do |l|
+        %div= l

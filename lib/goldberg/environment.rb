@@ -20,11 +20,9 @@ module Goldberg
       end
 
       def read_file(path)
-        data = ''
+        data = []
         f = File.open(path, "r") do |f|
-          f.each_line do |line|
-            data += "#{line}\n"
-          end
+          f.each_line { |line| data << line }
         end
         data
       end
