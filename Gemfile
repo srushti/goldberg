@@ -13,7 +13,6 @@ end
 
 group :test do
   gem 'rspec', '~> 2.2.0'
-  gem 'rcov', '~> 0.9.9'
   gem 'rack-test', '~> 0.5.6', :require => 'rack/test'
 end
 
