@@ -26,9 +26,13 @@ module Goldberg
     def update
       @logger.info "Updating #{name}"
       g = Git.open(File.join(Paths.projects, @name), :log => @logger)
-      fetch_result = g.fetch('origin')
-      (!fetch_result.empty?).tap do |fetched_changes|
-        g.merge('master', 'origin pull') if fetched_changes
+      begin
+        fetch_result = g.fetch('origin')
+        (!fetch_result.empty?).tap do |fetched_changes|
+          g.merge('master', 'origin pull') if fetched_changes
+        end
+      rescue Exception => e
+        @logger.error e
       end
     end
 
