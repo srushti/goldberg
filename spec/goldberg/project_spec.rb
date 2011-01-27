@@ -43,7 +43,7 @@ module Goldberg
 
     it "removes projects" do
       FileUtils.should_receive(:rm_rf).with('some_path/project_to_be_removed')
-      Project.remove('project_to_be_removed')
+      Project.new('project_to_be_removed').remove
     end
 
     it "reports the status of the project" do

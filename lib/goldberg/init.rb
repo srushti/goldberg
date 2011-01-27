@@ -3,8 +3,9 @@ require File.join(File.dirname(__FILE__), 'project')
 module Goldberg
   class Init
     def run
-      send(Environment.argv[0]) if Environment.argv.size > 0
-      if Environment.argv.size == 0
+      if Environment.argv.size > 0
+        send(Environment.argv[0])
+      else
         Environment.puts "You did not pass any command."
         Environment.puts "Valid commands are add, remove, list & start."
       end
@@ -15,7 +16,7 @@ module Goldberg
     end
 
     def remove
-      Project.remove(Environment.argv[1])
+      Project.new(Environment.argv[1]).remove
     end
 
     def list

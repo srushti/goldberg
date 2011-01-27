@@ -10,7 +10,9 @@ module Goldberg
 
     it "removes the specifies project" do
       Environment.stub!(:argv).and_return(['remove', 'name'])
-      Project.should_receive(:remove).with('name')
+      project = mock(Goldberg::Project)
+      Project.should_receive(:new).with('name').and_return(project)
+      project.should_receive(:remove)
       Init.new.run
     end
 

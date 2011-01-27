@@ -6,13 +6,6 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.pattern = "spec/**/*_spec.rb"
 end
 
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |spec|
-  spec.libs << 'spec'
-  spec.pattern = 'spec/**/spec*.rb'
-  spec.verbose = true
-end
-
 task :default => :spec
 
 require 'rake/rdoctask'

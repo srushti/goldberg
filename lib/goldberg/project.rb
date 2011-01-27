@@ -15,8 +15,8 @@ module Goldberg
       end
     end
 
-    def self.remove(name)
-      FileUtils.rm_rf(File.join(Paths.projects, name))
+    def remove
+      FileUtils.rm_rf(code_path)
     end
 
     def checkout(url)
@@ -25,7 +25,7 @@ module Goldberg
 
     def update
       @logger.info "Updating #{name}"
-      g = Git.open(File.join(Paths.projects, @name), :log => @logger)
+      g = Git.open(code_path, :log => @logger)
       begin
         fetch_result = g.fetch('origin')
         (!fetch_result.empty?).tap do |fetched_changes|
@@ -37,12 +37,16 @@ module Goldberg
     end
 
     def build_status_file_path
-      File.join(Paths.projects, "#{@name}.status")
+      "#{code_path}.status"
+    end
+
+    def code_path
+      File.join(Paths.projects, @name)
     end
 
     def build(task = :default)
       @logger.info "Building #{name}"
-      Environment.system("cd #{File.join(Paths.projects, @name)} ; rake #{task.to_s}").tap do |result|
+      Environment.system("cd #{code_path} ; rake #{task.to_s}").tap do |result|
         @logger.info "Build status #{result}"
         Environment.write_file(build_status_file_path, result)
       end
