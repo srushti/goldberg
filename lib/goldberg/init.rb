@@ -26,13 +26,13 @@ module Goldberg
     def start
       while true
         Project.all.each do |p|
-          if p.update
+          p.update do |project|
             exit_value = p.build
             build_status = exit_value ? "passed" : "failed"
             Environment.puts "Build #{build_status}!"
           end
+          Environment.sleep(20)
         end
-        Environment.sleep(20)
       end
     end
   end

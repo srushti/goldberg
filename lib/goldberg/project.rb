@@ -27,9 +27,8 @@ module Goldberg
       @logger.info "Updating #{name}"
       g = Git.open(code_path, :log => @logger)
       begin
-        fetch_result = g.fetch('origin')
-        (!fetch_result.empty?).tap do |fetched_changes|
-          g.merge('master', 'origin pull') if fetched_changes
+        if !g.remote('origin').merge('master').include?("Already up-to-date.")
+          yield self
         end
       rescue Exception => e
         @logger.error e
