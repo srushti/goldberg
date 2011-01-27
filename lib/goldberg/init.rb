@@ -4,6 +4,10 @@ module Goldberg
   class Init
     def run
       send(Environment.argv[0]) if Environment.argv.size > 0
+      if Environment.argv.size == 0
+        Environment.puts "You did not pass any command."
+        Environment.puts "Valid commands are add, remove, list & start."
+      end
     end
 
     def add
@@ -15,7 +19,7 @@ module Goldberg
     end
 
     def list
-      Project.all.map(&:name).each{|name| puts name}
+      Project.all.map(&:name).each{|name| Environment.puts name}
     end
 
     def start
@@ -25,7 +29,7 @@ module Goldberg
             p.build
           end
         end
-        sleep(5)
+        Environment.sleep(20)
       end
     end
   end
