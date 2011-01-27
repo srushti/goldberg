@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'project')
 module Goldberg
   class Init
     def run
-      if Environment.argv.size > 0
+      if Environment.argv.size > 0 && ['add', 'remove', 'list', 'start'].include?(Environment.argv[0])
         send(Environment.argv[0])
       else
         Environment.puts "You did not pass any command."
@@ -34,6 +34,11 @@ module Goldberg
     end
 
     def start
+      Environment.puts "This only runs the scheduler. If you want the web app as well please run 'rake server' instead."
+      start_poller
+    end
+
+    def start_poller
       while true
         Project.all.each do |p|
           p.update do |project|
@@ -41,8 +46,9 @@ module Goldberg
             build_status = exit_value ? "passed" : "failed"
             Environment.puts "Build #{build_status}!"
           end
-          Environment.sleep(20)
         end
+        Environment.puts "Sleeping for 20 seconds."
+        Environment.sleep(20)
       end
     end
   end
