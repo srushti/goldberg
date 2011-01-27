@@ -13,27 +13,14 @@ module Goldberg
       project.name.should == 'some_project'
     end
 
-    it "updates the project" do
-      git = mock(Git)
-      Git.should_receive(:open).with('some_path/name', anything).and_return(git)
-      remote = mock(Git::Remote)
-      git.should_receive(:remote).with('origin').and_return(remote)
-      remote.should_receive(:merge).with('master').and_return('Already up-to-date.')
-      Project.new('name').update
-    end
-
     it "updates but doesn't yield if there are no updates" do
-      git = mock(Git)
-      Git.stub!(:open).with('some_path/name', anything).and_return(git)
-      git.stub_chain(:remote, :merge).and_return('Already up-to-date.')
-      Project.new('name'){|p| true.should_not be}.update.should_not be
+      Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('Already up-to-date.')
+      Project.new('name'){|p| true.should_not be}.update
     end
 
     it "updates and yields if there are updates" do
       yielded_project = nil
-      git = mock(Git)
-      Git.stub!(:open).with('some_path/name', anything).and_return(git)
-      git.stub_chain(:remote, :merge).and_return('some changes')
+      Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('some changes')
       project = Project.new('name').update{|p| yielded_project = p}
       project.should == yielded_project
     end

@@ -25,14 +25,11 @@ module Goldberg
 
     def update
       @logger.info "Updating #{name}"
-      g = Git.open(code_path, :log => @logger)
-      begin
-        if !g.remote('origin').merge('master').include?("Already up-to-date.")
-          yield self
-        end
-      rescue Exception => e
-        @logger.error e
+      if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.')
+        yield self
       end
+    rescue Exception => e
+      @logger.error e
     end
 
     def build_status_file_path
