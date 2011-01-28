@@ -26,6 +26,7 @@ module Goldberg
       end
     rescue
       remove
+      raise
     end
 
     def build_anyway?
