@@ -8,7 +8,8 @@ module Goldberg
     end
 
     it "checks out a new git project" do
-      Git.should_receive(:clone).with('git://some.url.git', 'some_project', :path => 'some_path')
+      FileUtils.should_receive(:mkdir_p).with('some_path/some_project')
+      Environment.should_receive(:system).with('git clone git://some.url.git some_path/some_project/code').and_return(true)
       project = Project.add({:url => "git://some.url.git", :name => 'some_project'})
       project.name.should == 'some_project'
     end
@@ -16,13 +17,13 @@ module Goldberg
     it "updates but doesn't yield if there are no updates" do
       project = Project.new('name')
       project.should_receive(:build_anyway?).and_return(false)
-      Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('Already up-to-date.')
+      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('Already up-to-date.')
       project.update{|p| true.should_not be}
     end
 
     it "updates and yields if there are updates" do
       yielded_project = nil
-      Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('some changes')
+      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
       project = Project.new('name').update{|p| yielded_project = p}
       yielded_project.should == project
     end
@@ -30,34 +31,34 @@ module Goldberg
     it "yields if there are is build to be forced even if there are no updates" do
       yielded_project = nil
       project = Project.new('name')
-      ['build_status_file_path', 'build_log_path', 'force_build_file_path'].each do |method_name|
+      ['build_status_path', 'build_log_path', 'force_build_path'].each do |method_name|
         File.should_receive(:exist?).with(project.send(method_name)).and_return(true)
       end
-      Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('Already up-to-date.')
+      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('Already up-to-date.')
       project.update{|p| yielded_project = p}
       yielded_project.should == project
     end
 
     it "builds the default target" do
-      Environment.should_receive(:system).with('cd some_path/name ; rake default > some_path/name.log').and_return(true)
-      Environment.stub!(:write_file).with('some_path/name.status', true)
+      Environment.should_receive(:system).with('cd some_path/name/code ; rake default > some_path/name/build_log').and_return(true)
+      Environment.stub!(:write_file).with('some_path/name/build_status', true)
       Project.new('name').build
     end
 
     it "removes projects" do
-      FileUtils.should_receive(:rm_rf).with('some_path/project_to_be_removed')
+      FileUtils.should_receive(:rm_rf).with('some_path/project_to_be_removed/')
       Project.new('project_to_be_removed').remove
     end
 
     it "reports the status of the project" do
-      File.should_receive(:exist?).with('some_path/name.status').and_return(true)
-      Environment.should_receive(:read_file).with('some_path/name.status').and_return(['build status'])
+      File.should_receive(:exist?).with('some_path/name/build_status').and_return(true)
+      Environment.should_receive(:read_file).with('some_path/name/build_status').and_return(['build status'])
       Project.new('name').status.should == 'build status'
     end
 
     it "writes the build force file" do
       project = Project.new('name')
-      Environment.should_receive(:write_file).with(project.force_build_file_path, '')
+      Environment.should_receive(:write_file).with(project.force_build_path, '')
       project.force_build
     end
   end

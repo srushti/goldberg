@@ -1,6 +1,5 @@
 source "http://rubygems.org"
 
-gem 'git', '~> 1.2.5'
 gem 'rake'
 
 group :web do
