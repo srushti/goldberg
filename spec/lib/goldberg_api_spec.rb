@@ -22,12 +22,11 @@ module GoldbergApi
 
     it "allows forcing a build" do
       project = mock(Goldberg::Project, :name => "name", :status => "status", :build_log => ["log"])
-      Goldberg::Project.should_receive(:new).twice.with(project.name).and_return(project)
+      Goldberg::Project.should_receive(:new).with(project.name).and_return(project)
       project.should_receive(:force_build)
       post '/projects/name/force'
-      follow_redirect!
-      last_response.body.should include "name status"
-      last_response.body.should include "log"
+      last_response.should be_redirect
+      last_response.headers['Location'].should include '/projects/name'
     end
   end
 end
