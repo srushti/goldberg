@@ -23,9 +23,13 @@ module Goldberg
       Git.clone(url, @name, :path => Paths.projects)
     end
 
+    def build_anyway?
+      !File.exist?(build_status_file_path) || !File.exist?("#{build_log_path}") || File.exist?(force_build_file_path)
+    end
+
     def update
       @logger.info "Checking #{name}"
-      if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.') || !File.exist?(build_status_file_path) || !File.exist?("#{code_path}.log")
+      if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.') || build_anyway?
         yield self
       end
     rescue Exception => e
@@ -36,15 +40,24 @@ module Goldberg
       "#{code_path}.status"
     end
 
+    def force_build_file_path
+      "#{code_path}.force"
+    end
+
+    def build_log_path
+      "#{code_path}.log"
+    end
+
     def code_path
       File.join(Paths.projects, @name)
     end
 
     def build(task = :default)
       @logger.info "Building #{name}"
-      Environment.system("cd #{code_path} ; rake #{task.to_s} > #{code_path}.log").tap do |result|
+      Environment.system("cd #{code_path} ; rake #{task.to_s} > #{build_log_path}").tap do |result|
         @logger.info "Build status #{result}"
         Environment.write_file(build_status_file_path, result)
+        File.delete(force_build_file_path) if File.exist?(force_build_file_path)
       end
     end
 
@@ -61,7 +74,11 @@ module Goldberg
     end
 
     def build_log
-      Environment.read_file("#{code_path}.log")
+      Environment.read_file("#{build_log_path}")
+    end
+
+    def force_build
+      Environment.write_file(force_build_file_path, '')
     end
   end
 end

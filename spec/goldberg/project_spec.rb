@@ -14,16 +14,28 @@ module Goldberg
     end
 
     it "updates but doesn't yield if there are no updates" do
-      File.stub!(:exist?).and_return(true)
+      project = Project.new('name')
+      project.should_receive(:build_anyway?).and_return(false)
       Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('Already up-to-date.')
-      Project.new('name').update{|p| true.should_not be}
+      project.update{|p| true.should_not be}
     end
 
     it "updates and yields if there are updates" do
       yielded_project = nil
       Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('some changes')
       project = Project.new('name').update{|p| yielded_project = p}
-      project.should == yielded_project
+      yielded_project.should == project
+    end
+
+    it "yields if there are is build to be forced even if there are no updates" do
+      yielded_project = nil
+      project = Project.new('name')
+      ['build_status_file_path', 'build_log_path', 'force_build_file_path'].each do |method_name|
+        File.should_receive(:exist?).with(project.send(method_name)).and_return(true)
+      end
+      Environment.should_receive(:system_call_output).with('cd some_path/name ; git pull').and_return('Already up-to-date.')
+      project.update{|p| yielded_project = p}
+      yielded_project.should == project
     end
 
     it "builds the default target" do
@@ -41,6 +53,12 @@ module Goldberg
       File.should_receive(:exist?).with('some_path/name.status').and_return(true)
       Environment.should_receive(:read_file).with('some_path/name.status').and_return(['build status'])
       Project.new('name').status.should == 'build status'
+    end
+
+    it "writes the build force file" do
+      project = Project.new('name')
+      Environment.should_receive(:write_file).with(project.force_build_file_path, '')
+      project.force_build
     end
   end
 end

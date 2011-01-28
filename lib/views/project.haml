@@ -1,5 +1,7 @@
 %p
   %strong= "#{project.name} #{project.status}"
-  %a{:href => "/#{project.name}"}= project.name
+  %a{:href => "/projects/#{project.name}"}= project.name
+  %form{:method => 'post', :action => "/#{project.name}/force"}
+    %input{:type => 'submit', :value => 'force build'}
   - project.build_log.each do |l|
     %div= h l
