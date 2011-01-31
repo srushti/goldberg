@@ -17,14 +17,22 @@ module GoldbergApi
       haml :index, :locals => { :projects => Goldberg::Project.all }
     end
 
-    get "/projects/*" do
-      haml :project, :locals => { :project => Goldberg::Project.new(params[:splat][0]) }
+    get "/projects/:project_name" do
+      if !Goldberg::Project.all.map(&:name).include?(params[:project_name])
+        status 404
+      else
+        haml :project, :locals => { :project => Goldberg::Project.new(params[:project_name]) }
+      end
     end
 
-    post "/projects/*/force" do
-      project = Goldberg::Project.new(params[:splat][0])
-      project.force_build
-      redirect "/projects/#{project.name}"
+    post "/projects/:project_name/force" do
+      if !Goldberg::Project.all.map(&:name).include?(params[:project_name])
+        status 404
+      else
+        project = Goldberg::Project.new(params[:project_name])
+        project.force_build
+        redirect back
+      end
     end
   end
 end
