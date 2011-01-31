@@ -52,8 +52,8 @@ module Goldberg
 
     it "reports the status of the project" do
       File.should_receive(:exist?).with('some_path/name/build_status').and_return(true)
-      Environment.should_receive(:read_file).with('some_path/name/build_status').and_return(['build status'])
-      Project.new('name').status.should == 'build status'
+      Environment.should_receive(:read_file).with('some_path/name/build_status').and_return(['true'])
+      Project.new('name').status.should == true
     end
 
     it "writes the build force file" do
