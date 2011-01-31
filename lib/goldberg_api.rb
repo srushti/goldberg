@@ -5,6 +5,7 @@ require File.join(File.dirname(__FILE__), 'goldberg', 'project')
 Bundler.require(:web)
 
 set :views, File.join(File.dirname(__FILE__), 'views')
+set :public, File.join(File.dirname(__FILE__), '..', 'public')
 
 helpers do
   include Rack::Utils

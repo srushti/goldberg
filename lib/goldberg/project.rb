@@ -67,9 +67,9 @@ module Goldberg
 
     def status
       if File.exist?(build_status_path)
-        Environment.read_file(build_status_path)[0]
+        Environment.read_file(build_status_path)[0] == 'true'
       else
-        "unknown"
+        nil
       end
     end
 
