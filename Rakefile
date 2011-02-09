@@ -20,7 +20,7 @@ end
 
 desc "Start a console"
 task :console do
-  system "irb -Ilib -r lib/goldberg"
+  system "irb -Ilib -r goldberg"
 end
 
 desc "Start server at port 3000 in development mode"
