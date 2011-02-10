@@ -8,7 +8,11 @@ group :web do
 end
 
 group :development do
-  gem 'ruby-debug19', '~> 0.11.6'
+  if RUBY_VERSION.include?('1.9')
+    gem 'ruby-debug19', '~> 0.11.6'
+  else
+    gem 'ruby-debug'
+  end
 end
 
 group :test do
