@@ -2,5 +2,11 @@
   %link{:rel => 'stylesheet', :href => '/stylesheets/dashboard.css', :type => 'text/css'}
 
 %table#all_projects
+  %tr.headings
+    %td.status_icon Status
+    %td.project_name Project Name
+    %td.last_built_at Last Built at
+    %td.total_tests Number of tests
+    
   - projects.each do |project|
     = haml :"dashboard/_project_row", :locals => { :project => project }
