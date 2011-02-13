@@ -1,0 +1,11 @@
+%tr{:id => "project_#{project.id}", :class => "project_row #{project.status_en}"}
+
+  %td.status_icon
+    %img{:src => "/images/#{project.status_en}.png"}
+
+  %td.project_name{:class => project.status_en}
+    %b= project.name
+
+  %td.last_built_at
+    = DateTime.now
+

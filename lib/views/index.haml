@@ -1,3 +1,6 @@
-#all_projects
+- content_for(:head) do
+  %link{:rel => 'stylesheet', :href => '/stylesheets/dashboard.css', :type => 'text/css'}
+
+%table#all_projects
   - projects.each do |project|
-    = haml :project, :locals => { :project => project }
+    = haml :"dashboard/_project_row", :locals => { :project => project }

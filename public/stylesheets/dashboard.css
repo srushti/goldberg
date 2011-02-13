@@ -1,0 +1,20 @@
+div.project {
+    color: black;
+    width: 10em;
+    height: 8em;
+    padding: 2em;
+    -moz-border-radius: 3em;
+    -webkit-border-radius: 3em;
+    border-radius: 3em;
+}
+
+
+.shadow {
+	-moz-box-shadow: 0.3em 0.3em 0.4em #000;
+	-webkit-box-shadow: 0.3em 0.3em 0.4em #000;
+	box-shadow: 0.3em 0.3em 0.4em #000;
+	/* For IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
+	/* For IE 5.5 - 7 */
+	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
+}
