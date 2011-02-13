@@ -5,6 +5,7 @@ gem 'rake'
 group :web do
   gem 'sinatra', '~> 1.1.2'
   gem 'haml', '~> 3.0.25'
+  gem 'sinatra-outputbuffer', '~> 0.1'
 end
 
 group :development do
