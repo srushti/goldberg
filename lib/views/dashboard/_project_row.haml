@@ -4,7 +4,8 @@
     %img{:src => "/images/#{project.status_en}.png"}
 
   %td.project_name{:class => project.status_en}
-    %b= project.name
+    %a{:href => "/projects/#{project.name}"}
+      %b= project.name
 
   %td.last_built_at
     = DateTime.now
