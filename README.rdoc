@@ -1,3 +1,14 @@
-Goldberg 0.0.1
+= Goldberg 0.0.1
 
 A CI server. With pipelines!
+
+== Setting up a new repository
+
+bin/goldberg add <git url> <name>
+
+== Running Goldberg
+
+bin/goldberg start          # Starts the CI server
+rackup                      # Starts the front-end
+
+
