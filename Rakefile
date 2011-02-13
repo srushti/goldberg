@@ -27,3 +27,13 @@ desc "Start server at port 3000 in development mode"
 task :server do
   system "rackup -E development -p 3000 config.ru"
 end
+
+directory('mnt/projects')
+
+require File.expand_path('../lib/goldberg', __FILE__)
+desc "Add a repo for Goldberg to monitor"
+task :add, [:url, :name] => [ 'mnt/projects' ] do |t, arg|
+  puts "Usage 'rake add[<url>,<name>]'" and exit if arg.count < 2
+  Goldberg::Project.add(arg)
+  puts "#{arg[:name]} successfully added."
+end
