@@ -73,6 +73,10 @@ module Goldberg
       end
     end
 
+    def status_en
+      status ? "passed" : "failed"
+    end
+
     def build_log
       Environment.read_file("#{build_log_path}")
     end
