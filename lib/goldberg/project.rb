@@ -21,7 +21,7 @@ module Goldberg
 
     def checkout(url)
       FileUtils.mkdir_p(File.join(Paths.projects, name))
-      if !Environment.system("git clone #{url} #{File.join(Paths.projects, name, 'code')}")
+      if !Environment.system("git clone #{url} #{code_path}")
         remove
       end
     rescue
@@ -54,7 +54,8 @@ module Goldberg
 
     def build(task = :default)
       @logger.info "Building #{name}"
-      Environment.system("cd #{code_path} ; rake #{task.to_s} > #{build_log_path}").tap do |result|
+      Environment.system("cd #{code_path} ; rake #{task.to_s} 2>&1") do |output, result|
+        Environment.write_file(build_log_path, output)
         @logger.info "Build status #{result}"
         Environment.write_file(build_status_path, result)
         File.delete(force_build_path) if File.exist?(force_build_path)

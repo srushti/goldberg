@@ -9,7 +9,16 @@ module Goldberg
         `#{command}`
       end
 
-      [:system, :puts, :sleep].each do |method_name|
+      def system(command)
+        if block_given?
+          yield system_call_output(command), $?.success?
+          $?.success?
+        else
+          super(command)
+        end
+      end
+
+      [:puts, :sleep].each do |method_name|
         define_method method_name do |args|
           super(args)
         end
