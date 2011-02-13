@@ -1,20 +1,24 @@
-div.project {
-    color: black;
-    width: 10em;
-    height: 8em;
-    padding: 2em;
-    -moz-border-radius: 3em;
-    -webkit-border-radius: 3em;
-    border-radius: 3em;
+
+tr.project_row {
+    padding: 0.6em;
 }
 
+tr.project_row.passed td.project_name {
+    background-color: #7fffd4;
+}
 
-.shadow {
-	-moz-box-shadow: 0.3em 0.3em 0.4em #000;
-	-webkit-box-shadow: 0.3em 0.3em 0.4em #000;
-	box-shadow: 0.3em 0.3em 0.4em #000;
-	/* For IE 8 */
-	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000')";
-	/* For IE 5.5 - 7 */
-	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');
+tr.project_row.failed td.project_name {
+    background-color: #990000;
+    color: white;
+    width: 20%;
+}
+
+tr.project_row td.status_icon {
+    background-color: white;
+    width: 10%;
+}
+
+tr.project_row td.last_built_at {
+    background-color: white;
+    width: 20%;
 }
