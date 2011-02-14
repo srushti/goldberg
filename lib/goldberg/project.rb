@@ -94,10 +94,6 @@ module Goldberg
       end
     end
 
-    def status_en
-      status ? "passed" : "failed"
-    end
-
     def id
       name.hash.abs
     end

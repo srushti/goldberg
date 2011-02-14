@@ -1,9 +1,9 @@
-%tr{:id => "project_#{project.id}", :class => "project_row #{project.status_en}"}
+%tr{:id => "project_#{project.id}", :class => "project_row #{project_status(project.status)}"}
 
   %td.status_icon
-    %img{:src => "/images/#{project.status_en}.png"}
+    %img{:src => "/images/#{project_status(project.status)}.png"}
 
-  %td.project_name{:class => project.status_en}
+  %td.project_name{:class => project_status(project.status)}
     %a{:href => "/projects/#{project.name}"}
       %b= project.name
 
