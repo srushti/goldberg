@@ -9,6 +9,6 @@ A CI server. With pipelines!
 
 == Running Goldberg
 
-   rackup                      # Starts the CI server and the web front-end at localhost:9292
+   rake server                      # Starts the CI server and the web front-end at localhost:3000
 
 
