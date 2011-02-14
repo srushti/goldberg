@@ -40,7 +40,8 @@ module Goldberg
     end
 
     it "builds the default target and copies the build to its own folder" do
-      Environment.should_receive(:system).with('cd some_path/name/code ; rake default > some_path/name/build_log').and_return(true)
+      Environment.should_receive(:system).with('cd some_path/name/code ; rake default 2>&1').and_yield('some log data', true)
+      Environment.stub!(:write_file).with('some_path/name/build_log', 'some log data')
       Environment.stub!(:write_file).with('some_path/name/build_status', true)
       project = Project.new('name')
       project.should_receive(:latest_build_number).and_return(1)
