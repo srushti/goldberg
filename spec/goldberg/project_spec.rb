@@ -39,10 +39,15 @@ module Goldberg
       yielded_project.should == project
     end
 
-    it "builds the default target" do
+    it "builds the default target and copies the build to its own folder" do
       Environment.should_receive(:system).with('cd some_path/name/code ; rake default > some_path/name/build_log').and_return(true)
       Environment.stub!(:write_file).with('some_path/name/build_status', true)
-      Project.new('name').build
+      project = Project.new('name')
+      project.should_receive(:latest_build_number).and_return(1)
+      FileUtils.should_receive(:mkdir_p).with("some_path/name/builds/2", :verbose => true)
+      FileUtils.should_receive(:cp)
+      Environment.should_receive(:write_file).with(project.build_number_path, 2.to_s)
+      project.build
     end
 
     it "removes projects" do
@@ -52,7 +57,7 @@ module Goldberg
 
     it "reports the status of the project" do
       File.should_receive(:exist?).with('some_path/name/build_status').and_return(true)
-      Environment.should_receive(:read_file).with('some_path/name/build_status').and_return(['true'])
+      Environment.should_receive(:read_file).with('some_path/name/build_status').and_return('true')
       Project.new('name').status.should == true
     end
 
