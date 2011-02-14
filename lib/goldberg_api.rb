@@ -10,6 +10,10 @@ set :public, File.join(File.dirname(__FILE__), '..', 'public')
 helpers do
   include Rack::Utils
   alias_method :h, :escape_html
+
+  def project_status(passed)
+    passed ? 'passed' : 'failed'
+  end
 end
 
 module GoldbergApi
