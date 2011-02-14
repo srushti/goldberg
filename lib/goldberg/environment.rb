@@ -20,11 +20,11 @@ module Goldberg
       end
 
       def read_file(path)
-        data = []
+        result = ''
         f = File.open(path, "r") do |f|
-          f.each_line { |line| data << line }
+          f.each_line { |line| result << line }
         end
-        data
+        result
       end
     end
   end

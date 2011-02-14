@@ -42,14 +42,34 @@ module Goldberg
       @logger.error e
     end
 
-    ['build_status', 'force_build', 'build_log', 'code'].each do |relative_path|
+    ['build_status', 'force_build', 'build_log', 'code', 'build_number', 'builds'].each do |relative_path|
       define_method "#{relative_path}_path".to_sym do
         path(relative_path)
       end
     end
 
+    def latest_build_number
+      Environment.write_file(build_number_path, 0) if !File.exist?(build_number_path)
+      Environment.read_file(build_number_path).to_i
+    end
+
     def path(extra = '')
       File.join(Paths.projects, @name, extra)
+    end
+
+    def latest_build
+      latest_build_path = File.join(path('builds'), latest_build_number.to_s)
+      if !File.exist?(latest_build_path)
+        Build.null
+      end
+      Build.new(latest_build_path)
+    end
+
+    def copy_latest_build_to_its_own_folder
+      new_build_number = (latest_build_number + 1).to_s
+      FileUtils.mkdir_p(File.join(builds_path, new_build_number), :verbose => true)
+      FileUtils.cp %w(build_status build_log).map{|basename| File.join(path(basename))}, File.join(builds_path, new_build_number), :verbose => true
+      Environment.write_file(build_number_path, new_build_number)
     end
 
     def build(task = :default)
@@ -58,6 +78,7 @@ module Goldberg
         @logger.info "Build status #{result}"
         Environment.write_file(build_status_path, result)
         File.delete(force_build_path) if File.exist?(force_build_path)
+        copy_latest_build_to_its_own_folder
       end
     end
 
@@ -67,7 +88,7 @@ module Goldberg
 
     def status
       if File.exist?(build_status_path)
-        Environment.read_file(build_status_path)[0] == 'true'
+        Environment.read_file(build_status_path) == 'true'
       else
         nil
       end
@@ -79,6 +100,10 @@ module Goldberg
 
     def force_build
       Environment.write_file(force_build_path, '')
+    end
+
+    def builds
+      Build.all(self)
     end
   end
 end

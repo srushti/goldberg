@@ -14,18 +14,21 @@ module GoldbergApi
 
     it "gives the status & log of a project" do
       project = mock(Goldberg::Project, :name => "name", :status => "status", :build_log => ["log"])
+      build = Goldberg::Build.null
       Goldberg::Project.should_receive(:all).and_return([project])
       Goldberg::Project.should_receive(:new).with(project.name).and_return(project)
+      project.should_receive(:builds).and_return([build])
+      project.should_receive(:latest_build).and_return(build)
       get '/projects/name'
       last_response.body.should include "name status"
       last_response.body.should include "log"
     end
 
-    ['/projects/unknown_project', '/projects/unknown_project/force'].each do |path|
-      it "gives a 404 when an unknown project is requested for #{path}" do
+    [{:url => '/projects/unknown_project', :method => :get}, {:url => '/projects/unknown_project/force', :method => :post}].each do |entry|
+      it "gives a 404 when an unknown project is requested for #{entry[:url]}" do
         project = mock(Goldberg::Project, :name => 'existing_project')
         Goldberg::Project.stub!(:all).and_return([project])
-        get path
+        send(entry[:method], entry[:url])
         last_response.status.should == 404
       end
     end
