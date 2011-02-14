@@ -1,3 +1,11 @@
-.navigation_bar a {
-    margin-top: 4em;
+div.container {
+    padding-top: 2em;
+}
+
+h1 {
+    color: rgb(60, 11, 140);
+    font-family: Georgia;
+    font-size: 2.5em;
+    letter-spacing: 0.1em;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
 }

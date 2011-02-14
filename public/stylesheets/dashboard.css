@@ -2,14 +2,25 @@
 #all_projects tr.headings td { font-weight: bold; }
 #all_projects tr.project_row td { border-top: white solid 1em; background-color: white; }
 
-
-/* Table Columns */
-#all_projects tr.project_row td.project_name {
-    width: 40%;
+/* Red/Green for pass/fail */
+#all_projects tr.project_row.passed td {
+    background-color: #ccf0cc;
 }
 
+#all_projects tr.project_row.failed td {
+    background-color: #f0cccc;
+}
+
+
+/* Table Columns */
+
 #all_projects tr.project_row td.status_icon {
-    width: 10%;
+    width: 5%;
+    background-color: white;
+}
+
+#all_projects tr.project_row td.project_name {
+    width: 40%;
 }
 
 #all_projects tr.project_row td.last_built_at {
@@ -20,11 +31,3 @@
     width: 20%;
 }
 
-/* Red/Green for pass/fail */
-#all_projects tr.project_row.passed td.project_name {
-    background-color: #71ad86;
-}
-
-#all_projects tr.project_row.failed td.project_name {
-    background-color: #b34848;
-}
