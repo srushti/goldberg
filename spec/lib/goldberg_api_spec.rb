@@ -8,10 +8,8 @@ module GoldbergApi
       projects << mock('project2', :name => 'name2', :status => false, :build_log => 'log2')
       Goldberg::Project.should_receive(:all).and_return(projects)
       get '/'
-      last_response.body.should include "name1 passed"
-      last_response.body.should include "log1"
-      last_response.body.should include "name2 failed"
-      last_response.body.should include "log2"
+      last_response.body.should include "name1"
+      last_response.body.should include "name2"
     end
 
     it "gives the status & log of a project" do
