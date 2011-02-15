@@ -1,8 +1,12 @@
-#all_projects
+- content_for(:head) do
+  %link{:rel => 'stylesheet', :href => '/stylesheets/dashboard.css', :type => 'text/css'}
+
+%table#all_projects
+  %tr.headings
+    %td.status_icon 
+    %td.project_name Project Name
+    %td.last_built_at Last Built at
+    %td.total_tests 
+    
   - projects.each do |project|
-    %p
-      %strong= "#{project.name} #{project_status(project.status)}"
-      %a{:class => project_status(project.status) ? 'passed' : 'failed', :href => "/projects/#{project.name}"}= project.name
-      %form{:method => 'post', :action => "/projects/#{project.name}/force"}
-        %input{:type => 'submit', :value => 'force build'}
-      %pre= h project.build_log
+    = haml :"dashboard/_project_row", :locals => { :project => project }

@@ -7,6 +7,7 @@ gem 'rack-test', '~> 0.5.6', :require => 'rack/test'
 group :web do
   gem 'sinatra', '~> 1.1.2'
   gem 'haml', '~> 3.0.25'
+  gem 'sinatra-outputbuffer', '~> 0.1'
 end
 
 group :development do

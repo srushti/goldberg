@@ -3,6 +3,7 @@ require "haml"
 require File.join(File.dirname(__FILE__), 'goldberg', 'project')
 
 Bundler.require(:web)
+require "sinatra/outputbuffer"
 
 set :views, File.join(File.dirname(__FILE__), 'views')
 set :public, File.join(File.dirname(__FILE__), '..', 'public')
@@ -18,6 +19,8 @@ end
 
 module GoldbergApi
   class Application < Sinatra::Application
+    helpers Sinatra::OutputBuffer::Helpers
+    
     get '/' do
       haml :index, :locals => { :projects => Goldberg::Project.all }
     end

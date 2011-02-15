@@ -1,3 +1,13 @@
-Goldberg 0.0.1
+= Goldberg 0.0.1
 
-A CI server. With pipelines! Now running on DuoStack!
+A CI server. With pipelines!
+
+== Setting up a new repository
+
+   bin/goldberg add <git url> <name>
+
+
+== Running Goldberg
+
+   rake server                      # Starts the CI server and the web front-end at localhost:3000
+
