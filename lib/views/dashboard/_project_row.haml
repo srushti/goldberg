@@ -2,7 +2,7 @@
 %tr{:class => "project_row #{status}"}
 
   %td.status_icon
-    %img{:src => "/images/#{status}.png", :alt => ''}
+    %img{:src => "/images/#{status}.png", :alt => status, :title => status}
 
   %td.project_name{:class => status}
     %a{:href => "/projects/#{project.name}"}
