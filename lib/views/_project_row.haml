@@ -1,0 +1,13 @@
+- status = project_status(project.status)
+%tr{:class => "project_row #{status}"}
+
+  %td.status_icon
+    %img{:src => "/images/#{status}.png", :alt => status, :title => status}
+
+  %td.project_name{:class => status}
+    %a{:href => "/projects/#{project.name}"}
+      %b= project.name
+
+  %td.last_built_at
+    = DateTime.now
+
