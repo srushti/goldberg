@@ -1,9 +1,12 @@
+- content_for(:head) do
+  %link{:rel => 'stylesheet', :href => '/stylesheets/project.css', :type => 'text/css'}
+
 %p
-  %strong= "#{project.name} #{project_status(project.status)}"
-  %a{:class => project_status(project.latest_build.status) ? 'passed' : 'failed', :href => "/projects/#{project.name}"}= project.name
+  %strong{:class => project_status(project.status)}= "#{project_status(project.status)}"
   %form{:method => 'post', :action => "/projects/#{project.name}/force"}
     %input{:type => 'submit', :value => 'force build'}
   %pre= project.build_log
   %ul
     - project.builds.each do |build|
-      %li= "#{build.number} #{project_status(build.status)}"
+      %li
+        %a{:href => "/projects/#{project.name}/builds/#{build.number}"}= "#{build.number} #{project_status(build.status)}"

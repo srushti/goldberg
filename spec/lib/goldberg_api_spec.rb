@@ -13,14 +13,14 @@ module GoldbergApi
     end
 
     it "gives the status & log of a project" do
-      project = mock(Goldberg::Project, :name => "name", :status => true,:build_log => "log")
+      project = mock(Goldberg::Project, :name => "name", :status => true, :build_log => "log")
       build = Goldberg::Build.null
       Goldberg::Project.should_receive(:all).and_return([project])
       Goldberg::Project.should_receive(:new).with(project.name).and_return(project)
       project.should_receive(:builds).and_return([build])
-      project.should_receive(:latest_build).and_return(build)
       get '/projects/name'
-      last_response.body.should include "name passed"
+      last_response.body.should include project.name
+      last_response.body.should include "passed"
       last_response.body.should include "log"
     end
 

@@ -9,4 +9,4 @@
     %td.total_tests 
     
   - projects.each do |project|
-    = haml :"dashboard/_project_row", :locals => { :project => project }
+    = haml :_project_row, :locals => { :project => project }

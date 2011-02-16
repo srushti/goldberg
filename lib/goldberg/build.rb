@@ -2,7 +2,10 @@ module Goldberg
   class Build
     def self.all(project)
       FileUtils.mkdir_p(project.builds_path) if !File.exist?(project.builds_path)
-      (Dir.entries(project.builds_path) - ['.', '..']).map{|entry| File.join(project.builds_path, entry)}.select{|entry| File.directory?(entry)}.map{|dir_entry| Build.new(dir_entry)}
+      (Dir.entries(project.builds_path) - ['.', '..']).sort.reverse
+        .map{|entry| File.join(project.builds_path, entry)}
+        .select{|entry| File.directory?(entry)}
+        .map{|dir_entry| Build.new(dir_entry)}
     end
 
     def self.null
@@ -15,6 +18,10 @@ module Goldberg
 
     def number
       File.basename(@path)
+    end
+
+    def build_log_path
+      File.join(@path, 'build_log')
     end
 
     def status

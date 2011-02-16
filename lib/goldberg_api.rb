@@ -42,5 +42,13 @@ module GoldbergApi
         redirect back
       end
     end
+
+    get '/projects/:project_name/builds/:build_number' do
+      if !Goldberg::Project.all.map(&:name).include?(params[:project_name]) || !(project = Goldberg::Project.new(params[:project_name])).builds.map(&:number).include?(params[:build_number])
+        status 404
+      else
+        Goldberg::Environment.read_file(project.builds.detect{|build| build.number == params[:build_number]}.build_log_path)
+      end
+    end
   end
 end
