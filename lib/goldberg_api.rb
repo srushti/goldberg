@@ -20,7 +20,7 @@ end
 module GoldbergApi
   class Application < Sinatra::Application
     helpers Sinatra::OutputBuffer::Helpers
-    
+
     get '/' do
       haml :index, :locals => { :projects => Goldberg::Project.all }
     end
