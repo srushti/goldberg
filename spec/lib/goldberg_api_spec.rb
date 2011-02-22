@@ -7,6 +7,7 @@ module GoldbergApi
       projects << mock('project1', :name => 'name1', :status => true, :build_log => 'log1')
       projects << mock('project2', :name => 'name2', :status => false, :build_log => 'log2')
       Goldberg::Project.should_receive(:all).and_return(projects)
+      projects.each {|project| project.should_receive(:last_built_at)}
       get '/'
       last_response.body.should include "name1"
       last_response.body.should include "name2"
