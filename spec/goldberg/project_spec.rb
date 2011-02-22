@@ -67,5 +67,11 @@ module Goldberg
       Environment.should_receive(:write_file).with(project.force_build_path, '')
       project.force_build
     end
+
+    it "should return the latest build time" do
+      project = Project.new("name")
+      File.should_receive(:ctime).with('some_path/name/build_status')
+      project.last_built_at
+    end
   end
 end

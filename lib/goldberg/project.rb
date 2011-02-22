@@ -95,6 +95,10 @@ module Goldberg
       end
     end
 
+    def last_built_at
+      File.ctime(build_status_path)
+    end
+
     def id
       name.hash.abs
     end
