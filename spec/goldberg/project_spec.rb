@@ -28,7 +28,7 @@ module Goldberg
       yielded_project.should == project
     end
 
-    it "yields if there are is build to be forced even if there are no updates" do
+    it "yields if there is a build to be forced even if there are no updates" do
       yielded_project = nil
       project = Project.new('name')
       ['build_status_path', 'build_log_path', 'force_build_path'].each do |method_name|
@@ -65,6 +65,15 @@ module Goldberg
     it "writes the build force file" do
       project = Project.new('name')
       Environment.should_receive(:write_file).with(project.force_build_path, '')
+      project.should_receive(:update)
+      project.force_build
+    end
+
+    it "should get latest code when the build is forced" do
+      project = Project.new('name')
+      Environment.should_receive(:write_file).with(project.force_build_path, '')
+      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
+      project.should_receive(:build)
       project.force_build
     end
 

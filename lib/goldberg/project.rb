@@ -109,6 +109,7 @@ module Goldberg
 
     def force_build
       Environment.write_file(force_build_path, '')
+      update{ |project| project.build }
     end
 
     def builds
