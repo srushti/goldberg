@@ -22,14 +22,14 @@ module GoldbergApi
     helpers Sinatra::OutputBuffer::Helpers
 
     get '/' do
-      haml :index, :locals => { :projects => Goldberg::Project.all }
+      haml :index, :locals => { :projects => Goldberg::Project.all, :keep_refreshing => true }
     end
 
     get "/projects/:project_name" do
       if !Goldberg::Project.all.map(&:name).include?(params[:project_name])
         status 404
       else
-        haml :project, :locals => { :project => Goldberg::Project.new(params[:project_name]) }
+        haml :project, :locals => { :project => Goldberg::Project.new(params[:project_name]), :keep_refreshing => true }
       end
     end
 
@@ -47,7 +47,7 @@ module GoldbergApi
       if !Goldberg::Project.all.map(&:name).include?(params[:project_name]) || !(project = Goldberg::Project.new(params[:project_name])).builds.map(&:number).include?(params[:build_number])
         status 404
       else
-        Goldberg::Environment.read_file(project.builds.detect{|build| build.number == params[:build_number]}.build_log_path)
+        haml :build, :locals => { :project => project, :build => project.builds.detect{|build| build.number == params[:build_number] } }
       end
     end
   end

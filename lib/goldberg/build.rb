@@ -22,8 +22,12 @@ module Goldberg
       File.basename(@path)
     end
 
-    def build_log_path
+    def log_path
       File.join(@path, 'build_log')
+    end
+
+    def log
+      Environment.read_file(log_path)
     end
 
     def status
@@ -36,7 +40,7 @@ module Goldberg
     end
 
     def <=>(other)
-      path_comparison = build_log_path <=> build_log_path
+      path_comparison = log_path <=> log_path
       if path_comparison != 0
         path_comparison
       else
