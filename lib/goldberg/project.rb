@@ -42,7 +42,7 @@ module Goldberg
       @logger.error e
     end
 
-    ['build_status', 'force_build', 'build_log', 'code', 'build_number', 'builds'].each do |relative_path|
+    ['build_status', 'force_build', 'build_log', 'change_list', 'code', 'build_number', 'builds'].each do |relative_path|
       define_method "#{relative_path}_path".to_sym do
         path(relative_path)
       end
@@ -110,6 +110,11 @@ module Goldberg
     def force_build
       Environment.write_file(force_build_path, '')
       update{ |project| project.build }
+    end
+
+    def change_list
+      changes = Environment.system_call_output("cd #{code_path} ; git diff --name-status HEAD~1 HEAD")
+      Environment.write_file(change_list_path, changes)
     end
 
     def builds

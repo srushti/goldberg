@@ -82,5 +82,12 @@ module Goldberg
       File.should_receive(:ctime).with('some_path/name/build_status')
       project.last_built_at
     end
+
+    it "should write the list of changes to change list file" do
+      project = Project.new("name")
+      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git diff --name-status HEAD~1 HEAD').and_return('change list')
+      Environment.should_receive(:write_file).with('some_path/name/change_list', 'change list')
+      project.change_list
+    end
   end
 end
