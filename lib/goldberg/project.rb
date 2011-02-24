@@ -43,7 +43,7 @@ module Goldberg
       @logger.error e
     end
 
-    ['build_status', 'force_build', 'build_log', 'change_list', 'code', 'build_number', 'build_version', 'builds'].each do |relative_path|
+    ['build_status', 'force_build', 'build_log', 'change_list', 'code', 'build_number', 'build_version', 'builds', 'change_list'].each do |relative_path|
       define_method "#{relative_path}_path".to_sym do
         path(relative_path)
       end
@@ -75,6 +75,7 @@ module Goldberg
     end
 
     def build(task = :default)
+      write_change_list
       @logger.info "Building #{name}"
       Environment.system("cd #{code_path} ; rake #{task.to_s} 2>&1") do |output, result|
         Environment.write_file(build_log_path, output)
@@ -115,13 +116,19 @@ module Goldberg
     end
 
     def write_change_list
-      changes = Environment.system_call_output("cd #{code_path} ; git diff --name-status HEAD~1 HEAD")
+      latest_build_version = latest_build.version
+      new_build_version = build_version
+      changes = Environment.system_call_output("cd #{code_path} ; git diff --name-status #{latest_build_version} #{new_build_version}")
       Environment.write_file(change_list_path, changes)
     end
 
     def write_build_version
       current_version = Environment.system_call_output("cd #{code_path} ; git show-ref HEAD --hash")
       Environment.write_file(build_version_path, current_version)
+    end
+
+    def build_version
+      Environment.read_file(build_version_path).to_i
     end
 
     def builds
