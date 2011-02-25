@@ -39,6 +39,11 @@ module Goldberg
       end
     end
 
+    def version
+      build_version_path = File.join(@path, 'build_version')
+      Environment.read_file(build_version_path)
+    end
+
     def <=>(other)
       path_comparison = log_path <=> log_path
       if path_comparison != 0

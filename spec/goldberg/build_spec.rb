@@ -10,5 +10,11 @@ module Goldberg
       end
       Build.all(mock(Project, :builds_path => 'builds_path')).should =~ [Build.new('builds_path/9'), Build.new('builds_path/10'), Build.new('builds_path/11')]
     end
+
+    it "should return the version" do
+      build = Build.new('/projects/name/builds/latest')
+      Environment.should_receive(:read_file).with('/projects/name/builds/latest/build_version')
+      build.version
+    end
   end
 end

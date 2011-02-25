@@ -36,13 +36,14 @@ module Goldberg
     def update
       @logger.info "Checking #{name}"
       if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.') || build_anyway?
+        write_build_version
         yield self
       end
     rescue Exception => e
       @logger.error e
     end
 
-    ['build_status', 'force_build', 'build_log', 'code', 'build_number', 'builds'].each do |relative_path|
+    ['build_status', 'force_build', 'build_log', 'change_list', 'code', 'build_number', 'build_version', 'builds', 'change_list'].each do |relative_path|
       define_method "#{relative_path}_path".to_sym do
         path(relative_path)
       end
@@ -59,6 +60,7 @@ module Goldberg
 
     def latest_build
       latest_build_path = File.join(path('builds'), latest_build_number.to_s)
+
       if !File.exist?(latest_build_path)
         Build.null
       end
@@ -68,11 +70,12 @@ module Goldberg
     def copy_latest_build_to_its_own_folder
       new_build_number = (latest_build_number + 1).to_s
       FileUtils.mkdir_p(File.join(builds_path, new_build_number), :verbose => true)
-      FileUtils.cp %w(build_status build_log).map{|basename| File.join(path(basename))}, File.join(builds_path, new_build_number), :verbose => true
+      FileUtils.cp %w(build_status build_log build_version).map{|basename| File.join(path(basename))}, File.join(builds_path, new_build_number), :verbose => true
       Environment.write_file(build_number_path, new_build_number)
     end
 
     def build(task = :default)
+      write_change_list
       @logger.info "Building #{name}"
       Environment.system("cd #{code_path} ; rake #{task.to_s} 2>&1") do |output, result|
         Environment.write_file(build_log_path, output)
@@ -110,6 +113,24 @@ module Goldberg
     def force_build
       Environment.write_file(force_build_path, '')
       update{ |project| project.build }
+    end
+
+    def write_change_list
+      latest_build_version = latest_build.version
+      new_build_version = build_version
+      latest_build_version.gsub!(/\n/,'')
+      new_build_version.gsub!(/\n/,'')
+      changes = Environment.system_call_output("cd #{code_path} ; git diff --name-status #{latest_build_version} #{new_build_version}")
+      Environment.write_file(change_list_path, changes)
+    end
+
+    def write_build_version
+      current_version = Environment.system_call_output("cd #{code_path} ; git show-ref HEAD --hash")
+      Environment.write_file(build_version_path, current_version)
+    end
+
+    def build_version
+      Environment.read_file(build_version_path)
     end
 
     def builds

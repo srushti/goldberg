@@ -23,8 +23,10 @@ module Goldberg
 
     it "updates and yields if there are updates" do
       yielded_project = nil
+      project = Project.new('name')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
-      project = Project.new('name').update{|p| yielded_project = p}
+      project.should_receive(:write_build_version)
+      project.update{|p| yielded_project = p}
       yielded_project.should == project
     end
 
@@ -35,6 +37,7 @@ module Goldberg
         File.should_receive(:exist?).with(project.send(method_name)).and_return(true)
       end
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('Already up-to-date.')
+      project.should_receive(:write_build_version)
       project.update{|p| yielded_project = p}
       yielded_project.should == project
     end
@@ -45,6 +48,7 @@ module Goldberg
       Environment.stub!(:write_file).with('some_path/name/build_status', true)
       project = Project.new('name')
       project.should_receive(:latest_build_number).and_return(1)
+      project.should_receive(:write_change_list)
       FileUtils.should_receive(:mkdir_p).with("some_path/name/builds/2", :verbose => true)
       FileUtils.should_receive(:cp)
       Environment.should_receive(:write_file).with(project.build_number_path, 2.to_s)
@@ -74,6 +78,7 @@ module Goldberg
       Environment.should_receive(:write_file).with(project.force_build_path, '')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
       project.should_receive(:build)
+      project.should_receive(:write_build_version)
       project.force_build
     end
 
@@ -81,6 +86,30 @@ module Goldberg
       project = Project.new("name")
       File.should_receive(:ctime).with('some_path/name/build_status')
       project.last_built_at
+    end
+
+    it "should write the list of changes to change list file" do
+      project = Project.new("name")
+      latest_build = Build.new('latest_build_path')
+      project.should_receive(:latest_build).and_return(latest_build)
+      latest_build.should_receive(:version).and_return('HEAD~1')
+      project.should_receive(:build_version).and_return('HEAD')
+      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git diff --name-status HEAD~1 HEAD').and_return('change list')
+      Environment.should_receive(:write_file).with('some_path/name/change_list', 'change list')
+      project.write_change_list
+    end
+
+    it "should save the current build version" do
+      project = Project.new('name')
+      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git show-ref HEAD --hash').and_return('version')
+      Environment.should_receive(:write_file).with('some_path/name/build_version', 'version')
+      project.write_build_version
+    end
+
+    it "should return the current build version" do
+      project = Project.new('name')
+      Environment.should_receive(:read_file).with('some_path/name/build_version').and_return('version')
+      project.build_version
     end
   end
 end
