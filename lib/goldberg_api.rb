@@ -50,5 +50,9 @@ module GoldbergApi
         haml :build, :locals => { :project => project, :build => project.builds.detect{|build| build.number == params[:build_number] } }
       end
     end
+
+    get '/XmlStatusReport.aspx' do
+      haml :cctray, :locals => { :projects => Goldberg::Project.all }, :layout => false
+    end
   end
 end
