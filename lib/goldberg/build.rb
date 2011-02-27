@@ -11,7 +11,7 @@ module Goldberg
     end
 
     def self.null
-      OpenStruct.new(:number => '', :status => 'never run')
+      OpenStruct.new(:number => '', :status => 'never run', :version => 'HEAD')
     end
 
     def initialize(path)

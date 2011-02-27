@@ -62,7 +62,7 @@ module Goldberg
       latest_build_path = File.join(path('builds'), latest_build_number.to_s)
 
       if !File.exist?(latest_build_path)
-        Build.null
+        return Build.null
       end
       Build.new(latest_build_path)
     end
