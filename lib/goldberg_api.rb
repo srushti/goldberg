@@ -51,8 +51,10 @@ module GoldbergApi
       end
     end
 
-    get '/XmlStatusReport.aspx' do
-      haml :cctray, :locals => { :projects => Goldberg::Project.all }, :layout => false
+    ['XmlStatusReport.aspx', 'cctray.xml', 'cc.xml'].each do |route|
+      get "/#{route}" do
+        haml :cctray, :locals => { :projects => Goldberg::Project.all }, :layout => false
+      end
     end
   end
 end

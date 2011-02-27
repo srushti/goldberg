@@ -42,5 +42,20 @@ module GoldbergApi
       post '/projects/name/force'
       last_response.should be_redirect
     end
+
+    ['/cc.xml', '/XmlStatusReport.aspx', '/cctray.xml'].each do |route|
+      it "loads the cruise control tray feed at #{route}" do
+        build = mock('build', :status => true)
+        now = DateTime.now
+        Goldberg::Project.should_receive(:all).and_return([mock('project', :name => 'name', :last_built_at => now, :latest_build => build)])
+        get route
+        expected_report = <<-EOXML
+<Projects>
+  <Project activity='Sleeping' lastBuildStatus='Success' lastBuildTime='#{now}' name='name' nextBuildTime='#{now}' webUrl='/projects/name'></Project>
+</Projects>
+        EOXML
+        last_response.body.should == expected_report
+      end
+    end
   end
 end
