@@ -16,5 +16,10 @@ module Goldberg
       Environment.should_receive(:read_file).with('/projects/name/builds/latest/build_version')
       build.version
     end
+
+    it "should be able to fake the last version" do
+      Build.null.version.should == 'HEAD'
+      Build.null.should be_null
+    end
   end
 end

@@ -111,5 +111,21 @@ module Goldberg
       Environment.should_receive(:read_file).with('some_path/name/build_version').and_return('version')
       project.build_version
     end
+
+    it "should be able to return the latest build" do
+      project = Project.new('name')
+      project.should_receive(:latest_build_number).and_return(42)
+      File.should_receive(:exist?).with('some_path/name/builds/42').and_return(true)
+      project.latest_build.number.should == "42"
+    end
+
+    it "should be able to return a null build if the project has never been built" do
+      project = Project.new('name')
+      project.should_receive(:latest_build_number).and_return(0)
+      File.should_receive(:exist?).with('some_path/name/builds/0').and_return(false)
+      latest_build = project.latest_build
+      latest_build.number.should == ""
+      latest_build.should be_null
+    end
   end
 end
