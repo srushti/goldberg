@@ -4,7 +4,14 @@ module Goldberg
   describe Init do
     it "adds a new project" do
       Environment.stub!(:argv).and_return(['add', 'url', 'name'])
-      Project.should_receive(:add).with(:url => 'url', :name => 'name')
+      Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => nil)
+      Environment.should_receive(:puts).with('name successfully added.')
+      Init.new.run
+    end
+
+    it "adds a new project with a custom command" do
+      Environment.stub!(:argv).and_return(['add', 'url', 'name', 'cmake'])
+      Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => 'cmake')
       Environment.should_receive(:puts).with('name successfully added.')
       Init.new.run
     end

@@ -12,11 +12,11 @@ module Goldberg
     end
 
     def add
-      if Environment.argv.size == 3
-        Project.add(:url => Environment.argv[1], :name => Environment.argv[2])
+      if Environment.argv.size >= 3
+        Project.add(:url => Environment.argv[1], :name => Environment.argv[2], :command => Environment.argv[3])
         Environment.puts "#{Environment.argv[2]} successfully added."
       else
-        Environment.puts "Usage 'bin/goldberg add <url> <name>'"
+        Environment.puts "Usage 'bin/goldberg add <url> <name> [custom_command]'"
       end
     end
 

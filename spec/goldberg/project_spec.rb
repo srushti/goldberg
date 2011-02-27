@@ -14,6 +14,25 @@ module Goldberg
       project.name.should == 'some_project'
     end
 
+    it "writes the custom command if it is recieved when adding" do
+      Environment.stub!(:system).and_return(true)
+      Environment.should_receive(:write_file).with('some_path/some_project/custom_command', 'cmake')
+      project = Project.add({:url => "git://some.url.git", :name => 'some_project', :command => 'cmake'})
+    end
+
+    it "should be able to retrieve the custom command" do
+      File.should_receive(:exist?).with('some_path/name/custom_command').and_return(true)
+      Environment.should_receive(:read_file).with('some_path/name/custom_command').and_return('cmake')
+      project = Project.new('name')
+      project.command.should == 'cmake'
+    end
+    
+    it "should default the custom command to rake" do
+      File.should_receive(:exist?).with('some_path/name/custom_command').and_return(false)
+      project = Project.new('name')
+      project.command.should == 'rake'
+    end
+
     it "updates but doesn't yield if there are no updates" do
       project = Project.new('name')
       project.should_receive(:build_anyway?).and_return(false)
@@ -49,6 +68,7 @@ module Goldberg
       project = Project.new('name')
       project.should_receive(:latest_build_number).and_return(1)
       project.should_receive(:write_change_list)
+      project.should_receive(:command).and_return('rake')
       FileUtils.should_receive(:mkdir_p).with("some_path/name/builds/2", :verbose => true)
       FileUtils.should_receive(:cp)
       Environment.should_receive(:write_file).with(project.build_number_path, 2.to_s)

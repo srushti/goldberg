@@ -12,6 +12,7 @@ module Goldberg
     def self.add(options)
       Project.new(options[:name]).tap do |project|
         project.checkout(options[:url])
+        project.write_custom_command(options[:command])
       end
     end
 
@@ -29,6 +30,10 @@ module Goldberg
       raise
     end
 
+    def write_custom_command(command)
+      Environment.write_file(custom_command_path, command) if command
+    end
+
     def build_anyway?
       !File.exist?(build_status_path) || !File.exist?("#{build_log_path}") || File.exist?(force_build_path)
     end
@@ -43,7 +48,7 @@ module Goldberg
       @logger.error e
     end
 
-    ['build_status', 'force_build', 'build_log', 'change_list', 'code', 'build_number', 'build_version', 'builds', 'change_list'].each do |relative_path|
+    ['build_status', 'force_build', 'build_log', 'change_list', 'code', 'build_number', 'build_version', 'builds', 'change_list', 'custom_command'].each do |relative_path|
       define_method "#{relative_path}_path".to_sym do
         path(relative_path)
       end
@@ -77,7 +82,7 @@ module Goldberg
     def build(task = :default)
       write_change_list
       @logger.info "Building #{name}"
-      Environment.system("cd #{code_path} ; rake #{task.to_s} 2>&1") do |output, result|
+      Environment.system("cd #{code_path} ; #{command} #{task.to_s} 2>&1") do |output, result|
         Environment.write_file(build_log_path, output)
         @logger.info "Build status #{result}"
         Environment.write_file(build_status_path, result)
@@ -135,6 +140,11 @@ module Goldberg
 
     def builds
       Build.all(self)
+    end
+
+    def command
+      return Environment.read_file(custom_command_path) if File.exist? custom_command_path
+      "rake"
     end
   end
 end
