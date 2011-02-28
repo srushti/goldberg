@@ -40,3 +40,12 @@ div.container div.footer div.logo img{
 div.container div.footer div.author {
   font-size: 1.3em;
 }
+
+h1.a {
+  text-decoration: none;
+}
+
+div.container {
+    padding-top: 2em;
+}
+
