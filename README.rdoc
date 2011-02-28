@@ -9,5 +9,5 @@ A CI server. With pipelines!
 
 == Running Goldberg
 
-   rake server                      # Starts the CI server and the web front-end at localhost:3000
+   bin/goldberg start [port=3000]                      # Starts the CI server and the web front-end at localhost:3000, specify port to override
 

@@ -3,11 +3,11 @@ require File.join(File.dirname(__FILE__), 'project')
 module Goldberg
   class Init
     def run
-      if Environment.argv.size > 0 && ['add', 'remove', 'list', 'start'].include?(Environment.argv[0])
+      if Environment.argv.size > 0 && ['add', 'remove', 'list', 'start', 'start_poller'].include?(Environment.argv[0])
         send(Environment.argv[0])
       else
         Environment.puts "You did not pass any command."
-        Environment.puts "Valid commands are add, remove, list & start."
+        Environment.puts "Valid commands are add, remove, list, start & start_poller."
       end
     end
 
@@ -34,8 +34,11 @@ module Goldberg
     end
 
     def start
-      Environment.puts "This only runs the scheduler. If you want the web app as well please run 'rake server' instead."
-      start_poller
+      port = 3000
+      if Environment.argv.size == 2
+        port = Environment.argv[1].to_i
+      end
+      Environment.exec "rackup -p #{port} #{File.join(File.dirname(__FILE__), '..', '..', 'config.ru')}"
     end
 
     def start_poller

@@ -25,6 +25,15 @@ module Goldberg
       Environment.should_receive(:puts).with('name')
       Init.new.run
     end
+
+    {(['start']) => 3000, (['start', '9292']) => 9292}.each_pair do |args, port|
+      it "starts the app on port #{port} with arguments #{args}" do
+        Environment.stub!(:argv).and_return(args)
+        app_root = File.join(File.dirname(__FILE__)).split('/spec/goldberg')[0]
+        Environment.should_receive(:exec).with("rackup -p #{port} #{File.join(app_root, 'lib', 'goldberg', '..', '..', 'config.ru')}")
+        Init.new.run
+      end
+    end
   end
 end
 

@@ -18,7 +18,7 @@ module Goldberg
         end
       end
 
-      [:puts, :sleep].each do |method_name|
+      [:puts, :sleep, :exec].each do |method_name|
         define_method method_name do |args|
           super(args)
         end
