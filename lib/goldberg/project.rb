@@ -143,8 +143,7 @@ module Goldberg
     end
 
     def command
-      return Environment.read_file(custom_command_path) if File.exist? custom_command_path
-      "rake"
+      File.exist?(custom_command_path) ? Environment.read_file(custom_command_path) : "rake"
     end
   end
 end

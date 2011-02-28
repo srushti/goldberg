@@ -26,7 +26,7 @@ module Goldberg
       project = Project.new('name')
       project.command.should == 'cmake'
     end
-    
+
     it "should default the custom command to rake" do
       File.should_receive(:exist?).with('some_path/name/custom_command').and_return(false)
       project = Project.new('name')
