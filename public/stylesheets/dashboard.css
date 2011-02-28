@@ -1,4 +1,3 @@
-#all_projects a, a:visited { color: black; }
 #all_projects tr.headings td { font-weight: bold; }
 #all_projects tr.project_row td { border-top: white solid 1em; background-color: white; }
 
@@ -30,4 +29,3 @@
 #all_projects tr.project_row td.number_of_tests {
     width: 20%;
 }
-
