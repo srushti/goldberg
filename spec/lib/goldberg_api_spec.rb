@@ -46,12 +46,12 @@ module GoldbergApi
     ['/cc.xml', '/XmlStatusReport.aspx', '/cctray.xml'].each do |route|
       it "loads the cruise control tray feed at #{route}" do
         build = mock('build', :status => true)
-        now = DateTime.now
+        now = Time.now
         Goldberg::Project.should_receive(:all).and_return([mock('project', :name => 'name', :last_built_at => now, :latest_build => build)])
         get route
         expected_report = <<-EOXML
 <Projects>
-  <Project activity='Sleeping' lastBuildStatus='Success' lastBuildTime='#{now}' name='name' nextBuildTime='#{now}' webUrl='/projects/name'></Project>
+  <Project activity='Sleeping' lastBuildStatus='Success' lastBuildTime='#{now}' name='name' nextBuildTime='#{now + 20}' webUrl='/projects/name'></Project>
 </Projects>
         EOXML
         last_response.body.should == expected_report
