@@ -1,0 +1,42 @@
+html {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+}
+
+a, a:visited { color: black; }
+
+div.container div.header {
+  border-bottom: 1px #ddd solid;
+}
+
+div.container div.header div.title a {
+  text-decoration: none;
+}
+
+div.container div.footer {
+  width: inherit;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px #ddd solid;
+  text-align: right;
+  padding-top: .25em;
+}
+
+div.container div.footer div.logo {
+  float: left;
+}
+
+div.container div.footer div.logo img{
+  width: 50px;
+}
+
+div.container div.footer div.author {
+  font-size: 1.3em;
+}

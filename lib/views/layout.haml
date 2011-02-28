@@ -1,8 +1,9 @@
 %html
   %head
     %title Goldberg
-    %script{:type => "text/javascript", :src  => "/js/jquery-1.5.min.js"}
-    %link{:rel => 'stylesheet', :href => '/stylesheets/blueprint/screen.css', :type => 'text/css'}
+    = javascript_script_tag '/js/jquery-1.5.min.js'
+    = stylesheet_link_tag '/stylesheets/blueprint/screen.css'
+    = stylesheet_link_tag '/stylesheets/layout.css'
     - if defined?(keep_refreshing) && keep_refreshing
       :javascript
         $(document).ready(function(){
@@ -14,8 +15,21 @@
     = yield_content :head
   %body
     .container
-      %h1
-        %a{:href => '/'} Goldberg
-      %hr
-
-      = yield
+      .header
+        .title
+          %h1
+            %a{:href => '/'} Goldberg
+          %h4 Lightweight Continuous Integration in Ruby
+          
+      .page
+        = yield
+      .footer
+        .logo
+          %a{:href => 'http://c42.in'}
+            = image_tag '/images/c42-engineering-logo.png'
+        .message
+          .author
+            %a{:href => 'http://c42.in'} C42 Engineering 
+            Open Source
+          .version
+            = "Version #{Goldberg::VERSION::STRING}"

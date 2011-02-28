@@ -4,6 +4,7 @@ require File.join(File.dirname(__FILE__), 'goldberg', 'project')
 
 Bundler.require(:web)
 require "sinatra/outputbuffer"
+require 'sinatra/static_assets'
 
 set :views, File.join(File.dirname(__FILE__), 'views')
 set :public, File.join(File.dirname(__FILE__), '..', 'public')
