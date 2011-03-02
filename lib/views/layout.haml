@@ -4,6 +4,7 @@
     = javascript_script_tag '/js/jquery-1.5.min.js'
     = stylesheet_link_tag '/stylesheets/blueprint/screen.css'
     = stylesheet_link_tag '/stylesheets/layout.css'
+    - keep_refreshing = false if settings.environment == :development
     - if defined?(keep_refreshing) && keep_refreshing
       :javascript
         $(document).ready(function(){
