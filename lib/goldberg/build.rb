@@ -11,7 +11,7 @@ module Goldberg
     end
 
     def self.null
-      OpenStruct.new(:number => '', :status => 'never run', :version => 'HEAD', :null? => true)
+      OpenStruct.new(:number => '', :status => 'never run', :version => 'HEAD', :null? => true, :timestamp => nil)
     end
 
     def initialize(path)
@@ -22,30 +22,38 @@ module Goldberg
       File.basename(@path)
     end
 
-    def log_path
-      File.join(@path, 'build_log')
+    def log
+      Environment.read_file(build_log_path)
     end
 
-    def log
-      Environment.read_file(log_path)
+    def change_list
+      File.exist?(change_list_path) ? Environment.read_file(change_list_path) : nil
+    end
+
+    def timestamp
+      File.ctime(build_status_path)
+    end
+
+    %w(build_status change_list build_log build_version).each do |file_name|
+      define_method "#{file_name}_path".to_sym do
+        File.join(@path, file_name)
+      end
     end
 
     def status
-      build_status_path = File.join(@path, 'build_status')
       if File.exist?(build_status_path)
-        Environment.read_file(build_status_path) == 'true'
+        Environment.read_file(build_status_path) == 'true' ? 'passed' : 'failed'
       else
         nil
       end
     end
 
     def version
-      build_version_path = File.join(@path, 'build_version')
       File.exist?(build_version_path) ? Environment.read_file(build_version_path) : nil
     end
 
     def <=>(other)
-      path_comparison = log_path <=> log_path
+      path_comparison = build_log_path <=> other.build_log_path
       if path_comparison != 0
         path_comparison
       else

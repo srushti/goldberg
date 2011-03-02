@@ -4,8 +4,8 @@ module GoldbergApi
   describe Application do
     it "lists all project" do
       projects = []
-      projects << mock('project1', :name => 'name1', :status => true, :build_log => 'log1')
-      projects << mock('project2', :name => 'name2', :status => false, :build_log => 'log2')
+      projects << mock('project1', :name => 'name1', :status => 'passed', :build_log => 'log1')
+      projects << mock('project2', :name => 'name2', :status => 'failed', :build_log => 'log2')
       Goldberg::Project.should_receive(:all).and_return(projects)
       projects.each {|project| project.should_receive(:last_built_at)}
       get '/'
@@ -14,7 +14,7 @@ module GoldbergApi
     end
 
     it "gives the status & log of a project" do
-      project = mock(Goldberg::Project, :name => "name", :status => true, :build_log => "log")
+      project = mock(Goldberg::Project, :name => "name", :status => 'passed', :build_log => "log")
       build = Goldberg::Build.null
       Goldberg::Project.should_receive(:all).and_return([project])
       Goldberg::Project.should_receive(:new).with(project.name).and_return(project)
@@ -45,9 +45,9 @@ module GoldbergApi
 
     ['/cc.xml', '/XmlStatusReport.aspx', '/cctray.xml'].each do |route|
       it "loads the cruise control tray feed at #{route}" do
-        build = mock('build', :status => true)
         now = Time.now
-        Goldberg::Project.should_receive(:all).and_return([mock('project', :name => 'name', :last_built_at => now, :latest_build => build)])
+        build = mock('build')
+        Goldberg::Project.should_receive(:all).and_return([mock('project', :name => 'name', :last_built_at => now, :latest_build => build, :map_to_cctray_project_status => 'Success')])
         get route
         expected_report = <<-EOXML
 <Projects>

@@ -79,12 +79,6 @@ module Goldberg
       Project.new('project_to_be_removed').remove
     end
 
-    it "reports the status of the project" do
-      File.should_receive(:exist?).with('some_path/name/build_status').and_return(true)
-      Environment.should_receive(:read_file).with('some_path/name/build_status').and_return('true')
-      Project.new('name').status.should == true
-    end
-
     it "writes the build force file" do
       project = Project.new('name')
       Environment.should_receive(:write_file).with(project.force_build_path, '')
@@ -97,12 +91,6 @@ module Goldberg
       Environment.stub!(:write_file).with(project.force_build_path, '')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
       project.force_build
-    end
-
-    it "should return the latest build time" do
-      project = Project.new("name")
-      File.should_receive(:ctime).with('some_path/name/build_status')
-      project.last_built_at
     end
 
     it "should write the list of changes to change list file" do

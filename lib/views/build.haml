@@ -6,5 +6,6 @@
 %h3= "Build: #{build.number}"
 %strong{:class => project_status(build.status)}= "#{project_status(build.status)}"
 %div= build.version
+%pre= build.change_list
 %pre= build.log
 

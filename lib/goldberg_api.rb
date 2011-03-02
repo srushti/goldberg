@@ -14,7 +14,7 @@ helpers do
   alias_method :h, :escape_html
 
   def project_status(passed)
-    passed ? 'passed' : 'failed'
+    passed.gsub(/ /, '_')
   end
 end
 

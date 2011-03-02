@@ -81,8 +81,8 @@ module Goldberg
     end
 
     def build(task = :default)
-      write_change_list
       write_build_version
+      write_change_list
       @logger.info "Building #{name}"
       Environment.system("cd #{code_path} ; #{command} #{task.to_s} 2>&1") do |output, result|
         Environment.write_file(build_log_path, output)
@@ -98,21 +98,17 @@ module Goldberg
     end
 
     def status
-      if File.exist?(build_status_path)
-        Environment.read_file(build_status_path) == 'true'
-      else
-        nil
-      end
+      latest_build.status
     end
 
     def last_built_at
-      File.ctime(build_status_path)
+      latest_build.timestamp
     end
 
     def id
       name.hash.abs
     end
-    
+
     def build_log
       Environment.read_file("#{build_log_path}")
     end
@@ -146,6 +142,14 @@ module Goldberg
 
     def command
       File.exist?(custom_command_path) ? Environment.read_file(custom_command_path) : "rake"
+    end
+
+    def map_to_cctray_project_status
+      case status
+      when 'passed' then 'Success'
+      when 'failed' then 'Failure'
+      else 'Unknown'
+      end
     end
   end
 end
