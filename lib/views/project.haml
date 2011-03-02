@@ -11,3 +11,4 @@
     - project.builds.each do |build|
       %li
         %a{:href => "/projects/#{project.name}/builds/#{build.number}"}= "#{build.number} #{project_status(build.status)}"
+        = build.version
