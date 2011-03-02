@@ -35,5 +35,13 @@ module Goldberg
       File.should_receive(:ctime).with('some_path/name/builds/2/build_status').and_return(now)
       build.timestamp.should == now
     end
+
+    it "sorts correctly" do
+      builds = []
+      [10, 9, 1, 500].each do |i|
+        builds << Build.new("some_path/name/builds/#{i}")
+      end
+      builds.sort.map(&:number).map(&:to_i).should == [1, 9, 10, 500]
+    end
   end
 end

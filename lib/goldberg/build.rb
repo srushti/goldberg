@@ -53,12 +53,12 @@ module Goldberg
     end
 
     def <=>(other)
-      path_comparison = build_log_path <=> other.build_log_path
-      if path_comparison != 0
-        path_comparison
-      else
-        number.to_i <=> other.number.to_i
-      end
+      number.to_i <=> other.number.to_i
+    end
+
+    protected
+    def path
+      @path
     end
   end
 end
