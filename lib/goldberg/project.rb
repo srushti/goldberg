@@ -41,8 +41,9 @@ module Goldberg
     def update
       @logger.info "Checking #{name}"
       if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.') || build_anyway?
-        write_build_version
-        yield self
+        if block_given?
+          yield self
+        end
       end
     rescue Exception => e
       @logger.error e
@@ -75,12 +76,13 @@ module Goldberg
     def copy_latest_build_to_its_own_folder
       new_build_number = (latest_build_number + 1).to_s
       FileUtils.mkdir_p(File.join(builds_path, new_build_number), :verbose => true)
-      FileUtils.cp %w(build_status build_log build_version).map{|basename| File.join(path(basename))}, File.join(builds_path, new_build_number), :verbose => true
+      FileUtils.cp %w(build_status build_log build_version change_list).map{|basename| File.join(path(basename))}, File.join(builds_path, new_build_number), :verbose => true
       Environment.write_file(build_number_path, new_build_number)
     end
 
     def build(task = :default)
       write_change_list
+      write_build_version
       @logger.info "Building #{name}"
       Environment.system("cd #{code_path} ; #{command} #{task.to_s} 2>&1") do |output, result|
         Environment.write_file(build_log_path, output)
@@ -117,7 +119,7 @@ module Goldberg
 
     def force_build
       Environment.write_file(force_build_path, '')
-      update{ |project| project.build }
+      update
     end
 
     def write_change_list

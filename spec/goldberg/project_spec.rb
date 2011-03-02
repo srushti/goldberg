@@ -44,7 +44,6 @@ module Goldberg
       yielded_project = nil
       project = Project.new('name')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
-      project.should_receive(:write_build_version)
       project.update{|p| yielded_project = p}
       yielded_project.should == project
     end
@@ -56,7 +55,6 @@ module Goldberg
         File.should_receive(:exist?).with(project.send(method_name)).and_return(true)
       end
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('Already up-to-date.')
-      project.should_receive(:write_build_version)
       project.update{|p| yielded_project = p}
       yielded_project.should == project
     end
@@ -68,9 +66,10 @@ module Goldberg
       project = Project.new('name')
       project.should_receive(:latest_build_number).and_return(1)
       project.should_receive(:write_change_list)
+      project.should_receive(:write_build_version)
       project.should_receive(:command).and_return('rake')
       FileUtils.should_receive(:mkdir_p).with("some_path/name/builds/2", :verbose => true)
-      FileUtils.should_receive(:cp)
+      FileUtils.should_receive(:cp).with(["some_path/name/build_status", "some_path/name/build_log", "some_path/name/build_version", "some_path/name/change_list"], "some_path/name/builds/2", :verbose => true)
       Environment.should_receive(:write_file).with(project.build_number_path, 2.to_s)
       project.build
     end
@@ -89,16 +88,14 @@ module Goldberg
     it "writes the build force file" do
       project = Project.new('name')
       Environment.should_receive(:write_file).with(project.force_build_path, '')
-      project.should_receive(:update)
+      Environment.stub!(:system_call_output).and_return('some changes')
       project.force_build
     end
 
     it "should get latest code when the build is forced" do
       project = Project.new('name')
-      Environment.should_receive(:write_file).with(project.force_build_path, '')
+      Environment.stub!(:write_file).with(project.force_build_path, '')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
-      project.should_receive(:build)
-      project.should_receive(:write_build_version)
       project.force_build
     end
 
