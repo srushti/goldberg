@@ -9,5 +9,6 @@
       %b= project.name
 
   %td.last_built_at
-    = project.last_built_at
+    - if project.last_built_at
+      = project.last_built_at.strftime("%a, %Y/%m/%d %I:%M%p %Z")
 
