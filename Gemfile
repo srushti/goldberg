@@ -17,5 +17,4 @@ group :development do
   else
     gem 'ruby-debug'
   end
-  gem 'mongrel', '~> 1.2.0.pre2'
 end
