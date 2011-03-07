@@ -41,13 +41,21 @@ module Goldberg
       Environment.exec "rackup -p #{port} #{File.join(File.dirname(__FILE__), '..', '..', 'config.ru')}"
     end
 
-    def start_poller
-      while true
-        Project.all.each do |p|
+    def poll
+      Project.all.each do |p|
+        begin
           p.update do |project|
             Environment.puts "Build #{ project.build ? "passed" : "failed!" }"
           end
+        rescue Exception => e
+          Logger.new.error "Build on project #{p.name} failed because of #{e}"
         end
+      end
+    end
+
+    def start_poller
+      while true
+        poll
         Environment.puts "Sleeping for 20 seconds."
         Environment.sleep(20)
       end

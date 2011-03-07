@@ -41,6 +41,18 @@ module Goldberg
         Init.new.run
       end
     end
+
+    it "continues on with the next project even if one build fails" do
+      one = mock('project_one', :name => 'one')
+      two = mock('project_two', :name => 'two')
+      Project.should_receive(:all).and_return([one, two])
+      one.stub!(:update).and_raise(Exception.new("An exception"))
+      two.should_receive(:update)
+      logger = mock('logger')
+      logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
+      Logger.stub!(:new).and_return(logger)
+      Init.new.poll
+    end
   end
 end
 
