@@ -4,10 +4,11 @@ module Goldberg
 
     def self.all(project)
       FileUtils.mkdir_p(project.builds_path) if !File.exist?(project.builds_path)
-      (Dir.entries(project.builds_path) - ['.', '..'])
-        .map{|entry| File.join(project.builds_path, entry)}
-        .select{|entry| File.directory?(entry)}
-        .map{|dir_entry| Build.new(dir_entry)}.sort.reverse
+      folder_contents = (Dir.entries(project.builds_path) - ['.', '..'])
+      full_names_folder_contents = folder_contents.map{|entry| File.join(project.builds_path, entry)}
+      directory_paths = full_names_folder_contents.select{|entry| File.directory?(entry)}
+      builds = directory_paths.map{|dir_entry| Build.new(dir_entry)}
+      builds.sort.reverse
     end
 
     def self.null
