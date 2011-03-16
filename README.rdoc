@@ -11,3 +11,5 @@ A CI server. With pipelines!
 
    bin/goldberg start [port=3000]                      # Starts the CI server and the web front-end at localhost:3000, specify port to override
 
+
+Sample Goldberg Server: http://golberg.c42.in
