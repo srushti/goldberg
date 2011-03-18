@@ -60,7 +60,7 @@ module Goldberg
     end
 
     it "builds the default target" do
-      Environment.should_receive(:system).with('cd some_path/name/code ; rake default 2>&1').and_yield('some log data', true)
+      Environment.should_receive(:system).with("source $HOME/.rvm/scripts/rvm && cd some_path/name/code && BUNDLE_GEMFILE='' rake default 2>&1").and_yield('some log data', true)
       Environment.stub!(:write_file).with('some_path/name/build_log', 'some log data')
       Environment.stub!(:write_file).with('some_path/name/build_status', true)
       project = Project.new('name')
