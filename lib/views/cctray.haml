@@ -1,3 +1,0 @@
-%Projects
-  - projects.each do |project|
-    %Project{:name => project.name, :activity => "Sleeping", :lastBuildStatus => project.map_to_cctray_project_status, :lastBuildTime => project.last_built_at, :nextBuildTime => (project.last_built_at || Time.now) + 20, :webUrl => "/projects/#{project.name}"}

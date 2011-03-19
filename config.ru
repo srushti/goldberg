@@ -1,13 +1,4 @@
-$:.unshift File.dirname(__FILE__) + "/lib/"
-require 'goldberg_api'
+# This file is used by Rack-based servers to start the application.
 
-if ENV['RACK_ENV'] == 'production'
-  log = File.new("log/sinatra.log", "a")
-  STDOUT.reopen(log)
-  STDERR.reopen(log)
-  puts "starting in #{ENV['RACK_ENV']} mode, redirecting output to sinatra.log"
-end
-
-Thread.start{ Goldberg::Init.new.start_poller }
-
-run GoldbergApi::Application
+require ::File.expand_path('../config/environment',  __FILE__)
+run Goldberg::Application

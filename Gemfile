@@ -1,20 +1,17 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
-gem 'rake'
-gem 'rspec', '~> 2.2.0'
-gem 'rack-test', '~> 0.5.6', :require => 'rack/test'
+gem 'rails', '3.0.5'
 
-group :web do
-  gem 'sinatra', '~> 1.1.2'
-  gem 'sinatra-static-assets', '~> 0.5.0'
-  gem 'haml', '~> 3.0.25'
-  gem 'sinatra-outputbuffer', '~> 0.1'
-end
+gem 'sqlite3', '~> 1.3.3'
+gem 'haml', '~> 3.0.25'
 
-group :development do
+group :development, :test do
   if RUBY_VERSION.include?('1.9')
     gem 'ruby-debug19', '~> 0.11.6'
   else
     gem 'ruby-debug'
   end
+  gem 'rspec-rails', '~> 2.5.0'
+  gem 'mongrel', '1.2.0.pre2'
+  gem 'spork', '~> 0.9.0.rc'
 end

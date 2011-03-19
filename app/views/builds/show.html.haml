@@ -1,0 +1,13 @@
+- content_for(:head) do
+  %link{:rel => 'stylesheet', :href => '/stylesheets/project.css', :type => 'text/css'}
+
+%h2
+  %a{:href => "/projects/#{@project.name}"}= @project.name
+%h3= "Build: #{@build.number}"
+%strong{:class => project_status(@build.status)}= "#{project_status(@build.status)}"
+- if @build.version
+  %div= "Revision: #{@build.version[0, 6]}"
+= @build.timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")
+%pre= @build.change_list
+%pre= @build.log
+

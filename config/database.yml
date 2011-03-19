@@ -1,0 +1,24 @@
+production:
+  adapter: sqlite3
+  database: db/goldberg_production.sqlite3
+  pool: 5
+  timeout: 5000
+  username: production
+  password: production
+  host: localhost
+
+development:
+  adapter: sqlite3
+  database: db/goldberg_development.sqlite3
+  username: root
+  password: 
+  host: localhost
+
+test:
+  adapter: sqlite3
+  database: db/goldberg_test.sqlite3
+  username: root
+  password: 
+  host: localhost
+  pool: 5
+  timeout: 5000
