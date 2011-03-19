@@ -84,7 +84,7 @@ module Goldberg
       write_build_version
       write_change_list
       @logger.info "Building #{name}"
-      Environment.system("cd #{code_path} ; #{command} #{task.to_s} 2>&1") do |output, result|
+      Environment.system("source $HOME/.rvm/scripts/rvm && cd #{code_path} && BUNDLE_GEMFILE='' #{command} #{task.to_s} 2>&1") do |output, result|
         Environment.write_file(build_log_path, output)
         @logger.info "Build status #{result}"
         Environment.write_file(build_status_path, result)
