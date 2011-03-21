@@ -13,6 +13,7 @@ describe HomeController do
     projects = [mock('project')]
     Project.should_receive(:all).and_return(projects)
     get :ccfeed, :format => :xml
+    response.should be_ok
     response.body.should == ''
     assigns[:projects].should == projects
   end
