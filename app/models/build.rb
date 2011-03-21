@@ -44,7 +44,7 @@ class Build
 
   def status
     if File.exist?(build_status_path)
-      Environment.read_file(build_status_path) == 'true' ? 'passed' : 'failed'
+      Environment.read_file(build_status_path).strip == 'true' ? 'passed' : 'failed'
     else
       nil
     end

@@ -119,7 +119,7 @@ module Goldberg
 
     it "should be able to return the latest build" do
       project = Project.new('name')
-      project.should_receive(:builds).and_return([mock, mock('last_build', :number => '42')])
+      project.should_receive(:builds).and_return([mock('last_build', :number => '42'), mock('first_build', :number => '1')])
       project.latest_build.number.should == "42"
     end
   end
