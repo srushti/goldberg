@@ -10,3 +10,4 @@ log/*
 tmp/*
 tags
 projects/*
+cscope.*
