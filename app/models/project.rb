@@ -64,12 +64,7 @@ class Project
   end
 
   def latest_build
-    latest_build_path = File.join(path('builds'), latest_build_number.to_s)
-
-    if !File.exist?(latest_build_path)
-      return Build.null
-    end
-    Build.new(latest_build_path)
+    builds.last
   end
 
   def copy_latest_build_to_its_own_folder
@@ -118,6 +113,9 @@ class Project
   end
 
   def write_change_list
+    if latest_build.version.nil?
+      return
+    end
     latest_build_version = latest_build.version
     new_build_version = build_version
     latest_build_version.gsub!(/\n/,'')

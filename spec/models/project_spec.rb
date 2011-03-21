@@ -96,8 +96,8 @@ module Goldberg
     it "should write the list of changes to change list file" do
       project = Project.new("name")
       latest_build = Build.new('latest_build_path')
-      project.should_receive(:latest_build).and_return(latest_build)
-      latest_build.should_receive(:version).and_return('HEAD~1')
+      project.stub!(:latest_build).and_return(latest_build)
+      latest_build.stub!(:version).and_return('HEAD~1')
       project.should_receive(:build_version).and_return('HEAD')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git diff --name-status HEAD~1 HEAD').and_return('change list')
       Environment.should_receive(:write_file).with('some_path/name/change_list', 'change list')
@@ -119,18 +119,8 @@ module Goldberg
 
     it "should be able to return the latest build" do
       project = Project.new('name')
-      project.should_receive(:latest_build_number).and_return(42)
-      File.should_receive(:exist?).with('some_path/name/builds/42').and_return(true)
+      project.should_receive(:builds).and_return([mock, mock('last_build', :number => '42')])
       project.latest_build.number.should == "42"
-    end
-
-    it "should be able to return a null build if the project has never been built" do
-      project = Project.new('name')
-      project.should_receive(:latest_build_number).and_return(0)
-      File.should_receive(:exist?).with('some_path/name/builds/0').and_return(false)
-      latest_build = project.latest_build
-      latest_build.number.should == ""
-      latest_build.should be_null
     end
   end
 end
