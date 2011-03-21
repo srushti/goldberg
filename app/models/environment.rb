@@ -5,7 +5,7 @@ module Environment
     end
 
     def system_call_output(command)
-      `#{command}`
+      `/bin/bash -c "#{command.gsub(/"/, '\"')}"`
     end
 
     def system(command)
