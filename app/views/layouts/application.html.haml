@@ -2,7 +2,7 @@
   %head
     %title Goldberg
     = javascript_include_tag '/js/jquery-1.5.min.js'
-    = stylesheet_link_tag '/stylesheets/blueprint/screen.css'
+    = stylesheet_link_tag '/stylesheets/reset.css'
     = stylesheet_link_tag '/stylesheets/layout.css'
     - keep_refreshing = false if Rails.env == 'development'
     - if defined?(keep_refreshing) && keep_refreshing
@@ -12,25 +12,26 @@
         });
       %noscript
         %meta{:'http-equiv' => "refresh", :content => "15"}
-    <!--[if lt IE 8]> %link{:rel => 'stylesheet', :href => '/stylesheets/ie.css', :type => 'text/css'} <![endif]-->
     = yield :head
   %body
-    .container
-      .header
-        .title
-          %h1
-            %a{:href => '/'} Goldberg
-          %h4 Lightweight Continuous Integration in Ruby
-          
-      .page
-        = yield
-      .footer
-        .logo
-          %a{:href => 'http://c42.in'}
-            = image_tag '/images/c42-engineering-logo.png'
-        .message
-          .author
-            %a{:href => 'http://c42.in'} C42 Engineering 
-            Open Source
-          .version
-            = "Version #{Goldberg::VERSION::STRING}"
+    .wrapper
+      .container
+        .header
+          .title
+            %h1
+              %a{:href => '/'} Goldberg
+            %h4 Lightweight Continuous Integration in Ruby
+            
+        .page
+          = yield
+      .push
+    .footer
+      .logo
+        %a{:href => 'http://c42.in'}
+          = image_tag '/images/c42-engineering-logo.png'
+      .message
+        .author
+          %a{:href => 'http://c42.in'} C42 Engineering 
+          Open Source
+        .version
+        = "Version #{Goldberg::VERSION::STRING}"

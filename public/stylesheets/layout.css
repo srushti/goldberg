@@ -11,41 +11,59 @@ body {
 }
 
 a, a:visited { color: black; }
-
-div.container div.header {
-  border-bottom: 1px #ddd solid;
-}
-
-div.container div.header div.title a {
-  text-decoration: none;
-}
-
-div.container div.footer {
-  width: inherit;
-  position: absolute;
-  bottom: 0;
-  border-top: 1px #ddd solid;
-  text-align: right;
-  padding-top: .25em;
-}
-
-div.container div.footer div.logo {
-  float: left;
-}
-
-div.container div.footer div.logo img{
-  width: 50px;
-}
-
-div.container div.footer div.author {
-  font-size: 1.3em;
-}
-
 h1.a {
   text-decoration: none;
 }
 
-div.container {
-    padding-top: 2em;
+
+div.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -65px;
 }
+
+div.container {
+  padding: 2em;
+}
+div.push {
+  height: 60px;
+}
+
+/* header */
+div.header {
+  padding-top: 2em;
+  border-bottom: 1px #ddd solid;
+}
+
+div.header div.title a {
+  text-decoration: none;
+}
+
+
+/* Footer */
+div.footer {
+  width: inherit;
+  border-top: 1px #ddd solid;
+  text-align: right;
+  height: 60px;
+}
+
+div.footer div.logo {
+  float: left;
+  padding-left: 1em;
+}
+
+div.footer div.logo img{
+  width: 50px;
+}
+
+div.footer div.author {
+  font-size: 1.3em;
+}
+
+div.footer div.message {
+  padding-right: 2em;
+}
+
 
