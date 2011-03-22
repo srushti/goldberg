@@ -10,10 +10,10 @@ describe HomeController do
   end
 
   it "generates the cc feed" do
-    pending ('need to figure out how to test xml generation')
     projects = [mock('project')]
     Project.should_receive(:all).and_return(projects)
-    get :ccfeed
+    get :ccfeed, :format => :xml
+    response.should be_ok
     response.body.should == ''
     assigns[:projects].should == projects
   end

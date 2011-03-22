@@ -1,6 +1,3 @@
-- content_for(:head) do
-  = stylesheet_link_tag 'project'
-
 %p
   %h2= @project.name
   %strong{:class => project_status(@project.status)}= "#{project_status(@project.status)}"

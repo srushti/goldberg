@@ -15,6 +15,7 @@ module Goldberg
     end
 
     it "writes the custom command if it is recieved when adding" do
+      FileUtils.stub!(:mkdir_p).with('some_path/some_project')
       Environment.stub!(:system).and_return(true)
       Environment.should_receive(:write_file).with('some_path/some_project/custom_command', 'cmake')
       project = Project.add({:url => "git://some.url.git", :name => 'some_project', :command => 'cmake'})
