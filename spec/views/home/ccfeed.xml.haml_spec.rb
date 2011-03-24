@@ -7,7 +7,7 @@ describe 'home/ccfeed.xml.haml' do
     projects = [mock('project', :name => 'name', :last_built_at => now, :latest_build => build, :map_to_cctray_project_status => 'Success')]
     assign(:projects, projects)
     render
-    expected_report = "<Projects>\n<Project activity='Sleeping' lastBuildStatus='Success' lastBuildTime='#{now}' name='name' nextBuildTime='#{now + 20}' webUrl='/projects/name'></Project>\n</Projects>\n"
+    expected_report = "<Projects>\n<Project activity='Sleeping' lastBuildStatus='Success' lastBuildTime='#{now}' name='name' nextBuildTime='#{now + 20}' webUrl='http://test.host/projects/name'></Project>\n</Projects>\n"
     rendered.should == expected_report
   end
 end
