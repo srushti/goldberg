@@ -1,5 +1,7 @@
 = Goldberg 0.0.1
 
+(c) Copyright 2010-2011 {C42 Engineering}[http://c42.in]. All Rights Reserved.
+
 A CI server. With pipelines!
 
 == Setting up a new repository
