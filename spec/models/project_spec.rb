@@ -94,17 +94,26 @@ module Goldberg
       project.force_build
     end
 
-    it "should write the list of changes to change list file" do
-      project = Project.new("name")
-      latest_build = Build.new('latest_build_path')
-      project.stub!(:latest_build).and_return(latest_build)
-      latest_build.stub!(:version).and_return('HEAD~1')
-      project.should_receive(:build_version).and_return('HEAD')
-      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git diff --name-status HEAD~1 HEAD').and_return('change list')
-      Environment.should_receive(:write_file).with('some_path/name/change_list', 'change list')
-      project.write_change_list
+    context "store change list for the build" do
+      it "should write the list of changes to change list file" do
+        project = Project.new("name")
+        latest_build = Build.new('latest_build_path')
+        project.stub!(:latest_build).and_return(latest_build)
+        latest_build.stub!(:version).and_return('HEAD~1')
+        project.should_receive(:build_version).and_return('HEAD')
+        Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git diff --name-status HEAD~1 HEAD').and_return('change list')
+        Environment.should_receive(:write_file).with('some_path/name/change_list', 'change list')
+        project.write_change_list
+      end
+      
+      it "should not write change list in case of the first build" do
+        project = Project.new("name")
+        Build.should_receive(:all).and_return([])
+        Environment.should_not_receive(:write_file)
+        project.write_change_list
+      end
     end
-
+    
     it "should save the current build version" do
       project = Project.new('name')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git show-ref HEAD --hash').and_return('version')

@@ -64,7 +64,7 @@ class Project
   end
 
   def latest_build
-    builds.first
+    builds.first || Build.new("")
   end
 
   def copy_latest_build_to_its_own_folder
