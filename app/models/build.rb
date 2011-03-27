@@ -57,6 +57,12 @@ class Build
   def <=>(other)
     number.to_i <=> other.number.to_i
   end
+  
+  class NilBuild
+    def version; nil; end
+    def timestamp; nil; end
+    def status; "no build available"; end
+  end
 
   protected
   def path
