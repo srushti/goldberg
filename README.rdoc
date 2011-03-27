@@ -4,14 +4,29 @@
 
 A CI server. With pipelines!
 
-== Setting up a new repository
+Visit http://goldberg.c42.in to see a live Goldberg server.
+
+== Setting up your own Goldberg server
+
+=== Prerequisites
+
+RVM, Git and Ruby (we usually use MRI 1.9.2, but any flavour should work). 
+
+Goldberg currently runs only on Linux/Mac OS X.
+
+=== Installation
+
+   # If you're on Ubuntu, you might need:
+   sudo apt-get install sqlite3 libsqlite3-dev
+
+   git clone git://github.com/c42/goldberg.git
+   bundle install
+
+=== Setting up a new repository
 
    bin/goldberg add <git url> <name>
 
+=== Starting Goldberg
 
-== Running Goldberg
-
-   bin/goldberg start [port=3000]                      # Starts the CI server and the web front-end at localhost:3000, specify port to override
-
-
-Sample Goldberg Server: http://goldberg.c42.in
+   # Start the CI server and web front-end at port 3000.
+   bin/goldberg start [port=3000]
