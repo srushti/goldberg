@@ -1,4 +1,4 @@
-class Init
+class GoldbergInit
   def run
     if Environment.argv.size > 0 && ['add', 'remove', 'list', 'start', 'start_poller'].include?(Environment.argv[0])
       send(Environment.argv[0])
