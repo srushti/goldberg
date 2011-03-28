@@ -16,20 +16,18 @@ module Goldberg
       Init.new.run
     end
 
-    it "removes the specifies project" do
+    it "removes the specified project" do
       Environment.stub!(:argv).and_return(['remove', 'name'])
-      project = mock(Project)
-      Project.should_receive(:new).with('name').and_return(project)
-      project.should_receive(:remove)
+      project = Factory(:project, :name => 'name')
       Environment.should_receive(:puts).with('name successfully removed.')
       Init.new.run
+      Project.find_by_id(project.id).should_not be
     end
 
     it "lists all projects" do
+      project = Factory(:project, :name => 'a_project')
       Environment.stub!(:argv).and_return(['list'])
-      project = mock(Project, :name => 'name')
-      Project.should_receive(:all).and_return([project])
-      Environment.should_receive(:puts).with('name')
+      Environment.should_receive(:puts).with(project.name)
       Init.new.run
     end
 
@@ -43,11 +41,11 @@ module Goldberg
     end
 
     it "continues on with the next project even if one build fails" do
-      one = mock('project_one', :name => 'one')
-      two = mock('project_two', :name => 'two')
-      Project.should_receive(:all).and_return([one, two])
+      one = Factory(:project, :name => 'one')
+      two = Factory(:project, :name => 'two')
       one.stub!(:update).and_raise(Exception.new("An exception"))
       two.should_receive(:update)
+      Project.stub!(:all).and_return([one, two])
       logger = mock('logger')
       logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
       Logger.stub!(:new).and_return(logger)

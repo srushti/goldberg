@@ -75,10 +75,6 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def self.all
-    (Dir.entries(Paths.projects) - ['.', '..']).select{|entry| File.directory?(File.join(Paths.projects, entry))}.map{|entry| Project.new(entry)}
-  end
-
   def status
     latest_build.status
   end
