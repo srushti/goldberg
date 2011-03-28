@@ -14,28 +14,18 @@ module Goldberg
       project.name.should == 'some_project'
     end
 
-    it "writes the custom command if it is recieved when adding" do
-      FileUtils.stub!(:mkdir_p).with('some_path/some_project')
-      Environment.stub!(:system).and_return(true)
-      Environment.should_receive(:write_file).with('some_path/some_project/custom_command', 'cmake')
-      project = Project.add({:url => "git://some.url.git", :name => 'some_project', :command => 'cmake'})
-    end
-
     it "should be able to retrieve the custom command" do
-      File.should_receive(:exist?).with('some_path/name/custom_command').and_return(true)
-      Environment.should_receive(:read_file).with('some_path/name/custom_command').and_return('cmake')
-      project = Project.new('name')
+      project = Factory(:project, :custom_command => 'cmake')
       project.command.should == 'cmake'
     end
 
     it "should default the custom command to rake" do
-      File.should_receive(:exist?).with('some_path/name/custom_command').and_return(false)
-      project = Project.new('name')
+      project = Factory(:project, :custom_command => nil)
       project.command.should == 'rake'
     end
 
     it "updates but doesn't yield if there are no updates" do
-      project = Project.new('name')
+      project = Factory(:project, :name => 'name')
       project.should_receive(:build_anyway?).and_return(false)
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('Already up-to-date.')
       project.update{|p| true.should_not be}
@@ -43,7 +33,7 @@ module Goldberg
 
     it "updates and yields if there are updates" do
       yielded_project = nil
-      project = Project.new('name')
+      project = Factory(:project, :name => 'name')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
       project.update{|p| yielded_project = p}
       yielded_project.should == project
@@ -51,7 +41,7 @@ module Goldberg
 
     it "yields if there is a build to be forced even if there are no updates" do
       yielded_project = nil
-      project = Project.new('name')
+      project = Factory(:project, :name => 'name')
       ['build_status_path', 'build_log_path', 'force_build_path'].each do |method_name|
         File.should_receive(:exist?).with(project.send(method_name)).and_return(true)
       end
@@ -63,21 +53,16 @@ module Goldberg
     it "builds the default target" do
       Environment.should_receive(:system).with("source $HOME/.rvm/scripts/rvm && cd some_path/name/code && BUNDLE_GEMFILE='' rake default 2>&1").and_yield('some log data', true)
       Environment.stub!(:write_file).with('some_path/name/build_log', 'some log data')
-      Environment.stub!(:write_file).with('some_path/name/build_status', true)
-      project = Project.new('name')
-      project.should_receive(:latest_build_number).and_return(1)
-      project.should_receive(:write_change_list)
-      project.should_receive(:write_build_version)
-      project.should_receive(:command).and_return('rake')
+      project = Factory(:project, :name => 'name', :builds => [Factory(:build, :number => 1)])
       FileUtils.should_receive(:mkdir_p).with("some_path/name/builds/2", :verbose => true)
-      FileUtils.should_receive(:cp).with(["some_path/name/build_status", "some_path/name/build_log", "some_path/name/build_version", "some_path/name/change_list"], "some_path/name/builds/2", :verbose => true)
-      Environment.should_receive(:write_file).with(project.build_number_path, 2.to_s)
+      FileUtils.should_receive(:cp).with( "some_path/name/build_log", "some_path/name/builds/2", :verbose => true)
       project.build
     end
 
     it "removes projects" do
       FileUtils.should_receive(:rm_rf).with('some_path/project_to_be_removed/')
-      Project.new('project_to_be_removed').remove
+      project = Factory(:project, :name => 'project_to_be_removed')
+      project.destroy
     end
 
     it "writes the build force file" do

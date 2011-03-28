@@ -19,7 +19,7 @@ class Init
 
   def remove
     if Environment.argv.size == 2
-      Project.new(Environment.argv[1]).remove
+      Project.find_by_name(Environment.argv[1]).destroy
       Environment.puts "#{Environment.argv[1]} successfully removed."
     else
       Environment.puts "Usage 'bin/goldberg remove <name>'"

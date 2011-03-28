@@ -1,7 +1,9 @@
 require "ostruct"
 
-class Build
+class Build < ActiveRecord::Base
   include Comparable
+
+  belongs_to :project
 
   def self.all(project)
     FileUtils.mkdir_p(project.builds_path) if !File.exist?(project.builds_path)
@@ -13,15 +15,11 @@ class Build
   end
 
   def self.null
-    OpenStruct.new(:number => '', :status => 'never run', :version => 'HEAD', :null? => true, :timestamp => nil)
+    OpenStruct.new(:number => 0, :status => 'never run', :revision => 'HEAD', :null? => true, :timestamp => nil)
   end
 
-  def initialize(path)
-    @path = path
-  end
-
-  def number
-    File.basename(@path)
+  def self.create(path)
+    Build.new(:path => path)
   end
 
   def log
@@ -60,6 +58,7 @@ class Build
 
   protected
   def path
+    File.join
     @path
   end
 end
