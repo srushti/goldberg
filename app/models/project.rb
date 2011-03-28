@@ -64,7 +64,7 @@ class Project
   end
 
   def latest_build
-    builds.first || Build.null
+    builds.first || Build::NilBuild.new("")
   end
 
   def copy_latest_build_to_its_own_folder
@@ -78,7 +78,7 @@ class Project
     write_build_version
     write_change_list
     @logger.info "Building #{name}"
-    Environment.system("source $HOME/.rvm/scripts/rvm && cd #{code_path} && BUNDLE_GEMFILE='' #{command} #{task.to_s} 2>&1") do |output, result|
+    Environment.system("source $HOME/.rvm/scripts/rvm && cd #{code_path} && BUNDLE_GEMFILE='' && #{command} #{task.to_s} 2>&1") do |output, result|
       Environment.write_file(build_log_path, output)
       @logger.info "Build status #{result}"
       Environment.write_file(build_status_path, result)
@@ -104,7 +104,7 @@ class Project
   end
 
   def build_log
-    Environment.read_file("#{build_log_path}")
+    Environment.read_file(build_log_path) if File.exists?(build_log_path)
   end
 
   def force_build
@@ -113,7 +113,7 @@ class Project
   end
 
   def write_change_list
-    if latest_build.null?
+    if latest_build.version.nil?
       return
     end
     latest_build_version = latest_build.version
