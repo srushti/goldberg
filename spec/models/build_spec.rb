@@ -43,17 +43,5 @@ module Goldberg
       end
       builds.sort.map(&:number).map(&:to_i).should == [1, 9, 10, 500]
     end
-    
-    context Build::NilBuild do
-      [:version, :timestamp].each do |property|
-        it "should have nil #{property}" do
-          Build::NilBuild.new.send(property).should == nil
-        end
-      end
-      
-      it "should have status as 'no build available'" do
-        Build::NilBuild.new.status.should == "no build available"
-      end
-    end
   end
 end

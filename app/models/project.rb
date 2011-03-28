@@ -64,7 +64,7 @@ class Project
   end
 
   def latest_build
-    builds.first || Build::NilBuild.new("")
+    builds.first || Build.null
   end
 
   def copy_latest_build_to_its_own_folder
@@ -113,7 +113,7 @@ class Project
   end
 
   def write_change_list
-    if latest_build.version.nil?
+    if latest_build.null?
       return
     end
     latest_build_version = latest_build.version
