@@ -66,22 +66,26 @@ module Goldberg
     end
 
     it "writes the build force file" do
-      project = Project.new('name')
+      project = Factory(:project, :name => 'name')
       Environment.should_receive(:write_file).with(project.force_build_path, '')
       Environment.stub!(:system_call_output).and_return('some changes')
       project.force_build
     end
 
     it "should get latest code when the build is forced" do
-      project = Project.new('name')
+      project = Factory(:project, :name => 'name')
       Environment.stub!(:write_file).with(project.force_build_path, '')
       Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
       project.force_build
     end
 
     context "store change list for the build" do
+      before(:each) do
+        pending "need a better place to move thio"
+      end
+
       it "should write the list of changes to change list file" do
-        project = Project.new("name")
+        project = Factory(:project, :name => 'name')
         latest_build = Build.new('latest_build_path')
         project.stub!(:latest_build).and_return(latest_build)
         latest_build.stub!(:version).and_return('HEAD~1')
@@ -90,30 +94,17 @@ module Goldberg
         Environment.should_receive(:write_file).with('some_path/name/change_list', 'change list')
         project.write_change_list
       end
-      
+
       it "should not write change list in case of the first build" do
-        project = Project.new("name")
+        project = Factory(:project, :name => 'name')
         Build.should_receive(:all).and_return([])
         Environment.should_not_receive(:write_file)
         project.write_change_list
       end
     end
-    
-    it "should save the current build version" do
-      project = Project.new('name')
-      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git show-ref HEAD --hash').and_return('version')
-      Environment.should_receive(:write_file).with('some_path/name/build_version', 'version')
-      project.write_build_version
-    end
-
-    it "should return the current build version" do
-      project = Project.new('name')
-      Environment.should_receive(:read_file).with('some_path/name/build_version').and_return('version')
-      project.build_version
-    end
 
     it "should be able to return the latest build" do
-      project = Project.new('name')
+      project = Factory(:project, :name => 'name')
       project.should_receive(:builds).and_return([mock('last_build', :number => '42'), mock('first_build', :number => '1')])
       project.latest_build.number.should == "42"
     end

@@ -30,7 +30,6 @@ class Project < ActiveRecord::Base
 
   def update
     Rails.logger.info "Checking #{name}"
-    puts code_path
     if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.') || build_anyway?
       if block_given?
         yield self
@@ -93,7 +92,7 @@ class Project < ActiveRecord::Base
   end
 
   def build_log
-    Environment.read_file("#{build_log_path}")
+    File.exist?(build_log_path) ? Environment.read_file(build_log_path) : ''
   end
 
   def force_build
