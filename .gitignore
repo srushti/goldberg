@@ -13,4 +13,4 @@ tags
 projects/*
 cscope.*
 tmtags
-
+db/schema.rb
