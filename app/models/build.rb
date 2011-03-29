@@ -5,15 +5,6 @@ class Build < ActiveRecord::Base
 
   belongs_to :project
 
-  def self.all(project)
-    FileUtils.mkdir_p(project.builds_path) if !File.exist?(project.builds_path)
-    folder_contents = (Dir.entries(project.builds_path) - ['.', '..'])
-    full_names_folder_contents = folder_contents.map{|entry| File.join(project.builds_path, entry)}
-    directory_paths = full_names_folder_contents.select{|entry| File.directory?(entry)}
-    builds = directory_paths.map{|dir_entry| Build.new(dir_entry)}
-    builds.sort.reverse
-  end
-
   def self.null
     OpenStruct.new(:number => 0, :status => 'never run', :revision => 'HEAD', :null? => true, :timestamp => nil)
   end
