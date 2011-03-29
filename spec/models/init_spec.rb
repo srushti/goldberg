@@ -5,21 +5,21 @@ module Goldberg
     it "adds a new project" do
       Environment.stub!(:argv).and_return(['add', 'url', 'name'])
       Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => nil)
-      Environment.should_receive(:puts).with('name successfully added.')
+      Rails.logger.should_receive(:info).with('name successfully added.')
       Init.new.run
     end
 
     it "adds a new project with a custom command" do
       Environment.stub!(:argv).and_return(['add', 'url', 'name', 'cmake'])
       Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => 'cmake')
-      Environment.should_receive(:puts).with('name successfully added.')
+      Rails.logger.should_receive(:info).with('name successfully added.')
       Init.new.run
     end
 
     it "removes the specified project" do
       Environment.stub!(:argv).and_return(['remove', 'name'])
       project = Factory(:project, :name => 'name')
-      Environment.should_receive(:puts).with('name successfully removed.')
+      Rails.logger.should_receive(:info).with('name successfully removed.')
       Init.new.run
       Project.find_by_id(project.id).should_not be
     end
@@ -27,7 +27,7 @@ module Goldberg
     it "lists all projects" do
       project = Factory(:project, :name => 'a_project')
       Environment.stub!(:argv).and_return(['list'])
-      Environment.should_receive(:puts).with(project.name)
+      Rails.logger.should_receive(:info).with(project.name)
       Init.new.run
     end
 
@@ -46,9 +46,7 @@ module Goldberg
       one.stub!(:update).and_raise(Exception.new("An exception"))
       two.should_receive(:update)
       Project.stub!(:all).and_return([one, two])
-      logger = mock('logger')
-      logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
-      Logger.stub!(:new).and_return(logger)
+      Rails.logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
       Init.new.poll
     end
   end

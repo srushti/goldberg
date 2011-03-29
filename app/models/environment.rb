@@ -17,7 +17,7 @@ module Environment
       end
     end
 
-    [:puts, :sleep, :exec].each do |method_name|
+    [:sleep, :exec].each do |method_name|
       define_method method_name do |args|
         super(args)
       end

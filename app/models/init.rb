@@ -3,31 +3,31 @@ class Init
     if Environment.argv.size > 0 && ['add', 'remove', 'list', 'start', 'start_poller'].include?(Environment.argv[0])
       send(Environment.argv[0])
     else
-      Environment.puts "You did not pass any command."
-      Environment.puts "Valid commands are add, remove, list, start & start_poller."
+      Rails.logger.info "You did not pass any command."
+      Rails.logger.info "Valid commands are add, remove, list, start & start_poller."
     end
   end
 
   def add
     if Environment.argv.size >= 3
       Project.add(:url => Environment.argv[1], :name => Environment.argv[2], :command => Environment.argv[3])
-      Environment.puts "#{Environment.argv[2]} successfully added."
+      Rails.logger.info "#{Environment.argv[2]} successfully added."
     else
-      Environment.puts "Usage 'bin/goldberg add <url> <name> [custom_command]'"
+      Rails.logger.info "Usage 'bin/goldberg add <url> <name> [custom_command]'"
     end
   end
 
   def remove
     if Environment.argv.size == 2
       Project.find_by_name(Environment.argv[1]).destroy
-      Environment.puts "#{Environment.argv[1]} successfully removed."
+      Rails.logger.info "#{Environment.argv[1]} successfully removed."
     else
-      Environment.puts "Usage 'bin/goldberg remove <name>'"
+      Rails.logger.info "Usage 'bin/goldberg remove <name>'"
     end
   end
 
   def list
-    Project.all.map(&:name).each{|name| Environment.puts name}
+    Project.all.map(&:name).each{|name| Rails.logger.info name}
   end
 
   def start
@@ -42,10 +42,11 @@ class Init
     Project.all.each do |p|
       begin
         p.update do |project|
-          Environment.puts "Build #{ project.build ? "passed" : "failed!" }"
+          build_successful = project.build
+          Rails.logger.info "Build #{ build_successful  ? "passed" : "failed!" }"
         end
       rescue Exception => e
-        Logger.new.error "Build on project #{p.name} failed because of #{e}"
+        Rails.logger.error "Build on project #{p.name} failed because of #{e}"
       end
     end
   end
@@ -53,7 +54,7 @@ class Init
   def start_poller
     while true
       poll
-      Environment.puts "Sleeping for 20 seconds."
+      Rails.logger.info "Sleeping for 20 seconds."
       Environment.sleep(20)
     end
   end
