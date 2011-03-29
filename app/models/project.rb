@@ -7,7 +7,8 @@ class Project < ActiveRecord::Base
   def self.add(options)
     Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url]).tap do |project|
       project.checkout(options[:url])
-    end.save!
+      project.save!
+    end
   end
 
   def remove
