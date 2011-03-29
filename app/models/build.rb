@@ -2,11 +2,13 @@ require "ostruct"
 
 class Build < ActiveRecord::Base
   include Comparable
-
+  
+  attr_accessor :previous_build_revision
+  
   belongs_to :project
 
-  def self.null
-    OpenStruct.new(:number => 0, :status => 'never run', :revision => 'HEAD', :null? => true, :timestamp => nil)
+  def self.nil
+    OpenStruct.new(:number => 0, :status => 'never run', :revision => '', :null? => true, :timestamp => nil)
   end
 
   def self.create(path)
@@ -45,6 +47,10 @@ class Build < ActiveRecord::Base
 
   def <=>(other)
     number.to_i <=> other.number.to_i
+  end
+  
+  def run
+    true
   end
 
   protected

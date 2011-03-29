@@ -47,7 +47,7 @@ class Project < ActiveRecord::Base
   end
 
   def latest_build_number
-    (builds.sort.last || Build.null).number
+    latest_build.number
   end
 
   def path(extra = '')
@@ -55,7 +55,7 @@ class Project < ActiveRecord::Base
   end
 
   def latest_build
-    builds.first || Build.new("")
+    builds.first || Build.nil
   end
 
   def copy_latest_build_to_its_own_folder
@@ -64,6 +64,10 @@ class Project < ActiveRecord::Base
     FileUtils.cp(File.join(path('build_log')), File.join(builds_path, new_build_number), :verbose => true)
   end
 
+  def run_build
+    builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision).run
+  end
+  
   def build(task = :default)
     write_change_list
     Rails.logger.info "Building #{name}"
