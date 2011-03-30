@@ -4,15 +4,12 @@ class Build < ActiveRecord::Base
   include Comparable
   
   attr_accessor :previous_build_revision
+  after_create :create_artifacts_dir
   
   belongs_to :project
 
   def self.nil
     OpenStruct.new(:number => 0, :status => 'never run', :revision => '', :null? => true, :timestamp => nil)
-  end
-
-  def self.create(path)
-    Build.new(:path => path)
   end
 
   def log
@@ -27,9 +24,12 @@ class Build < ActiveRecord::Base
     File.ctime(build_status_path)
   end
 
-  %w(build_status change_list build_log build_version).each do |file_name|
+  def artifacts_path
+    File.join(project.path, "builds", number.to_s)
+  end
+  %w(change_list build_log).each do |file_name|
     define_method "#{file_name}_path".to_sym do
-      File.join(@path, file_name)
+      File.join(artifacts_path, file_name)
     end
   end
 
@@ -52,10 +52,8 @@ class Build < ActiveRecord::Base
   def run
     true
   end
-
-  protected
-  def path
-    File.join
-    @path
+  
+  def create_artifacts_dir
+    FileUtils.mkdir_p(artifacts_path)
   end
 end

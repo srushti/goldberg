@@ -11,6 +11,31 @@ module Goldberg
       builds = [10, 9, 1, 500].map{|i| Factory(:build, :number => i)}
       builds.sort.map(&:number).map(&:to_i).should == [1, 9, 10, 500]
     end
+
+    context "paths" do
+      it "should know where to store the build artifacts on the file system" do
+        project = Factory.build(:project, :name => "name")
+        build = Factory.build(:build, :project => project, :number => 5)
+        build.artifacts_path.should == File.join(project.path, "builds", "5")
+      end
+      
+      [:change_list, :build_log].each do |artifact|
+        it "should append build number to the project path to create a path for #{artifact}" do
+          project = Factory.build(:project, :name => "name")
+          build = Factory.build(:build, :project => project, :number => 5)
+          build.send("#{artifact}_path").should == File.join(project.path, "builds", "5", artifact.to_s)
+        end
+      end
+    end
+    
+    context "after create" do
+      it "should create a directory for storing build artifacts" do
+        project = Factory.build(:project, :name => 'ooga')
+        build = Factory.build(:build, :project => project, :number => 5)
+        FileUtils.should_receive(:mkdir_p).with(build.artifacts_path)
+        build.save.should be_true
+      end
+    end
     
     # def build(task = :default)
     #       write_change_list
@@ -24,8 +49,15 @@ module Goldberg
     #       end
     #     end
     #     
-    context "run" do
+    context "changes" do
       
+      it "should write a file with all the changes since the previous build" do
+        pending
+        project = Factory.build(:project, :name => 'ooga')
+        build = Factory.build(:build, :project => project, :number => 5, :previous_build_revision => "random_sha")
+        
+        build.persist_change_list
+      end
     end
   end
 end
