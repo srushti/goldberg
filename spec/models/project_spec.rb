@@ -79,8 +79,9 @@ module Goldberg
       project.force_build
     end
 
-    context "build" do
+    context "run build" do
       let(:project) { Factory(:project, :name => "goldberg") }
+
       it "should create a new build for a project with build number set to 1 in case of first build  and run it" do
         project.run_build.should == true
         project.builds.should have(1).thing
@@ -89,13 +90,13 @@ module Goldberg
       
       it "should create a new build for a project with build number one greater than last build and run it" do
         build = mock(Build)
-        project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "random_sha").and_return(build)
+        project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "random_sha", :project => project).and_return(build)
         build.should_receive(:run).and_return(true)
-        project.builds.create(:number => 5, :revision => "random_sha")
+        project.builds.create(:number => 5, :revision => "random_sha", :project => project)
         project.run_build.should == true
       end
     end
-
+    
     context "store change list for the build" do
       before(:each) do
         pending "need a better place to move thio"

@@ -65,7 +65,7 @@ class Project < ActiveRecord::Base
   end
 
   def run_build
-    builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision).run
+    builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision, :project => self).run
   end
   
   def build(task = :default)
@@ -129,6 +129,10 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def repository
+    Repository.new(code_path, url)
+  end
+  
   def self.find_by_name(name)
     all.detect{|project| project.name == name}
   end
