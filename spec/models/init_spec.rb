@@ -43,8 +43,8 @@ module Goldberg
     it "continues on with the next project even if one build fails" do
       one = Factory(:project, :name => 'one')
       two = Factory(:project, :name => 'two')
-      one.stub!(:update).and_raise(Exception.new("An exception"))
-      two.should_receive(:update)
+      one.stub!(:run_build).and_raise(Exception.new("An exception"))
+      two.should_receive(:run_build)
       Project.stub!(:all).and_return([one, two])
       Rails.logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
       Init.new.poll

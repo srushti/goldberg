@@ -6,7 +6,7 @@ class Project < ActiveRecord::Base
 
   def self.add(options)
     Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url]).tap do |project|
-      project.checkout(options[:url])
+      project.checkout
       project.save!
     end
   end
@@ -15,8 +15,7 @@ class Project < ActiveRecord::Base
     FileUtils.rm_rf(path)
   end
 
-  def checkout(url)
-    FileUtils.mkdir_p(File.join(Paths.projects, name))
+  def checkout
     if !self.repository.checkout
       remove
     end
@@ -25,25 +24,12 @@ class Project < ActiveRecord::Base
     raise
   end
 
-  def build_anyway?
-    !File.exist?(build_status_path) || !File.exist?("#{build_log_path}") || File.exist?(force_build_path)
+  def build_required?
+    latest_build.nil_build? || self.build_requested?
   end
 
-  def update
-    Rails.logger.info "Checking #{name}"
-    if self.repository.update || build_anyway?
-      if block_given?
-        yield self
-      end
-    end
-  rescue Exception => e
-    Rails.logger.error e
-  end
-
-  ['build_status', 'force_build', 'build_log', 'change_list', 'code', 'build_number', 'build_version', 'builds', 'change_list', 'custom_command'].each do |relative_path|
-    define_method "#{relative_path}_path".to_sym do
-      path(relative_path)
-    end
+  def code_path
+    path("code")
   end
 
   def latest_build_number
@@ -58,25 +44,10 @@ class Project < ActiveRecord::Base
     builds.first || Build.nil
   end
 
-  def copy_latest_build_to_its_own_folder
-    new_build_number = (latest_build_number + 1).to_s
-    FileUtils.mkdir_p(File.join(builds_path, new_build_number), :verbose => true)
-    FileUtils.cp(File.join(path('build_log')), File.join(builds_path, new_build_number), :verbose => true)
-  end
-
   def run_build
-    builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision, :project => self).run
-  end
-
-  def build(task = :default)
-    write_change_list
-    Rails.logger.info "Building #{name}"
-    Environment.system("source $HOME/.rvm/scripts/rvm && cd #{code_path} && BUNDLE_GEMFILE='' #{command} #{task.to_s} 2>&1") do |output, result|
-      Environment.write_file(build_log_path, output)
-      Rails.logger.info "Build status #{result}"
-      builds.new(:project => self, :status => result, :number => latest_build_number + 1)
-      File.delete(force_build_path) if File.exist?(force_build_path)
-      copy_latest_build_to_its_own_folder
+    if self.repository.update || build_required?
+      build_successful = builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision, :project => self).run
+      Rails.logger.info "Build #{ build_successful  ? "passed" : "failed!" }"
     end
   end
 
@@ -97,24 +68,8 @@ class Project < ActiveRecord::Base
   end
 
   def force_build
-    Environment.write_file(force_build_path, '')
-    update
-  end
-
-  def write_change_list
-    if latest_build.revision.nil?
-      return
-    end
-    latest_build_version = latest_build.revision
-    new_build_revision = build_revision
-    latest_build_revision.gsub!(/\n/, '')
-    new_build_revision.gsub!(/\n/, '')
-    changes = self.repository.change_list(latest_build_version,new_build_revision)
-    Environment.write_file(change_list_path, changes)
-  end
-
-  def build_version
-    Environment.read_file(build_version_path)
+    self.build_requested = true
+    save
   end
 
   def command

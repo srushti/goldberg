@@ -10,7 +10,7 @@ class Build < ActiveRecord::Base
   belongs_to :project
 
   def self.nil
-    OpenStruct.new(:number => 0, :status => 'never run', :revision => '', :null? => true, :timestamp => nil)
+    OpenStruct.new(:number => 0, :status => 'never run', :revision => '', :nil_build? => true, :timestamp => nil)
   end
 
   def log
@@ -74,5 +74,9 @@ class Build < ActiveRecord::Base
   
   def update_revision
     self.revision = project.repository.revision if self.revision.blank?
+  end
+  
+  def nil_build?
+    false
   end
 end

@@ -41,10 +41,7 @@ class Init
   def poll
     Project.all.each do |p|
       begin
-        p.update do |project|
-          build_successful = project.build
-          Rails.logger.info "Build #{ build_successful  ? "passed" : "failed!" }"
-        end
+        p.run_build
       rescue Exception => e
         Rails.logger.error "Build on project #{p.name} failed because of #{e}"
       end
