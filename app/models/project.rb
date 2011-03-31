@@ -17,7 +17,7 @@ class Project < ActiveRecord::Base
 
   def checkout(url)
     FileUtils.mkdir_p(File.join(Paths.projects, name))
-    if !Environment.system("git clone #{url} #{code_path}")
+    if !self.repository.checkout
       remove
     end
   rescue
@@ -31,7 +31,7 @@ class Project < ActiveRecord::Base
 
   def update
     Rails.logger.info "Checking #{name}"
-    if !Environment.system_call_output("cd #{code_path} ; git pull").include?('Already up-to-date.') || build_anyway?
+    if self.repository.update || build_anyway?
       if block_given?
         yield self
       end
@@ -67,7 +67,7 @@ class Project < ActiveRecord::Base
   def run_build
     builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision, :project => self).run
   end
-  
+
   def build(task = :default)
     write_change_list
     Rails.logger.info "Building #{name}"
@@ -107,9 +107,9 @@ class Project < ActiveRecord::Base
     end
     latest_build_version = latest_build.revision
     new_build_revision = build_revision
-    latest_build_revision.gsub!(/\n/,'')
-    new_build_revision.gsub!(/\n/,'')
-    changes = Environment.system_call_output("cd #{code_path} ; git diff --name-status #{latest_build_revision} #{new_build_revision}")
+    latest_build_revision.gsub!(/\n/, '')
+    new_build_revision.gsub!(/\n/, '')
+    changes = self.repository.change_list(latest_build_version,new_build_revision)
     Environment.write_file(change_list_path, changes)
   end
 
@@ -123,17 +123,20 @@ class Project < ActiveRecord::Base
 
   def map_to_cctray_project_status
     case status
-    when 'passed' then 'Success'
-    when 'failed' then 'Failure'
-    else 'Unknown'
+      when 'passed' then
+        'Success'
+      when 'failed' then
+        'Failure'
+      else
+        'Unknown'
     end
   end
 
   def repository
     @repository ||= Repository.new(code_path, url)
   end
-  
+
   def self.find_by_name(name)
-    all.detect{|project| project.name == name}
+    all.detect { |project| project.name == name }
   end
 end
