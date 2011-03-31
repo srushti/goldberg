@@ -34,8 +34,14 @@ describe Repository do
       repo.change_list("old_sha", "new_sha").should == "change list"
     end
     
-    it "should return empty change list if either of old sha or new sha are blank" do
-      repo.change_list("", nil).should be_blank
+    it "should return empty change list if old sha is blank" do
+      Environment.should_not_receive(:system_call_output)
+      repo.change_list(nil, "new_sha").should be_blank
+    end
+    
+    it "should retrieve a list of changes if old sha is present but new sha is blank" do
+      Environment.should_receive(:system_call_output).with("cd code_path && git whatchanged old_sha.. --pretty=oneline --name-status").and_return("change list")
+      repo.change_list("old_sha", nil).should == "change list"
     end
   end
 end

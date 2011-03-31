@@ -5,7 +5,7 @@ module Environment
     end
 
     def system_call_output(command)
-      `/bin/bash -c "#{command.gsub(/"/, '\"')}"`
+      `/usr/bin/env bash -c "#{command.gsub(/"/, '\"')}"`
     end
 
     def system(command)
@@ -16,7 +16,7 @@ module Environment
         super(command)
       end
     end
-
+    
     [:sleep, :exec].each do |method_name|
       define_method method_name do |args|
         super(args)

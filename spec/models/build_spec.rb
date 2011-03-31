@@ -37,26 +37,66 @@ module Goldberg
       end
     end
     
-    # def build(task = :default)
-    #       write_change_list
-    #       Rails.logger.info "Building #{name}"
-    #       Environment.system("source $HOME/.rvm/scripts/rvm && cd #{code_path} && BUNDLE_GEMFILE='' #{command} #{task.to_s} 2>&1") do |output, result|
-    #         Environment.write_file(build_log_path, output)
-    #         Rails.logger.info "Build status #{result}"
-    #         builds.new(:project => self, :status => result, :number => latest_build_number + 1)
-    #         File.delete(force_build_path) if File.exist?(force_build_path)
-    #         copy_latest_build_to_its_own_folder
-    #       end
-    #     end
-    #     
-    context "changes" do
-      
-      it "should write a file with all the changes since the previous build" do
-        pending
+    context "before create" do
+      it "should update the revision of the build if it is blank" do
         project = Factory.build(:project, :name => 'ooga')
-        build = Factory.build(:build, :project => project, :number => 5, :previous_build_revision => "random_sha")
-        
+        build = Factory.build(:build, :project => project, :number => 5, :revision => nil)
+        project.repository.should_receive(:revision).and_return("new_sha")
+        build.save
+        build.reload
+        build.revision.should == "new_sha"
+      end
+      
+      it "should not update the build revision if it is already set" do
+        project = Factory.build(:project, :name => 'ooga')
+        build = Factory.build(:build, :project => project, :number => 5, :revision => "some_sha")
+        build.save
+        build.reload
+        build.revision.should == "some_sha"
+      end
+    end
+    
+    context "changes" do
+      it "should write a file with all the changes since the previous build" do
+        project = Factory.build(:project, :name => 'ooga')
+        build = Factory.build(:build, :project => project, :number => 5, :previous_build_revision => "old_sha", :revision => "new_sha")
+        project.repository.should_receive(:change_list).with("old_sha", "new_sha").and_return("changes")
+        file = mock(File)
+        file.should_receive(:write).with("changes")
+        File.should_receive(:open).with(build.change_list_path, "w+").and_yield(file)
         build.persist_change_list
+      end
+    end
+    
+    context "run" do
+      let(:project) { Factory.build(:project) }
+      let(:build) { Factory.create(:build, :project => project) }
+
+      before(:each) do
+        build.should_receive(:before_build)
+      end
+      
+      it "should run the build command and update the build status" do
+        Environment.should_receive(:system).and_return(true)
+        build.run.should be_true
+        build.reload
+        build.status.should == "passed"
+      end
+      
+      it "should set build status to failed if the build command fails" do
+        Environment.should_receive(:system).and_return(false)
+        build.run.should be_false
+        build.reload
+        build.status.should == "failed"
+      end
+    end
+    
+    context "before build" do
+      it "should set build status to 'building' and persist the change list" do
+        build = Factory.build(:build)
+        build.should_receive(:persist_change_list)
+        build.before_build
+        build.reload.status.should == 'building'
       end
     end
   end
