@@ -9,7 +9,7 @@ module Goldberg
 
     it "checks out a new git project" do
       FileUtils.should_receive(:mkdir_p).with('some_path/some_project')
-      Environment.should_receive(:system).with('git clone git://some.url.git some_path/some_project/code').and_return(true)
+      Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
       project = Project.add({:url => "git://some.url.git", :name => 'some_project'})
       project.name.should == 'some_project'
     end
@@ -27,14 +27,14 @@ module Goldberg
     it "updates but doesn't yield if there are no updates" do
       project = Factory(:project, :name => 'name')
       project.should_receive(:build_anyway?).and_return(false)
-      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('Already up-to-date.')
+      project.repository.should_receive(:update).and_return(false)
       project.update{|p| true.should_not be}
     end
 
     it "updates and yields if there are updates" do
       yielded_project = nil
       project = Factory(:project, :name => 'name')
-      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
+      project.repository.should_receive(:update).and_return(false)
       project.update{|p| yielded_project = p}
       yielded_project.should == project
     end
@@ -45,7 +45,7 @@ module Goldberg
       ['build_status_path', 'build_log_path', 'force_build_path'].each do |method_name|
         File.should_receive(:exist?).with(project.send(method_name)).and_return(true)
       end
-      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('Already up-to-date.')
+      project.repository.should_receive(:update).and_return(false)
       project.update{|p| yielded_project = p}
       yielded_project.should == project
     end
@@ -76,7 +76,7 @@ module Goldberg
     it "should get latest code when the build is forced" do
       project = Factory(:project, :name => 'name')
       Environment.stub!(:write_file).with(project.force_build_path, '')
-      Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git pull').and_return('some changes')
+      project.repository.should_receive(:update).and_return(true)
       project.force_build
     end
 
