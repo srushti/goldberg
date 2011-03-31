@@ -3,15 +3,22 @@ require "spec_helper"
 module Goldberg
   describe Project do
     before(:each) do
-      Logger.stub!(:new).and_return(stub(Logger, :info => ''))
       Paths.stub!(:projects).and_return('some_path')
     end
-
-    it "checks out a new git project" do
-      FileUtils.should_receive(:mkdir_p).with('some_path/some_project')
-      Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
-      project = Project.add({:url => "git://some.url.git", :name => 'some_project'})
-      project.name.should == 'some_project'
+    
+    context "add" do
+      it "creats a new projects and checks out the code for it" do
+        Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
+        lambda {Project.add({:url => "git://some.url.git", :name => 'some_project'})}.should change(Project, :count).by(1)
+      end
+    end
+    
+    context "checkout" do
+      it "should check out the code for the project" do
+        project = Project.new(:url => "git://some.url.git", :name => 'some_project')
+        Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
+        project.checkout
+      end
     end
 
     it "should be able to retrieve the custom command" do
@@ -24,82 +31,78 @@ module Goldberg
       project.command.should == 'rake'
     end
 
-    it "updates but doesn't yield if there are no updates" do
-      project = Factory(:project, :name => 'name')
-      project.should_receive(:build_anyway?).and_return(false)
-      project.repository.should_receive(:update).and_return(false)
-      project.update{|p| true.should_not be}
-    end
-
-    it "updates and yields if there are updates" do
-      yielded_project = nil
-      project = Factory(:project, :name => 'name')
-      project.repository.should_receive(:update).and_return(false)
-      project.update{|p| yielded_project = p}
-      yielded_project.should == project
-    end
-
-    it "yields if there is a build to be forced even if there are no updates" do
-      yielded_project = nil
-      project = Factory(:project, :name => 'name')
-      ['build_status_path', 'build_log_path', 'force_build_path'].each do |method_name|
-        File.should_receive(:exist?).with(project.send(method_name)).and_return(true)
-      end
-      project.repository.should_receive(:update).and_return(false)
-      project.update{|p| yielded_project = p}
-      yielded_project.should == project
-    end
-
-    it "builds the default target" do
-      pending
-      Environment.should_receive(:system).with("source $HOME/.rvm/scripts/rvm && cd some_path/name/code && BUNDLE_GEMFILE='' rake default 2>&1").and_yield('some log data', true)
-      Environment.stub!(:write_file).with('some_path/name/build_log', 'some log data')
-      project = Factory(:project, :name => 'name', :builds => [Factory(:build, :number => 1)])
-      FileUtils.should_receive(:mkdir_p).with("some_path/name/builds/2", :verbose => true)
-      FileUtils.should_receive(:cp).with( "some_path/name/build_log", "some_path/name/builds/2", :verbose => true)
-      project.build
-    end
-
     it "removes projects" do
       FileUtils.should_receive(:rm_rf).with('some_path/project_to_be_removed/')
       project = Factory(:project, :name => 'project_to_be_removed')
       project.destroy
     end
 
-    it "writes the build force file" do
+    it "sets the build requested flag to true" do
       project = Factory(:project, :name => 'name')
-      Environment.should_receive(:write_file).with(project.force_build_path, '')
-      Environment.stub!(:system_call_output).and_return('some changes')
       project.force_build
+      project.build_requested.should be_true
     end
-
-    it "should get latest code when the build is forced" do
-      project = Factory(:project, :name => 'name')
-      Environment.stub!(:write_file).with(project.force_build_path, '')
-      project.repository.should_receive(:update).and_return(true)
-      project.force_build
+    
+    context "when to build" do
+      it "should build if there are no existing builds" do
+        project = Project.new
+        project.build_required?.should be_true
+      end
+      
+      it "should build even if there are existing builds if it is requested" do
+        project = Project.new
+        project.builds << Build.new
+        project.build_requested = true
+        project.build_required?.should be_true
+      end
     end
 
     context "run build" do
       let(:project) { Factory(:project, :name => "goldberg") }
 
-      it "should create a new build for a project with build number set to 1 in case of first build  and run it" do
-        Environment.should_receive(:system).and_return(true)
-        project.repository.should_receive(:change_list).and_return("")
-        File.should_receive(:open)
-        project.run_build.should == true
-        project.builds.should have(1).thing
-        project.builds.last.number.should == 1
+      # all tests in this context are testing mock calls Grrrhhhhh
+      
+      context "without changes or requested build" do
+        it "should not run the build if there are no updates from repository or build is not required" do
+          project.should respond_to(:build_required?)
+          project.should_receive(:build_required?).and_return(false)
+          project.repository.should_receive(:update).and_return(false)
+          lambda { project.run_build }.should_not change(project.builds, :size)
+        end
+      end
+
+      it "should run the build even if there are no updates but a build is requested" do
+        build = Build.new
+        project.build_requested = true
+        project.repository.should_receive(:update).and_return(false)
+        project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :project => project).and_return(build)
+        build.should respond_to(:run)
+        build.should_receive(:run)
+        project.run_build
       end
       
-      it "should create a new build for a project with build number one greater than last build and run it" do
-        Environment.should_receive(:system).and_return(true)
-        project.repository.should_receive(:revision).and_return("new_sha")
-        project.repository.should_receive(:change_list).with("random_sha", "new_sha").and_return("")
-        File.should_receive(:open)
-        project.builds.create(:number => 5, :revision => "random_sha", :project => project)
-        project.run_build.should == true
-        project.builds.last.number.should == 6
+      context "with changes" do
+        before(:each) do
+          project.repository.should respond_to(:update)
+          project.repository.should_receive(:update).and_return(true)
+        end
+        
+        it "should create a new build for a project with build number set to 1 in case of first build  and run it" do
+          build = Build.new
+          project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :project => project).and_return(build)
+          build.should respond_to(:run)
+          build.should_receive(:run)
+          project.run_build
+        end
+
+        it "should create a new build for a project with build number one greater than last build and run it" do
+          project.builds << Factory(:build, :number => 5, :revision => "old_sha", :project => project)
+          build = Build.new
+          project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "old_sha", :project => project).and_return(build)
+          build.should respond_to(:run)
+          build.should_receive(:run)
+          project.run_build
+        end
       end
     end
     
