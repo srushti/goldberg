@@ -51,6 +51,7 @@ module Goldberg
     end
 
     it "builds the default target" do
+      pending
       Environment.should_receive(:system).with("source $HOME/.rvm/scripts/rvm && cd some_path/name/code && BUNDLE_GEMFILE='' rake default 2>&1").and_yield('some log data', true)
       Environment.stub!(:write_file).with('some_path/name/build_log', 'some log data')
       project = Factory(:project, :name => 'name', :builds => [Factory(:build, :number => 1)])
@@ -83,44 +84,25 @@ module Goldberg
       let(:project) { Factory(:project, :name => "goldberg") }
 
       it "should create a new build for a project with build number set to 1 in case of first build  and run it" do
+        Environment.should_receive(:system).and_return(true)
+        project.repository.should_receive(:change_list).and_return("")
+        File.should_receive(:open)
         project.run_build.should == true
         project.builds.should have(1).thing
-        project.builds.first.number.should == 1
+        project.builds.last.number.should == 1
       end
       
       it "should create a new build for a project with build number one greater than last build and run it" do
-        build = mock(Build)
-        project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "random_sha", :project => project).and_return(build)
-        build.should_receive(:run).and_return(true)
+        Environment.should_receive(:system).and_return(true)
+        project.repository.should_receive(:revision).and_return("new_sha")
+        project.repository.should_receive(:change_list).with("random_sha", "new_sha").and_return("")
+        File.should_receive(:open)
         project.builds.create(:number => 5, :revision => "random_sha", :project => project)
         project.run_build.should == true
+        project.builds.last.number.should == 6
       end
     end
     
-    context "store change list for the build" do
-      before(:each) do
-        pending "need a better place to move thio"
-      end
-
-      it "should write the list of changes to change list file" do
-        project = Factory(:project, :name => 'name')
-        latest_build = Build.new('latest_build_path')
-        project.stub!(:latest_build).and_return(latest_build)
-        latest_build.stub!(:version).and_return('HEAD~1')
-        project.should_receive(:build_version).and_return('HEAD')
-        Environment.should_receive(:system_call_output).with('cd some_path/name/code ; git diff --name-status HEAD~1 HEAD').and_return('change list')
-        Environment.should_receive(:write_file).with('some_path/name/change_list', 'change list')
-        project.write_change_list
-      end
-
-      it "should not write change list in case of the first build" do
-        project = Factory(:project, :name => 'name')
-        Build.should_receive(:all).and_return([])
-        Environment.should_not_receive(:write_file)
-        project.write_change_list
-      end
-    end
-
     it "should be able to return the latest build" do
       project = Factory(:project, :name => 'name')
       project.should_receive(:builds).and_return([mock('last_build', :number => '42'), mock('first_build', :number => '1')])

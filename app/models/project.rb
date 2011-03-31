@@ -130,7 +130,7 @@ class Project < ActiveRecord::Base
   end
 
   def repository
-    Repository.new(code_path, url)
+    @repository ||= Repository.new(code_path, url)
   end
   
   def self.find_by_name(name)

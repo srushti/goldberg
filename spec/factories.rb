@@ -9,5 +9,6 @@ end
 
 Factory.define :build do |b|
   b.project { Factory(:project) }
+  b.revision "some_random_sha"
 end
 
