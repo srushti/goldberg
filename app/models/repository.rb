@@ -21,6 +21,6 @@ class Repository
   
   def change_list(old_sha, new_sha)
     return "" if old_sha.blank?
-    Environment.system_call_output("cd #{@code_path} && git whatchanged #{old_sha.strip}..#{new_sha.strip} --pretty=oneline --name-status")
+    Environment.system_call_output("cd #{@code_path} && git whatchanged #{old_sha.strip if old_sha}..#{new_sha.strip if new_sha} --pretty=oneline --name-status")
   end
 end
