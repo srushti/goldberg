@@ -14,3 +14,4 @@ projects/*
 cscope.*
 tmtags
 db/schema.rb
+goldberg.ids
