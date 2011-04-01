@@ -9,6 +9,7 @@ module Environment
     end
 
     def system(command)
+      Rails.logger.info "executing #{command}"
       if block_given?
         yield system_call_output(command), $?.success?
         $?.success?

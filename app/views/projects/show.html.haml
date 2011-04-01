@@ -1,7 +1,7 @@
 %p
   %h2= @project.name
   %strong{:class => project_status(@project.status)}= "#{project_status(@project.status)}"
-  %form{:method => 'post', :action => "/projects/#{@project.name}/force"}
+  %form{:method => 'post', :action => "/projects/#{@project.id}/force"}
     %input{:type => 'submit', :value => 'force build'}
   %pre= @project.build_log
   %ul
@@ -10,5 +10,5 @@
         %a{:href => "/projects/#{@project.name}/builds/#{build.number}"}= "#{build.number} #{project_status(build.status)}"
         - if build.timestamp
           = build.timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")
-        - if build.version
-          = build.version[0, 6]
+        - if build.revision
+          = build.revision

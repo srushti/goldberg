@@ -75,7 +75,7 @@ module Goldberg
         build = Build.new
         project.build_requested = true
         project.repository.should_receive(:update).and_return(false)
-        project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :project => project).and_return(build)
+        project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
         build.should respond_to(:run)
         build.should_receive(:run)
         project.run_build
@@ -89,7 +89,7 @@ module Goldberg
         
         it "should create a new build for a project with build number set to 1 in case of first build  and run it" do
           build = Build.new
-          project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :project => project).and_return(build)
+          project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
           build.should respond_to(:run)
           build.should_receive(:run)
           project.run_build
@@ -98,7 +98,7 @@ module Goldberg
         it "should create a new build for a project with build number one greater than last build and run it" do
           project.builds << Factory(:build, :number => 5, :revision => "old_sha", :project => project)
           build = Build.new
-          project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "old_sha", :project => project).and_return(build)
+          project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "old_sha").and_return(build)
           build.should respond_to(:run)
           build.should_receive(:run)
           project.run_build

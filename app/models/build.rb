@@ -22,7 +22,7 @@ class Build < ActiveRecord::Base
   end
 
   def timestamp
-    File.ctime(build_status_path)
+    self.created_at
   end
 
   def artifacts_path

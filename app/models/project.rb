@@ -46,7 +46,7 @@ class Project < ActiveRecord::Base
 
   def run_build
     if self.repository.update || build_required?
-      build_successful = builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision, :project => self).run
+      build_successful = self.builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision).run
       Rails.logger.info "Build #{ build_successful  ? "passed" : "failed!" }"
     end
   end
@@ -59,15 +59,12 @@ class Project < ActiveRecord::Base
     latest_build.timestamp
   end
 
-  def id
-    name.hash.abs
-  end
-
   def build_log
-    File.exist?(build_log_path) ? Environment.read_file(build_log_path) : ''
+    latest_build ? latest_build.log : ''
   end
 
   def force_build
+    Rails.logger.info "forcing build for #{self.name}"
     self.build_requested = true
     save
   end
