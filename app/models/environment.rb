@@ -5,16 +5,18 @@ module Environment
     end
 
     def system_call_output(command)
-      `/usr/bin/env bash -c "#{command.gsub(/"/, '\"')}"`
+      Rails.logger.info("System call output: #{command}")
+      `#{command}`
     end
 
     def system(command)
-      Rails.logger.info "executing #{command}"
+      command_to_exec = %{/usr/bin/env zsh -c "#{command.gsub(/"/, '\"')}"}
+      Rails.logger.info "executing #{command_to_exec}"
       if block_given?
-        yield system_call_output(command), $?.success?
+        yield system_call_output(command_to_exec), $?.success?
         $?.success?
       else
-        super(command)
+        super(command_to_exec)
       end
     end
     

@@ -7,7 +7,7 @@
   %ul
     - @project.builds.each do |build|
       %li
-        %a{:href => "/projects/#{@project.name}/builds/#{build.number}"}= "#{build.number} #{project_status(build.status)}"
+        %a{:href => "/projects/#{@project.name}/builds/#{build.id}"}= "#{build.number} #{project_status(build.status)}"
         - if build.timestamp
           = build.timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")
         - if build.revision

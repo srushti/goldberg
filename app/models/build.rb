@@ -43,9 +43,9 @@ class Build < ActiveRecord::Base
     before_build
     require_rvm = "source $HOME/.rvm/scripts/rvm"
     go_to_project_path = "cd #{project.code_path}"
-    build_command = "BUNDLE_GEMFILE='' #{project.command}"
+    build_command = "#{project.command}"
     output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
-    Environment.system("#{require_rvm} && #{go_to_project_path}  && #{build_command} #{output_redirects}").tap do |success|
+    Environment.system("export BUNDLE_GEMFILE='' ; #{require_rvm} ; rvm reset ; #{go_to_project_path} ; #{build_command} #{output_redirects}").tap do |success|
       if success
         self.status = "passed"
       else
