@@ -8,7 +8,7 @@ describe Repository do
   end
   
   it "should know the sha of current revision" do
-    Environment.should_receive(:system_call_output).with("cd code_path && git rev-parse --verify HEAD").and_return("random_sha")
+    Environment.should_receive(:system_call_output).with("cd code_path && git rev-parse --verify HEAD").and_return("random_sha\n")
     repo.revision.should == "random_sha"
   end
   

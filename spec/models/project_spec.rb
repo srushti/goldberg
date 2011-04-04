@@ -108,8 +108,8 @@ module Goldberg
     
     it "should be able to return the latest build" do
       project = Factory(:project, :name => 'name')
-      first_build = project.builds.create()
-      last_build = project.builds.create()
+      first_build = Factory(:build, :project => project)
+      last_build = Factory(:build, :project => project)
       project.latest_build.should == last_build
     end
   end
