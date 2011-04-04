@@ -3,7 +3,8 @@ require "fileutils"
 class Project < ActiveRecord::Base
   has_many :builds
   after_destroy :remove
-
+  delegate :number, :status, :log, :timestamp, :to => :latest_build, :prefix => true
+  
   def self.add(options)
     Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url]).tap do |project|
       project.checkout
@@ -32,10 +33,6 @@ class Project < ActiveRecord::Base
     path("code")
   end
 
-  def latest_build_number
-    latest_build.number
-  end
-
   def path(extra = '')
     File.join(Paths.projects, name, extra)
   end
@@ -53,18 +50,6 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def status
-    latest_build.status
-  end
-
-  def last_built_at
-    latest_build.timestamp
-  end
-
-  def build_log
-    latest_build ? latest_build.log : ''
-  end
-
   def force_build
     Rails.logger.info "forcing build for #{self.name}"
     self.build_requested = true
@@ -76,7 +61,7 @@ class Project < ActiveRecord::Base
   end
 
   def map_to_cctray_project_status
-    case status
+    case latest_build_status
       when 'passed' then
         'Success'
       when 'failed' then

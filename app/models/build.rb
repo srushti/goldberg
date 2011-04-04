@@ -10,7 +10,7 @@ class Build < ActiveRecord::Base
   belongs_to :project
 
   def self.nil
-    OpenStruct.new(:number => 0, :status => 'never run', :revision => '', :nil_build? => true, :timestamp => nil)
+    OpenStruct.new(:number => 0, :status => 'not available', :revision => '', :nil_build? => true, :timestamp => nil, :log => '')
   end
 
   def log

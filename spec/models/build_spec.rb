@@ -2,9 +2,14 @@ require "spec_helper"
 
 module Goldberg
   describe Build do
-    it "should be able to fake the last version" do
-      Build.nil.revision.should == ''
-      Build.nil.should be_nil_build
+    it "should be able to fake a build" do
+      nil_build = Build.nil
+      nil_build.should be_nil_build
+      nil_build.revision.should == ""
+      nil_build.number.should == 0
+      nil_build.status.should == "not available"
+      nil_build.log.should == ""
+      nil_build.time.should be_nil
     end
 
     it "should not be a nil build" do
@@ -14,6 +19,12 @@ module Goldberg
     it "sorts correctly" do
       builds = [10, 9, 1, 500].map{|i| Factory(:build, :number => i)}
       builds.sort.map(&:number).map(&:to_i).should == [1, 9, 10, 500]
+    end
+    
+    it "should be able to read the build log file to retrieve associated log" do
+      build = Factory.build(:build)
+      Environment.should_receive(:read_file).with(build.build_log_path).and_return("build_log")
+      build.log.should == "build_log"
     end
 
     context "paths" do

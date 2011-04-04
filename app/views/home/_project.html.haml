@@ -1,14 +1,14 @@
-- status = project_status(project.status)
+- status = project_status(project.latest_build_status)
 %tr{:class => "project_row #{status}"}
 
   %td.status_icon
-    %img{:src => "/images/#{status}.png", :alt => project.status, :title => status}
+    %img{:src => "/images/#{status}.png", :alt => project.latest_build_status, :title => status}
 
   %td.project_name{:class => status}
     %a{:href => "/projects/#{project.name}"}
       %b= project.name
 
   %td.last_built_at
-    - if project.last_built_at
-      = project.last_built_at.strftime("%a, %Y/%m/%d %I:%M%p %Z")
+    - if project.latest_build_timestamp
+      = project.latest_build_timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")
 
