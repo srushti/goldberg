@@ -1,31 +1,17 @@
 require "ostruct"
+require 'fileutils'
 
-class Build
+class Build < ActiveRecord::Base
   include Comparable
+  
+  attr_accessor :previous_build_revision
+  after_create :create_artifacts_dir
+  before_create :update_revision
+  
+  belongs_to :project
 
-  def self.all(project)
-    FileUtils.mkdir_p(project.builds_path) if !File.exist?(project.builds_path)
-    folder_contents = (Dir.entries(project.builds_path) - ['.', '..'])
-    full_names_folder_contents = folder_contents.map{|entry| File.join(project.builds_path, entry)}
-    directory_paths = full_names_folder_contents.select{|entry| File.directory?(entry)}
-    builds = directory_paths.map{|dir_entry| Build.new(dir_entry)}
-    builds.sort.reverse
-  end
-
-  def self.null
-    OpenStruct.new(:number => '', :status => 'never run', :version => 'HEAD', :null? => true, :timestamp => nil)
-  end
-
-  def null?
-    false
-  end
-
-  def initialize(path)
-    @path = path
-  end
-
-  def number
-    File.basename(@path)
+  def self.nil
+    OpenStruct.new(:number => 0, :status => 'not available', :revision => '', :nil_build? => true, :timestamp => nil, :log => '')
   end
 
   def log
@@ -37,33 +23,64 @@ class Build
   end
 
   def timestamp
-    File.ctime(build_status_path)
+    self.created_at
   end
 
-  %w(build_status change_list build_log build_version).each do |file_name|
+  def artifacts_path
+    File.join(project.path, "builds", number.to_s)
+  end
+  
+  %w(change_list build_log).each do |file_name|
     define_method "#{file_name}_path".to_sym do
-      File.join(@path, file_name)
+      File.join(artifacts_path, file_name)
     end
-  end
-
-  def status
-    if File.exist?(build_status_path)
-      Environment.read_file(build_status_path).strip == 'true' ? 'passed' : 'failed'
-    else
-      nil
-    end
-  end
-
-  def version
-    File.exist?(build_version_path) ? Environment.read_file(build_version_path) : nil
   end
 
   def <=>(other)
     number.to_i <=> other.number.to_i
   end
   
-  protected
-  def path
-    @path
+  def run
+    before_build
+    Bundler.with_clean_env do
+      ENV['BUNDLE_GEMFILE'] = nil
+      require_rvm = "source $HOME/.rvm/scripts/rvm"
+      go_to_project_path = "cd #{project.code_path}"
+      build_command = "#{project.command}"
+      output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
+      Environment.system("#{require_rvm} ; rvm reset ; #{go_to_project_path};  #{build_command} #{output_redirects}").tap do |success|
+        if success
+          self.status = "passed"
+        else
+          self.status = "failed"
+        end
+        save
+      end
+    end
+  end
+  
+  def before_build
+    self.status = "building"
+    save
+    persist_change_list
+  end
+  
+  def persist_change_list
+    change_list = project.repository.change_list(previous_build_revision, revision)
+    File.open(change_list_path, "w+") do |file|
+      file.write(change_list)
+    end
+  end
+  
+  def create_artifacts_dir
+    FileUtils.mkdir_p(artifacts_path)
+  end
+  
+  def update_revision
+    self.revision = project.repository.revision if self.revision.blank?
+  end
+  
+  def nil_build?
+    false
   end
 end

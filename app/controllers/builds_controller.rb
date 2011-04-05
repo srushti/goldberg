@@ -1,6 +1,6 @@
 class BuildsController < ApplicationController
   def show
-    @project = Project.new(params[:project_id])
-    @build = @project.builds.detect{|build| build.number == params[:id] }
+    @project = Project.find_by_name(params[:project_id])
+    @build = @project.builds.find(params[:id])
   end
 end

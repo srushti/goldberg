@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
 
 require File.expand_path('../../config/environment', __FILE__)
+Rails.logger = Logger.new(STDOUT)
 GoldbergInit.new.run

@@ -4,6 +4,8 @@ require 'spork'
 Spork.prefork do
   # This file is copied to spec/ when you run 'rails generate rspec:install'
   ENV["RAILS_ENV"] ||= 'test'
+  ENV["GOLDBERG_PATH"] ||= File.join(File.expand_path('../../', __FILE__), 'tmp', 'goldberg')
+  
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
 
@@ -21,13 +23,15 @@ Spork.prefork do
     # config.mock_with :rr
     config.mock_with :rspec
 
-    # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-    config.fixture_path = "#{::Rails.root}/spec/fixtures"
-
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
     config.use_transactional_fixtures = true
+    
+    config.before(:each) do
+      # sleep(0.2)
+      FileUtils.stub!(:mkdir_p)
+    end
   end
 end
 

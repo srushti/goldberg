@@ -4,31 +4,29 @@ describe GoldbergInit do
   it "adds a new project" do
     Environment.stub!(:argv).and_return(['add', 'url', 'name'])
     Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => nil)
-    Environment.should_receive(:puts).with('name successfully added.')
+    Rails.logger.should_receive(:info).with('name successfully added.')
     GoldbergInit.new.run
   end
 
   it "adds a new project with a custom command" do
     Environment.stub!(:argv).and_return(['add', 'url', 'name', 'cmake'])
     Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => 'cmake')
-    Environment.should_receive(:puts).with('name successfully added.')
+    Rails.logger.should_receive(:info).with('name successfully added.')
     GoldbergInit.new.run
   end
 
-  it "removes the specifies project" do
+  it "removes the specified project" do
     Environment.stub!(:argv).and_return(['remove', 'name'])
-    project = mock(Project)
-    Project.should_receive(:new).with('name').and_return(project)
-    project.should_receive(:remove)
-    Environment.should_receive(:puts).with('name successfully removed.')
+    project = Factory(:project, :name => 'name')
+    Rails.logger.should_receive(:info).with('name successfully removed.')
     GoldbergInit.new.run
+    Project.find_by_id(project.id).should_not be
   end
 
   it "lists all projects" do
+    project = Factory(:project, :name => 'a_project')
     Environment.stub!(:argv).and_return(['list'])
-    project = mock(Project, :name => 'name')
-    Project.should_receive(:all).and_return([project])
-    Environment.should_receive(:puts).with('name')
+    Rails.logger.should_receive(:info).with(project.name)
     GoldbergInit.new.run
   end
 
@@ -42,14 +40,12 @@ describe GoldbergInit do
   end
 
   it "continues on with the next project even if one build fails" do
-    one = mock('project_one', :name => 'one')
-    two = mock('project_two', :name => 'two')
-    Project.should_receive(:all).and_return([one, two])
-    one.stub!(:update).and_raise(Exception.new("An exception"))
-    two.should_receive(:update)
-    logger = mock('logger')
-    logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
-    Logger.stub!(:new).and_return(logger)
+    one = Factory(:project, :name => 'one')
+    two = Factory(:project, :name => 'two')
+    one.stub!(:run_build).and_raise(Exception.new("An exception"))
+    two.should_receive(:run_build)
+    Project.stub!(:all).and_return([one, two])
+    Rails.logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
     GoldbergInit.new.poll
   end
 end

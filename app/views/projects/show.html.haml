@@ -1,14 +1,14 @@
 %p
   %h2= @project.name
-  %strong{:class => project_status(@project.status)}= "#{project_status(@project.status)}"
-  %form{:method => 'post', :action => "/projects/#{@project.name}/force"}
+  %strong{:class => project_status(@project.latest_build_status)}= "#{project_status(@project.latest_build_status)}"
+  %form{:method => 'post', :action => "/projects/#{@project.id}/force"}
     %input{:type => 'submit', :value => 'force build'}
-  %pre= @project.build_log
+  %pre= @project.latest_build_log
   %ul
     - @project.builds.each do |build|
       %li
-        %a{:href => "/projects/#{@project.name}/builds/#{build.number}"}= "#{build.number} #{project_status(build.status)}"
+        %a{:href => "/projects/#{@project.name}/builds/#{build.id}"}= "#{build.number} #{project_status(build.status)}"
         - if build.timestamp
           = build.timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")
-        - if build.version
-          = build.version[0, 6]
+        - if build.revision
+          = build.revision

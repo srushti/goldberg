@@ -9,6 +9,8 @@ group :development, :test do
   gem "ruby-debug", "~> 0.10.4", :platforms => :ruby_18
   gem "ruby-debug19", "~> 0.11.6", :platforms => :ruby_19
   gem 'rspec-rails', '~> 2.5.0'
+  gem 'stirlitz', '~> 0.0.1.1'
   gem 'mongrel', '1.2.0.pre2'
   gem 'spork', '~> 0.9.0.rc'
+  gem 'factory_girl_rails', '~> 1.0.1'
 end
