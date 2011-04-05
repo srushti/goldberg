@@ -1,4 +1,5 @@
 require "ostruct"
+require 'fileutils'
 
 class Build < ActiveRecord::Base
   include Comparable
@@ -10,7 +11,7 @@ class Build < ActiveRecord::Base
   belongs_to :project
 
   def self.nil
-    OpenStruct.new(:number => 0, :status => 'never run', :revision => '', :nil_build? => true, :timestamp => nil)
+    OpenStruct.new(:number => 0, :status => 'not available', :revision => '', :nil_build? => true, :timestamp => nil, :log => '')
   end
 
   def log
@@ -41,17 +42,20 @@ class Build < ActiveRecord::Base
   
   def run
     before_build
-    require_rvm = "source $HOME/.rvm/scripts/rvm"
-    go_to_project_path = "cd #{project.code_path}"
-    build_command = "#{project.command}"
-    output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
-    Environment.system("export BUNDLE_GEMFILE='' ; #{require_rvm} ; rvm reset ; #{go_to_project_path} ; #{build_command} #{output_redirects}").tap do |success|
-      if success
-        self.status = "passed"
-      else
-        self.status = "failed"
+    Bundler.with_clean_env do
+      ENV['BUNDLE_GEMFILE'] = nil
+      require_rvm = "source $HOME/.rvm/scripts/rvm"
+      go_to_project_path = "cd #{project.code_path}"
+      build_command = "#{project.command}"
+      output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
+      Environment.system("#{require_rvm} ; rvm reset ; #{go_to_project_path} ; #{build_command} #{output_redirects}").tap do |success|
+        if success
+          self.status = "passed"
+        else
+          self.status = "failed"
+        end
+        save
       end
-      save
     end
   end
   

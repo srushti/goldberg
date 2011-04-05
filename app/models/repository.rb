@@ -5,7 +5,7 @@ class Repository
   end
   
   def revision
-    Environment.system_call_output("cd #{@code_path} && git rev-parse --verify HEAD")
+    Environment.system_call_output("cd #{@code_path} && git rev-parse --verify HEAD").strip
   end
   
   def checkout
@@ -21,6 +21,6 @@ class Repository
   
   def change_list(old_sha, new_sha)
     return "" if old_sha.blank?
-    Environment.system_call_output("cd #{@code_path} && git whatchanged #{old_sha.strip if old_sha}..#{new_sha.strip if new_sha} --pretty=oneline --name-status")
+    Environment.system_call_output("cd #{@code_path} && git whatchanged #{old_sha}..#{new_sha} --pretty=oneline --name-status")
   end
 end

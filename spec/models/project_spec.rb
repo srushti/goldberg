@@ -20,6 +20,19 @@ module Goldberg
         project.checkout
       end
     end
+    
+    context "delegation to latest build" do
+      [:number, :status, :log, :timestamp].each do |field|
+        it "should delegate latest_build_#{field} to the latest build" do
+          project = Project.new
+          latest_build = mock(Build)
+          latest_build.should_receive(field)
+          project.should_receive(:latest_build).and_return(latest_build)
+          # testing delegation call through mocks
+          project.send("latest_build_#{field}")
+        end
+      end
+    end
 
     it "should be able to retrieve the custom command" do
       project = Factory(:project, :custom_command => 'cmake')
@@ -108,8 +121,8 @@ module Goldberg
     
     it "should be able to return the latest build" do
       project = Factory(:project, :name => 'name')
-      first_build = project.builds.create()
-      last_build = project.builds.create()
+      first_build = Factory(:build, :project => project)
+      last_build = Factory(:build, :project => project)
       project.latest_build.should == last_build
     end
   end
