@@ -47,8 +47,9 @@ class Build < ActiveRecord::Base
       require_rvm = "source $HOME/.rvm/scripts/rvm"
       go_to_project_path = "cd #{project.code_path}"
       build_command = "#{project.command}"
+      bundle_check_and_install = "bundle check || bundle install"
       output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
-      Environment.system("#{require_rvm} ; rvm reset ; #{go_to_project_path} ; #{build_command} #{output_redirects}").tap do |success|
+      Environment.system("#{require_rvm} ; rvm reset ; #{go_to_project_path} ; #{bundle_check_and_install};  #{build_command} #{output_redirects}").tap do |success|
         if success
           self.status = "passed"
         else
