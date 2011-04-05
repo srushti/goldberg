@@ -57,7 +57,8 @@ class Project < ActiveRecord::Base
   end
 
   def command
-    custom_command || "rake"
+    bundler_command = File.exists?(File.join(self.code_path,'Gemfile')) ? "(bundle check || bundle install) && " : ""
+    bundler_command << (custom_command || "rake")
   end
 
   def map_to_cctray_project_status

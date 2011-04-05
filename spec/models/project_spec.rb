@@ -34,14 +34,28 @@ module Goldberg
       end
     end
 
-    it "should be able to retrieve the custom command" do
-      project = Factory(:project, :custom_command => 'cmake')
-      project.command.should == 'cmake'
-    end
+    context "command" do
+      it "should not prefix bundler related command if Gemfile is missing" do
+        project = Factory(:project)
+        File.should_receive(:exists?).with(File.join(project.code_path,'Gemfile')).and_return(false)
+        project.command.starts_with?("(bundle check || bundle install)").should be_false
+      end
 
-    it "should default the custom command to rake" do
-      project = Factory(:project, :custom_command => nil)
-      project.command.should == 'rake'
+      it "should prefix bundler related command if Gemfile is present" do
+        project = Factory(:project)
+        File.should_receive(:exists?).with(File.join(project.code_path,'Gemfile')).and_return(true)
+        project.command.starts_with?("(bundle check || bundle install)").should be_true
+      end
+
+      it "should be able to retrieve the custom command" do
+        project = Factory(:project, :custom_command => 'cmake')
+        project.command.should == 'cmake'
+      end
+
+      it "should default the custom command to rake" do
+        project = Factory(:project, :custom_command => nil)
+        project.command.should == 'rake'
+      end
     end
 
     it "removes projects" do
