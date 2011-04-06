@@ -44,6 +44,7 @@ class Build < ActiveRecord::Base
     before_build
     Bundler.with_clean_env do
       ENV['BUNDLE_GEMFILE'] = nil
+      ENV['RAILS_ENV'] = nil
       require_rvm = "source $HOME/.rvm/scripts/rvm"
       go_to_project_path = "cd #{project.code_path}"
       build_command = "#{project.command}"

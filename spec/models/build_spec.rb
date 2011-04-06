@@ -88,7 +88,27 @@ module Goldberg
       let(:build) { Factory.create(:build, :project => project) }
 
       before(:each) do
+        build.stub(:before_build)
+      end
+
+      it "should execute in a clean environment" do
+        pending "Need to write spec to make sure all code is getting executed withing Bundle.with_clean_env"
+      end
+
+      it "should perform prebuild setup before building the project" do
         build.should_receive(:before_build)
+        build.run
+      end
+
+      it "should reset the bundler environment before executing command to build the project" do
+        Bundler.should_receive(:with_clean_env)
+        build.run
+      end
+
+      it "should reset the RAILS_ENV before executing the command to build the project" do
+        ENV.should_receive(:[]=).with('BUNDLE_GEMFILE',nil)
+        ENV.should_receive(:[]=).with('RAILS_ENV',nil)
+        build.run
       end
       
       it "should run the build command and update the build status" do
