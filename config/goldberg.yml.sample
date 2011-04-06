@@ -1,0 +1,11 @@
+defaults: &defaults
+  frequency: 20
+
+developent:
+  <<: *defaults
+
+production:
+  <<: *defaults
+
+test:
+  <<: *defaults

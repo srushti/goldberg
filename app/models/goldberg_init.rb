@@ -51,8 +51,8 @@ class GoldbergInit
   def start_poller
     while true
       poll
-      Rails.logger.info "Sleeping for 20 seconds."
-      Environment.sleep(20)
+      Rails.logger.info "Sleeping for #{BuildConfig.frequency} seconds."
+      Environment.sleep(BuildConfig.frequency)
     end
   end
 end
