@@ -17,17 +17,17 @@ module Goldberg
       context "removing project" do
         let(:project){ Factory(:project, :name => 'project_to_be_removed') }
 
-        it "should remove it from the DB" do
+        it "removes it from the DB" do
           project.destroy
           Project.find_by_name('project_to_be_removed').should be_nil
         end
 
-        it "should remove the checkedout code and build info from filesystem" do
+        it "removes the checked out code and build info from filesystem" do
           FileUtils.should_receive(:rm_rf).with(project.path)
           project.destroy
         end
 
-        it "should remove all the builds from DB" do
+        it "removes all the builds from DB" do
           build = project.builds.create
           project.destroy
           Build.find_by_id(build.id).should be_nil
@@ -36,7 +36,7 @@ module Goldberg
     end
 
     context "checkout" do
-      it "should check out the code for the project" do
+      it "checks out the code for the project" do
         project = Project.new(:url => "git://some.url.git", :name => 'some_project')
         Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
         project.checkout
@@ -45,7 +45,7 @@ module Goldberg
 
     context "delegation to latest build" do
       [:number, :status, :log, :timestamp].each do |field|
-        it "should delegate latest_build_#{field} to the latest build" do
+        it "delegates latest_build_#{field} to the latest build" do
           project = Project.new
           latest_build = mock(Build)
           latest_build.should_receive(field)
@@ -57,24 +57,24 @@ module Goldberg
     end
 
     context "command" do
-      it "should not prefix bundler related command if Gemfile is missing" do
+      it "does not prefix bundler related command if Gemfile is missing" do
         project = Factory(:project)
         File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(false)
         project.command.starts_with?("(bundle check || bundle install)").should be_false
       end
 
-      it "should prefix bundler related command if Gemfile is present" do
+      it "prefixes bundler related command if Gemfile is present" do
         project = Factory(:project)
         File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(true)
         project.command.starts_with?("(bundle check || bundle install)").should be_true
       end
 
-      it "should be able to retrieve the custom command" do
+      it "is able to retrieve the custom command" do
         project = Factory(:project, :custom_command => 'cmake')
         project.command.should == 'cmake'
       end
 
-      it "should default the custom command to rake" do
+      it "defaults the custom command to rake" do
         project = Factory(:project, :custom_command => nil)
         project.command.should == 'rake'
       end
@@ -87,12 +87,12 @@ module Goldberg
     end
 
     context "when to build" do
-      it "should build if there are no existing builds" do
+      it "builds if there are no existing builds" do
         project = Project.new
         project.build_required?.should be_true
       end
 
-      it "should build even if there are existing builds if it is requested" do
+      it "builds even if there are existing builds if it is requested" do
         project = Project.new
         project.builds << Build.new
         project.build_requested = true
@@ -106,7 +106,7 @@ module Goldberg
       # all tests in this context are testing mock calls Grrrhhhhh
 
       context "without changes or requested build" do
-        it "should not run the build if there are no updates from repository or build is not required" do
+        it "does not run the build if there are no updates from repository or build is not required" do
           project.should respond_to(:build_required?)
           project.should_receive(:build_required?).and_return(false)
           project.repository.should_receive(:update).and_return(false)
@@ -114,7 +114,7 @@ module Goldberg
         end
       end
 
-      it "should run the build even if there are no updates but a build is requested" do
+      it "runs the build even if there are no updates but a build is requested" do
         build = Build.new
         project.build_requested = true
         project.repository.should_receive(:update).and_return(false)
@@ -130,7 +130,7 @@ module Goldberg
           project.repository.should_receive(:update).and_return(true)
         end
 
-        it "should create a new build for a project with build number set to 1 in case of first build  and run it" do
+        it "creates a new build for a project with build number set to 1 in case of first build  and run it" do
           build = Build.new
           project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
           build.should respond_to(:run)
@@ -138,7 +138,7 @@ module Goldberg
           project.run_build
         end
 
-        it "should create a new build for a project with build number one greater than last build and run it" do
+        it "creates a new build for a project with build number one greater than last build and run it" do
           project.builds << Factory(:build, :number => 5, :revision => "old_sha", :project => project)
           build = Build.new
           project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "old_sha").and_return(build)
@@ -149,7 +149,7 @@ module Goldberg
       end
     end
 
-    it "should be able to return the latest build" do
+    it "is able to return the latest build" do
       project = Factory(:project, :name => 'name')
       first_build = Factory(:build, :project => project)
       last_build = Factory(:build, :project => project)

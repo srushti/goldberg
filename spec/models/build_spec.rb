@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Goldberg
   describe Build do
-    it "should be able to fake a build" do
+    it "is able to fake a build" do
       nil_build = Build.nil
       nil_build.should be_nil_build
       nil_build.revision.should == ""
@@ -12,7 +12,7 @@ module Goldberg
       nil_build.time.should be_nil
     end
 
-    it "should not be a nil build" do
+    it "is not a nil build" do
       Build.new.should_not be_nil_build
     end
     
@@ -21,21 +21,21 @@ module Goldberg
       builds.sort.map(&:number).map(&:to_i).should == [1, 9, 10, 500]
     end
     
-    it "should be able to read the build log file to retrieve associated log" do
+    it "is able to read the build log file to retrieve associated log" do
       build = Factory.build(:build)
       Environment.should_receive(:read_file).with(build.build_log_path).and_return("build_log")
       build.log.should == "build_log"
     end
 
     context "paths" do
-      it "should know where to store the build artifacts on the file system" do
+      it "knows where to store the build artifacts on the file system" do
         project = Factory.build(:project, :name => "name")
         build = Factory.build(:build, :project => project, :number => 5)
         build.artifacts_path.should == File.join(project.path, "builds", "5")
       end
       
       [:change_list, :build_log].each do |artifact|
-        it "should append build number to the project path to create a path for #{artifact}" do
+        it "appends build number to the project path to create a path for #{artifact}" do
           project = Factory.build(:project, :name => "name")
           build = Factory.build(:build, :project => project, :number => 5)
           build.send("#{artifact}_path").should == File.join(project.path, "builds", "5", artifact.to_s)
@@ -44,7 +44,7 @@ module Goldberg
     end
     
     context "after create" do
-      it "should create a directory for storing build artifacts" do
+      it "creates a directory for storing build artifacts" do
         project = Factory.build(:project, :name => 'ooga')
         build = Factory.build(:build, :project => project, :number => 5)
         FileUtils.should_receive(:mkdir_p).with(build.artifacts_path)
@@ -53,7 +53,7 @@ module Goldberg
     end
     
     context "before create" do
-      it "should update the revision of the build if it is blank" do
+      it "updates the revision of the build if it is blank" do
         project = Factory.build(:project, :name => 'ooga')
         build = Factory.build(:build, :project => project, :number => 5, :revision => nil)
         project.repository.should_receive(:revision).and_return("new_sha")
@@ -62,7 +62,7 @@ module Goldberg
         build.revision.should == "new_sha"
       end
       
-      it "should not update the build revision if it is already set" do
+      it "does not update the build revision if it is already set" do
         project = Factory.build(:project, :name => 'ooga')
         build = Factory.build(:build, :project => project, :number => 5, :revision => "some_sha")
         build.save
@@ -72,7 +72,7 @@ module Goldberg
     end
     
     context "changes" do
-      it "should write a file with all the changes since the previous build" do
+      it "writes a file with all the changes since the previous build" do
         project = Factory.build(:project, :name => 'ooga')
         build = Factory.build(:build, :project => project, :number => 5, :previous_build_revision => "old_sha", :revision => "new_sha")
         project.repository.should_receive(:change_list).with("old_sha", "new_sha").and_return("changes")
@@ -91,34 +91,34 @@ module Goldberg
         build.stub(:before_build)
       end
 
-      it "should execute in a clean environment" do
+      it "executes in a clean environment" do
         pending "Need to write spec to make sure all code is getting executed withing Bundle.with_clean_env"
       end
 
-      it "should perform prebuild setup before building the project" do
+      it "performs prebuild setup before building the project" do
         build.should_receive(:before_build)
         build.run
       end
 
-      it "should reset the bundler environment before executing command to build the project" do
+      it "resets the bundler environment before executing command to build the project" do
         Bundler.should_receive(:with_clean_env)
         build.run
       end
 
-      it "should reset the RAILS_ENV before executing the command to build the project" do
+      it "resets the RAILS_ENV before executing the command to build the project" do
         ENV.should_receive(:[]=).with('BUNDLE_GEMFILE',nil)
         ENV.should_receive(:[]=).with('RAILS_ENV',nil)
         build.run
       end
       
-      it "should run the build command and update the build status" do
+      it "runs the build command and update the build status" do
         Environment.should_receive(:system).and_return(true)
         build.run.should be_true
         build.reload
         build.status.should == "passed"
       end
       
-      it "should set build status to failed if the build command fails" do
+      it "sets build status to failed if the build command fails" do
         Environment.should_receive(:system).and_return(false)
         build.run.should be_false
         build.reload
@@ -127,7 +127,7 @@ module Goldberg
     end
     
     context "before build" do
-      it "should set build status to 'building' and persist the change list" do
+      it "sets build status to 'building' and persist the change list" do
         build = Factory.build(:build)
         build.should_receive(:persist_change_list)
         build.before_build
