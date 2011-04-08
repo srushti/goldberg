@@ -30,3 +30,7 @@ Goldberg currently runs only on Linux/Mac OS X.
 
    # Start the CI server and web front-end at port 3000.
    bin/goldberg start [port=3000]
+
+=== Tracking build status
+
+   Goldberg generates feeds that work with all CruiseControl-compatible monitors like CCMenu (mac), BuildNotify (linux) & CCTray (windows).
