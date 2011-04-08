@@ -33,4 +33,4 @@ Goldberg currently runs only on Linux/Mac OS X.
 
 === Tracking build status
 
-   Goldberg generates feeds that work with all CruiseControl-compatible monitors like CCMenu (mac), BuildNotify (linux) & CCTray (windows).
+Goldberg generates feeds that work with all CruiseControl-compatible monitors like {CCMenu (mac)}[http://ccmenu.sourceforge.net/], {BuildNotify (linux)}[https://bitbucket.org/Anay/buildnotify/wiki/Home] & CCTray (windows).
