@@ -1,10 +1,10 @@
-class GoldbergInit
+class Init
   def self.allowed_methods
     ['bootstrap', 'add', 'remove', 'list', 'start', 'start_poller']
   end
 
   def run
-    if Environment.argv.size > 0 && GoldbergInit::allowed_methods.include?(Environment.argv[0])
+    if Environment.argv.size > 0 && Init::allowed_methods.include?(Environment.argv[0])
       send(Environment.argv[0])
     else
       Rails.logger.info "You did not pass any command."
