@@ -38,12 +38,12 @@ class Project < ActiveRecord::Base
   end
 
   def latest_build
-    builds.last || Build.nil
+    builds.first || Build.nil
   end
 
   def run_build
     if self.repository.update || build_required?
-      build_successful = self.builds.create!(:number => latest_build_number + 1, :previous_build_revision => latest_build.revision).run
+      build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision).run
       self.build_requested = false
       self.save
       Rails.logger.info "Build #{ build_successful  ? "passed" : "failed!" }"

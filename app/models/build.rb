@@ -9,7 +9,7 @@ class Build < ActiveRecord::Base
   before_create :update_revision
   
   belongs_to :project
-                                    
+
   default_scope order('number DESC')
 
   def self.nil

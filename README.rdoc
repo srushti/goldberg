@@ -20,7 +20,7 @@ Goldberg currently runs only on Linux/Mac OS X.
    sudo apt-get install sqlite3 libsqlite3-dev
 
    git clone git://github.com/c42/goldberg.git
-   bundle install           
+   bundle install
    rake db:migrate
 
 === Setting up a new repository
