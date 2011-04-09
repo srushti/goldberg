@@ -8,7 +8,7 @@ module Goldberg
 
     describe "lifecycle" do
       context "adding a project" do
-        it "creats a new projects and checks out the code for it" do
+        it "creates a new projects and checks out the code for it" do
           Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
           lambda { Project.add({:url => "git://some.url.git", :name => 'some_project'}) }.should change(Project, :count).by(1)
         end
