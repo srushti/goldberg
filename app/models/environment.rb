@@ -10,7 +10,7 @@ module Environment
     end
 
     def system(command)
-      command_to_exec = %{/usr/bin/env zsh -c "#{command.gsub(/"/, '\"')}"}
+      command_to_exec = %{/usr/bin/env bash -c "#{command.gsub(/"/, '\"')}"}
       Rails.logger.info "executing #{command_to_exec}"
       if block_given?
         yield system_call_output(command_to_exec), $?.success?
