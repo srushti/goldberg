@@ -12,7 +12,9 @@ Visit http://goldberg.c42.in to see a live Goldberg server.
 
 RVM, Git and Ruby (we usually use MRI 1.9.2, but any flavour should work). 
 
-Goldberg currently runs only on Linux/Mac OS X.
+Goldberg currently runs only on Linux/Mac OS X.      
+
+Your project should have a Gemfile for {Bundler}[http://gembundler.com/] and a {.rvmrc file}[https://rvm.beginrescueend.com/workflow/rvmrc/] 
 
 === Installation
 
