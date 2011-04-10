@@ -30,7 +30,7 @@ Goldberg currently runs only on Linux/Mac OS X.
 === Starting Goldberg
 
    # Start the CI server and web front-end at port 3000.
-   bin/goldberg start [port=3000]
+   bin/goldberg start [3000]
 
 === Tracking build status
 
