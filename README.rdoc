@@ -36,6 +36,7 @@ Goldberg currently runs only on Linux/Mac OS X.
 
 Goldberg generates feeds that work with all CruiseControl-compatible monitors like {CCMenu (mac)}[http://ccmenu.sourceforge.net/], {BuildNotify (linux)}[https://bitbucket.org/Anay/buildnotify/wiki/Home] & CCTray (windows).
 
-=== Configuration and Debugging
-Your builds will be created in ~/.goldberg/projects
+=== Configuration
+
+Goldberg will be checking out your code in ~/.goldberg. If you want to override this create an environment variable called GOLDBERG_PATH.
 
