@@ -12,6 +12,12 @@ module Goldberg
           Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
           lambda { Project.add({:url => "git://some.url.git", :name => 'some_project'}) }.should change(Project, :count).by(1)
         end
+
+        it "creates a new project with spaces in the name" do
+          Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
+          lambda { Project.add({:url => "git://some.url.git", :name => 'some project'}) }.should change(Project, :count).by(1)
+        end
+
       end
 
       context "removing project" do

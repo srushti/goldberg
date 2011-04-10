@@ -6,7 +6,7 @@ class Project < ActiveRecord::Base
   delegate :number, :status, :log, :timestamp, :to => :latest_build, :prefix => true
   
   def self.add(options)
-    Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url]).tap do |project|
+    Project.new(:name => options[:name].gsub(' ','_'), :custom_command => options[:command], :url => options[:url]).tap do |project|
       project.checkout
       project.save!
     end
