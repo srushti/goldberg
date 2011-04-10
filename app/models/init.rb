@@ -33,7 +33,7 @@ class Init
   end
 
   def start(port = 3000)
-    Environment.exec "rackup -p #{port} #{File.join(File.dirname(__FILE__), '..', '..', 'config.ru')}"
+    Environment.exec "rackup -p #{port} -D -P #{Paths.pid} #{File.join(File.dirname(__FILE__), '..', '..', 'config.ru')}"
   end
 
   def poll
