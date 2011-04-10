@@ -33,7 +33,20 @@ class Init
   end
 
   def start(port = 3000)
-    Environment.exec "rackup -p #{port} -D -P #{Paths.pid} #{File.join(File.dirname(__FILE__), '..', '..', 'config.ru')}"
+    if !File.exist?(Paths.pid)
+      Environment.exec "rackup -p #{port} -D -P #{Paths.pid} #{File.join(File.dirname(__FILE__), '..', '..', 'config.ru')}"
+    else
+      Rails.logger.info "Goldberg already appears to be running. Please run 'bin/goldberg stop' or delete the existing pid file."
+    end
+  end
+
+  def stop
+    if File.exist?(Paths.pid)
+      Environment.exec "kill `cat #{Paths.pid}`"
+      FileUtils.rm(Paths.pid)
+    else
+      Rails.logger.info "Goldberg does not appear to be running."
+    end
   end
 
   def poll

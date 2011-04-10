@@ -35,6 +35,15 @@ command :start do |c|
   end
 end
 
+command :stop do |c|
+  c.syntax = 'goldberg stop'
+  c.description = 'Stop a currently running goldberg server.'
+  c.summary = 'Stop goldberg server'
+  c.action do |args, options|
+    Init.new.stop
+  end
+end
+
 command :list do |c|
   c.syntax = 'goldberg list'
   c.description = 'List all the projects being tracked & built by this goldberg instance.'
