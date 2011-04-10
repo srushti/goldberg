@@ -23,7 +23,7 @@ module Goldberg
         FileUtils.should_receive(:mkdir_p).and_return(true)
         Env.should_receive(:[]).with('GOLDBERG_PATH').and_return(nil)
         Env.should_receive(:[]).with('HOME').and_return("path_to_home")
-        Paths.pid.should == 'path_to_home/.goldberg/pid/goldberg.pid'
+        Paths.pid.should == 'path_to_home/.goldberg/pids/goldberg.pid'
       end
     end
   end

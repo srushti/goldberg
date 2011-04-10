@@ -1,3 +1,5 @@
+require "fileutils"
+
 class Init
   def bootstrap
     if RVM.installed?

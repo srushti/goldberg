@@ -3,8 +3,8 @@ require "fileutils"
 module Paths
   class << self
     def pid
-      pid_path = create_if_doesnt_exist(File.join(goldberg_path, 'pid'))
-      File.join(pid_path, "goldberg.pid")
+      pid_path = create_if_doesnt_exist(File.join(goldberg_path, 'pids'))
+      File.join(pid_path, 'goldberg.pid')
     end
 
     def projects
