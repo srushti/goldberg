@@ -14,7 +14,7 @@ RVM, Git and Ruby (we usually use MRI 1.9.2, but any flavour should work).
 
 Goldberg currently runs only on Linux/Mac OS X.      
 
-Your project should have a Gemfile for {Bundler}[http://gembundler.com/] and a {.rvmrc file}[https://rvm.beginrescueend.com/workflow/rvmrc/] 
+Your project should have a Gemfile for {Bundler}[http://gembundler.com/] and a .rvmrc file for {rvm}[https://rvm.beginrescueend.com] A simple one might contain the line "rvm ruby-1.9.2@rails3" 
 
 === Installation
 
