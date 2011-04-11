@@ -13,12 +13,11 @@ class Init
   end
 
   def bootstrap
-    if File.exist?(File.join(Env['HOME'], '.rvm', 'scripts', 'rvm'))
+    if RVM.installed?
       Rails.logger.info "It looks like you have RVM installed. We will now add the following settings to your global .rvmrc located at #{Env['HOME']}."
-      goldberg_rvmrc_contents =  "rvm_install_on_use_flag=1\nrvm_project_rvmrc=1\nrvm_gemset_create_on_use_flag=1"
-      Rails.logger.info "#{goldberg_rvmrc_contents}\n(Y/n)"
+      Rails.logger.info "#{RVM.goldberg_rvmrc_contents}\n(Y/n)"
       if ['yes', 'y'].include?(STDIN.gets.chomp.downcase)
-        File.open(File.join(Env['HOME'], '.rvmrc'), 'a') {|f| f.write(goldberg_rvmrc_contents)}
+        RVM.write_goldberg_rvmrc_contents
       else
         Rails.logger.info "Aborting"
       end
