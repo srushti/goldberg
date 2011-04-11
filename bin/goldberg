@@ -1,5 +1,59 @@
 #!/usr/bin/env ruby
-
 require File.expand_path('../../config/environment', __FILE__)
 Rails.logger = Logger.new(STDOUT)
-Init.new.run
+
+require 'commander/import'
+
+program :name, 'Goldberg'
+program :version, '0.0.1'
+program :description, 'Yet another CI server. With pipelines.'
+
+command :add do |c|
+  c.syntax = 'goldberg add <url> <name> [command]'
+  c.description = 'Add a new codebase to build'
+  c.action do |args, options|
+    url = args[0]
+    name = args[1]
+    command = args[2]
+    Init.new.add(url,name,command)
+  end
+end
+
+command :start do |c|
+  c.syntax = 'goldberg start [port]'
+  c.description = 'Start goldberg server with specified port. If no port is specified, server listens on port 3000. On development environment only, the start command starts a poller along with the server.'
+  c.summary = 'Start goldberg server'
+  c.action do |args, options|
+    port = args[0]
+    Init.new.start if port.nil?
+    Init.new.start(port) unless port.nil?
+  end
+end
+
+command :list do |c|
+  c.syntax = 'goldberg list'
+  c.description = 'List all the projects being tracked & built by this goldberg instance.'
+  c.action do |args, options|
+    Init.new.list
+  end
+end
+
+command :start_poller do |c|
+  c.syntax = 'goldberg start_poller'
+  c.description = 'Starts a polling process, which will check for updates and build the project if updates available.'
+  c.action do |args, options|
+    Init.new.start_poller
+  end
+end
+
+command :remove do |c|
+  c.syntax = 'goldberg remove <name>'
+  c.description = 'Remove the project from goldberg. This removes the checkout codebase, all builds and history from filesystem as well as the DB.'
+  c.summary = 'Remove the project from goldberg'
+  c.action do |args, options|
+    project_name = args[0]
+    agree("Do you want to get rid of #{project_name}?").tap do |confirmed|
+      Init.new.remove(project_name) if confirmed
+    end
+  end
+end

@@ -4,6 +4,7 @@ gem 'rails', '3.0.5'
 
 gem 'sqlite3', '~> 1.3.3', :platforms => :ruby
 gem 'haml', '~> 3.0.25'
+gem 'commander'
 
 platform :jruby do
   gem 'jdbc-sqlite3', '~> 3.6.0'
