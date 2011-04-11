@@ -45,3 +45,10 @@ Goldberg will be checking out your code in ~/.goldberg. If you want to override 
   # To get man page style help
   ./bin/goldberg help [command]
 
+== Contributors
+
+* Srushtivratha Ambekallu ({srushti}[http://github.com/srushti])
+* Jasim A Basheer ({jasim}[http://github.com/jasim])
+* Saager Mhatre ({dexterous}[http://github.com/dexterous])
+* Niranjan Parajape ({achamian}[http://github.com/achamian])
+* Todd Sedano ({professor}[http://github.com/professor])

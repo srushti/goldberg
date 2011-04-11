@@ -12,8 +12,9 @@ platform :jruby do
 end
 
 group :development, :test do
-  gem "ruby-debug", "~> 0.10.4", :platforms => [:ruby_18, :jruby]
-  gem "ruby-debug19", "~> 0.11.6", :platforms => :ruby_19
+  gem 'ruby-debug', :platforms => [:ruby_18, :jruby]
+  gem 'ruby-debug19', :platforms => :ruby_19
+  gem 'ffi-ncurses', :platforms => :jruby
   gem 'rspec-rails', '~> 2.5.0'
   gem 'rspec-http'
   gem 'stirlitz', '~> 0.0.1.1'
