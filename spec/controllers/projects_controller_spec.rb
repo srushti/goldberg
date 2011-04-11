@@ -13,7 +13,7 @@ describe ProjectsController do
     @request.env['HTTP_REFERER'] = 'http://referer/'
     post :force, :project_id => project.id
     response.should redirect_to('http://referer/')
-    project.reload.build_requested?.should be_true
+    project.reload.should be_build_requested
   end
 
   [{:action => :show, :method => :get, :params => {:id => 'unknown_project'}}, {:action => :force, :method => :post, :params => {:project_id => 'unknown_project'}}].each do |entry|

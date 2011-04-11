@@ -14,7 +14,7 @@ describe HomeController do
     Project.should_receive(:all).and_return(projects)
     get :ccfeed, :format => :xml
     response.should be_ok
-    response.body.should == ''
+    response.body.should be_empty
     assigns[:projects].should == projects
   end
 end
