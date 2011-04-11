@@ -25,7 +25,7 @@ Goldberg currently runs only on Linux/Mac OS X.
 
 === Setting up a new repository
 
-   bin/goldberg add <git url> <name>
+   ./bin/goldberg add <url> <name> [command] [--branch <branch_name>]
 
 === Starting Goldberg
 
@@ -39,4 +39,9 @@ Goldberg generates feeds that work with all CruiseControl-compatible monitors li
 === Configuration
 
 Goldberg will be checking out your code in ~/.goldberg. If you want to override this create an environment variable called GOLDBERG_PATH.
+
+=== Help
+
+  # To get man page style help
+  ./bin/goldberg help [command]
 
