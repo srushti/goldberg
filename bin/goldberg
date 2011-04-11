@@ -9,13 +9,18 @@ program :version, '0.0.1'
 program :description, 'Yet another CI server. With pipelines.'
 
 command :add do |c|
-  c.syntax = 'goldberg add <url> <name> [command]'
+  c.syntax = 'goldberg add <url> <name> [command] [--branch <branch_name>]'
   c.description = 'Add a new codebase to build'
+  c.option '--branch STRING', String, 'branch to build'
   c.action do |args, options|
+    options.default :branch => 'master'
+
     url = args[0]
     name = args[1]
     command = args[2]
-    Init.new.add(url,name,command)
+    branch = options.branch
+    
+    Init.new.add(url,name, branch, command)
   end
 end
 

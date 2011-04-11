@@ -5,6 +5,7 @@ end
 Factory.define :project do |p|
   p.name { Factory.next(:project_name) }
   p.url  { |project| "git://domain/#{project.name}.git" }
+  p.branch 'master'
 end
 
 Factory.define :build do |b|

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Repository do
-  let(:repo) { Repository.new("code_path", "url") }
+  let(:repo) { Repository.new("code_path", "url", "production") }
   it "checks out the code at the given path and return true on success" do
-    Environment.should_receive(:system).with("git clone --depth 1 url code_path").and_return(true)
+    Environment.should_receive(:system).with("git clone --depth 1 url code_path --branch production").and_return(true)
     repo.checkout.should be_true
   end
   

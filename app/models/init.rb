@@ -13,14 +13,19 @@ class Init
     end
   end
 
-  def add(url, name, command = nil)
-    Project.add(:url => url, :name => name, :command => command)
+  def add(url, name, branch, command = nil)
+    Project.add(:url => url, :name => name, :command => command, :branch => branch)
     Rails.logger.info "#{name} successfully added."
   end
 
   def remove(name)
-      Project.find_by_name(name).destroy
+    project = Project.find_by_name(name)
+    if project
+      project.destroy
       Rails.logger.info "#{name} successfully removed."
+    else
+      Rails.logger.error "Project #{name} does not exist."
+    end
   end
 
   def list

@@ -4,9 +4,11 @@ class Project < ActiveRecord::Base
   has_many :builds, :dependent => :destroy
   after_destroy :remove
   delegate :number, :status, :log, :timestamp, :to => :latest_build, :prefix => true
+
+  validates_presence_of :branch, :name, :url
   
   def self.add(options)
-    Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url]).tap do |project|
+    Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch]).tap do |project|
       project.checkout
       project.save!
     end
@@ -73,7 +75,7 @@ class Project < ActiveRecord::Base
   end
 
   def repository
-    @repository ||= Repository.new(code_path, url)
+    @repository ||= Repository.new(code_path, url, branch)
   end
 
   def self.find_by_name(name)

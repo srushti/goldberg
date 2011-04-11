@@ -6,11 +6,21 @@ module Goldberg
       Paths.stub!(:projects).and_return('some_path')
     end
 
+    describe "attribute validation" do
+      [:name, :url, :branch].each do |mandatory_field|
+        it "should be invalid without a #{mandatory_field}" do
+          project = Factory.build(:project, mandatory_field => nil)
+          project.should have_at_least(1).error_on(mandatory_field)
+          project.errors.full_messages.should include("#{mandatory_field.to_s.humanize} can't be blank")
+        end
+      end
+    end
+
     describe "lifecycle" do
       context "adding a project" do
         it "creates a new projects and checks out the code for it" do
-          Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
-          lambda { Project.add({:url => "git://some.url.git", :name => 'some_project'}) }.should change(Project, :count).by(1)
+          Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master').and_return(true)
+          lambda { Project.add({:url => "git://some.url.git", :name => 'some_project', :branch => 'master'}) }.should change(Project, :count).by(1)
         end
       end
 
@@ -37,8 +47,8 @@ module Goldberg
 
     context "checkout" do
       it "checks out the code for the project" do
-        project = Project.new(:url => "git://some.url.git", :name => 'some_project')
-        Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code').and_return(true)
+        project = Project.new(:url => "git://some.url.git", :name => 'some_project', :branch => 'master')
+        Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master').and_return(true)
         project.checkout
       end
     end

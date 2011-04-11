@@ -2,15 +2,15 @@ require "spec_helper"
 
 describe Init do
   it "adds a new project" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => nil)
+    Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => nil, :branch => 'master')
     Rails.logger.should_receive(:info).with('name successfully added.')
-    Init.new.add('url','name')
+    Init.new.add('url','name','master')
   end
 
   it "adds a new project with a custom command" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => 'cmake')
+    Project.should_receive(:add).with(:url => 'url', :name => 'name', :command => 'cmake', :branch => 'master')
     Rails.logger.should_receive(:info).with('name successfully added.')
-    Init.new.add('url','name','cmake')
+    Init.new.add('url','name', 'master', 'cmake')
   end
 
   it "removes the specified project" do

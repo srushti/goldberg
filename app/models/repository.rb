@@ -1,7 +1,8 @@
 class Repository
-  def initialize(code_path, url)  
+  def initialize(code_path, url, branch)
     @code_path = code_path
     @url = url
+    @branch = branch
   end
 
   def revision
@@ -9,7 +10,7 @@ class Repository
   end
 
   def checkout
-    Environment.system("git clone --depth 1 #{@url} #{@code_path}")
+    Environment.system("git clone --depth 1 #{@url} #{@code_path} --branch #{@branch}")
   end
 
   def update
