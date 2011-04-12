@@ -242,8 +242,10 @@ module Goldberg
       new_project = Factory(:project)
       build_due_project = Factory(:project, :next_build_at => Time.now - 10.seconds)
       build_not_due_project = Factory(:project, :next_build_at => Time.now + 1.hour)
+      undue_but_forced_project = Factory(:project, :next_build_at => Time.now + 1.hour, :build_requested => true)
       Project.projects_to_build.should include(new_project)
       Project.projects_to_build.should include(build_due_project)
+      Project.projects_to_build.should include(undue_but_forced_project)
       Project.projects_to_build.should_not include(build_not_due_project)
     end
   end

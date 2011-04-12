@@ -111,6 +111,6 @@ class Project < ActiveRecord::Base
   end
 
   def self.projects_to_build
-    Project.where("next_build_at is null or next_build_at <= :next_build_at", :next_build_at => Time.now)
+    Project.where("build_requested = 't' or next_build_at is null or next_build_at <= :next_build_at", :next_build_at => Time.now)
   end
 end
