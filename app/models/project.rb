@@ -46,6 +46,7 @@ class Project < ActiveRecord::Base
   def cleanup_codebase
     #TODO Remove the Gemfile.lock only if Gemfile has been modified since last commit
     if File.exists?(File.expand_path('Gemfile.lock', self.code_path))
+      Rails.logger.info("removing Gemfile.lock if its not versioned")
       File.delete(File.expand_path('Gemfile.lock', self.code_path)) unless self.repository.versioned?('Gemfile.lock')
     end
   end

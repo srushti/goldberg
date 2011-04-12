@@ -108,6 +108,7 @@ module Goldberg
       it "resets the RAILS_ENV before executing the command to build the project" do
         ENV.should_receive(:[]=).with('BUNDLE_GEMFILE',nil)
         ENV.should_receive(:[]=).with('RAILS_ENV',nil)
+        ENV.should_receive(:[]=).with('RUBYOPT',nil)
         build.run
       end
       
