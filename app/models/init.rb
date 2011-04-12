@@ -52,7 +52,7 @@ class Init
   end
 
   def poll
-    Project.all.each do |p|
+    Project.projects_to_build.each do |p|
       begin
         p.run_build
       rescue Exception => e

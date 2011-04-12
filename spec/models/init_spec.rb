@@ -63,7 +63,7 @@ describe Init do
     two = Factory(:project, :name => 'two')
     one.stub!(:run_build).and_raise(Exception.new("An exception"))
     two.should_receive(:run_build)
-    Project.stub!(:all).and_return([one, two])
+    Project.stub!(:projects_to_build).and_return([one, two])
     Rails.logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
     Init.new.poll
   end

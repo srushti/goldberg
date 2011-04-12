@@ -1,6 +1,6 @@
 class GlobalConfig
 
-  DEFAULT_CONFIG = {'frequency' => 20}
+  DEFAULT_CONFIG = {'frequency' => 10}
 
   class << self
     def frequency

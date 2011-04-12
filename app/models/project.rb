@@ -59,9 +59,10 @@ class Project < ActiveRecord::Base
       prepare_for_build
       build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision).run
       self.build_requested = false
-      self.save
       Rails.logger.info "Build #{ build_successful ? "passed" : "failed!" }"
     end
+    self.next_build_at = Time.now + self.config.frequency.seconds
+    self.save
   end
 
   def force_build
@@ -107,5 +108,9 @@ class Project < ActiveRecord::Base
     config = ProjectConfig.new
     yield config
     config
+  end
+
+  def self.projects_to_build
+    Project.where("next_build_at is null or next_build_at <= :next_build_at", :next_build_at => Time.now)
   end
 end

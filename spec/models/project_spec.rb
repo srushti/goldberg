@@ -24,8 +24,8 @@ module Goldberg
         end
       end
 
-      context "removing project" do
-        let(:project){ Factory(:project, :name => 'project_to_be_removed') }
+      context "removing a project" do
+        let(:project) { Factory(:project, :name => 'project_to_be_removed') }
 
         it "removes it from the DB" do
           project.destroy
@@ -90,10 +90,12 @@ module Goldberg
       end
     end
 
-    it "sets the build requested flag to true" do
-      project = Factory(:project, :name => 'name')
-      project.force_build
-      project.build_requested.should be_true
+    context "forcing a build" do
+      it "sets the build requested flag to true" do
+        project = Factory(:project, :name => 'name')
+        project.force_build
+        project.build_requested.should be_true
+      end
     end
 
     context "when to build" do
@@ -113,17 +115,8 @@ module Goldberg
     context "run build" do
       let(:project) { Factory(:project, :name => "goldberg") }
 
-      context "without changes or requested build" do
-        it "does not run the build if there are no updates from repository or build is not required" do
-          project.should respond_to(:build_required?)
-          project.should_receive(:build_required?).and_return(false)
-          project.repository.should_receive(:update).and_return(false)
-          lambda { project.run_build }.should_not change(project.builds, :size)
-        end
-      end
-
       # all tests in this context are testing mock calls Grrrhhhhh
-      
+
       it "preprocesses the codebase before calling build" do
         build = Build.new
         project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
@@ -133,41 +126,73 @@ module Goldberg
         project.should respond_to(:prepare_for_build)
         project.should_receive(:prepare_for_build)
         project.repository.should_receive(:update).and_return(true)
-        
+
         project.run_build
       end
 
-      it "runs the build even if there are no updates but a build is requested" do
-        build = Build.new
-        project.build_requested = true
-        project.repository.should_receive(:update).and_return(false)
-        project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
-        build.should respond_to(:run)
-        build.should_receive(:run)
-        project.run_build
-      end
-
-      context "with changes" do
-        before(:each) do
-          project.repository.should respond_to(:update)
-          project.repository.should_receive(:update).and_return(true)
-        end
-
-        it "creates a new build for a project with build number set to 1 in case of first build  and run it" do
+      context "with build requested" do
+        it "runs the build even if there are no updates" do
           build = Build.new
+          project.build_requested = true
+          project.repository.should_receive(:update).and_return(false)
           project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
           build.should respond_to(:run)
           build.should_receive(:run)
           project.run_build
         end
+      end
+
+      context "without changes or requested build" do
+        before :each do
+          project.should respond_to(:build_required?)
+          project.should_receive(:build_required?).and_return(false)
+          project.repository.should_receive(:update).and_return(false)
+        end
+
+        it "does not run the build if there are no updates from repository or build is not required" do
+          lambda { project.run_build }.should_not change(project.builds, :size)
+        end
+
+        it "schedules the next build based on the project's configuration" do
+          project.next_build_at.should be_nil
+          current_time = Time.now
+          Time.stub!(:now).and_return(current_time)
+
+          project.run_build
+
+          Time.parse(project.reload.next_build_at.to_s).should == Time.parse((current_time + project.config.frequency.seconds).to_s)
+        end
+      end
+
+      context "with changes" do
+        let(:build) { Build.new }
+        before(:each) do
+          project.repository.should respond_to(:update)
+          project.repository.should_receive(:update).and_return(true)
+          build.should respond_to(:run)
+          build.should_receive(:run)
+        end
+
+        it "creates a new build for a project with build number set to 1 in case of first build  and run it" do
+          project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
+          project.run_build
+        end
 
         it "creates a new build for a project with build number one greater than last build and run it" do
           project.builds << Factory(:build, :number => 5, :revision => "old_sha", :project => project)
-          build = Build.new
           project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "old_sha").and_return(build)
-          build.should respond_to(:run)
-          build.should_receive(:run)
           project.run_build
+        end
+
+        it "schedules the next build based on the project's configuration" do
+          project.next_build_at.should be_nil
+          current_time = Time.now
+          Time.stub!(:now).and_return(current_time)
+
+          project.builds.should_receive(:create!).and_return(build)
+          project.run_build
+
+          Time.parse(project.reload.next_build_at.to_s).should == Time.parse((current_time + project.config.frequency.seconds).to_s)
         end
       end
     end
@@ -178,39 +203,48 @@ module Goldberg
       last_build = Factory(:build, :project => project)
       project.latest_build.should == last_build
     end
-  end
 
-  describe "build preprocessing" do
-    let(:project) { Factory(:project, :name => "goldberg") }
-    
-    it "removes Gemfile.lock if the file exists and is not being versioned" do
-      File.should_receive(:exists?).with(File.expand_path('Gemfile.lock', project.code_path)).and_return(true)
-      project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(false)
-      File.should_receive(:delete).with(File.expand_path('Gemfile.lock', project.code_path))
-      project.prepare_for_build
+    describe "build preprocessing" do
+      let(:project) { Factory(:project, :name => "goldberg") }
+
+      it "removes Gemfile.lock if the file exists and is not being versioned" do
+        File.should_receive(:exists?).with(File.expand_path('Gemfile.lock', project.code_path)).and_return(true)
+        project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(false)
+        File.should_receive(:delete).with(File.expand_path('Gemfile.lock', project.code_path))
+        project.prepare_for_build
+      end
+
+      it "does not remove Gemfile.lock if the file exists but it's being versioned" do
+        File.should_receive(:exists?).with(File.expand_path('Gemfile.lock', project.code_path)).and_return(true)
+        project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(true)
+        File.should_not_receive(:delete).with(File.expand_path('Gemfile.lock', project.code_path))
+        project.prepare_for_build
+      end
     end
 
-    it "does not remove Gemfile.lock if the file exists but it' being versioned" do
-      File.should_receive(:exists?).with(File.expand_path('Gemfile.lock', project.code_path)).and_return(true)
-      project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(true)
-      File.should_not_receive(:delete).with(File.expand_path('Gemfile.lock', project.code_path))
-      project.prepare_for_build
-    end
-  end
+    describe "project configuration" do
+      let(:project) { Factory(:project, :name => 'goldberg') }
 
-  describe "project configuration" do
-    let(:project) { Factory(:project, :name => 'goldberg') }
-    
-    it "loads a new configuration object with default values if goldberg_config.rb is not found" do
-      File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb',project.code_path)).and_return(false)
-      File.should_not_receive(:read).with(File.expand_path('goldberg_config.rb',project.code_path))
-      project.config.should_not be_nil
+      it "loads a new configuration object with default values if goldberg_config.rb is not found" do
+        File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+        File.should_not_receive(:read).with(File.expand_path('goldberg_config.rb', project.code_path))
+        project.config.should_not be_nil
+      end
+
+      it "evals the goldberg_config.rb and returns the modified config as project config when file exists" do
+        File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+        File.should_receive(:read).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure{|c| c.frequency = 30 }")
+        project.config.frequency.should == 30
+      end
     end
 
-    it "evals the goldberg_config.rb and returns the modified config as project config when file exists" do
-      File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb',project.code_path)).and_return(true)
-      File.should_receive(:read).with(File.expand_path('goldberg_config.rb',project.code_path)).and_return("Project.configure{|c| c.frequency = 30 }")
-      project.config.frequency.should == 30
+    it "provides list of projects to be built" do
+      new_project = Factory(:project)
+      build_due_project = Factory(:project, :next_build_at => Time.now - 10.seconds)
+      build_not_due_project = Factory(:project, :next_build_at => Time.now + 1.hour)
+      Project.projects_to_build.should include(new_project)
+      Project.projects_to_build.should include(build_due_project)
+      Project.projects_to_build.should_not include(build_not_due_project)
     end
   end
 end

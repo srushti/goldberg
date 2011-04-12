@@ -8,9 +8,9 @@ describe GlobalConfig do
   end
 
   context "default values" do
-    it "returns frequency to 20 seconds" do
+    it "returns frequency to 10 seconds" do
       File.should_receive(:exists?).with("#{Rails.root}/config/goldberg.yml").and_return(false)
-      GlobalConfig.frequency.should eq(20)
+      GlobalConfig.frequency.should eq(10)
     end
   end
 
