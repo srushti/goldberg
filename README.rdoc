@@ -11,8 +11,10 @@ Visit http://goldberg.c42.in to see a live Goldberg server.
 === Prerequisites
 
 RVM, Git and Ruby (we usually use MRI 1.9.2, but any flavour should work). 
+                                                   
+Your project should have a Gemfile for {Bundler}[http://gembundler.com/] and a .rvmrc file for {rvm}[https://rvm.beginrescueend.com] A simple one might contain the line "rvm ruby-1.9.2@rails3" 
 
-Goldberg currently runs only on Linux/Mac OS X.
+Goldberg currently runs only on Linux/Mac OS X.    
 
 === Installation
 
@@ -43,7 +45,9 @@ Goldberg generates feeds that work with all CruiseControl-compatible monitors li
 
 === Configuration
 
-Goldberg will be checking out your code in ~/.goldberg. If you want to override this create an environment variable called GOLDBERG_PATH.
+Goldberg will be checking out your code in ~/.goldberg. If you want to override this create an environment variable called GOLDBERG_PATH.                   
+
+You can configure the poller by copy the config/goldberg.yml.sample to config/goldberg.yml -- By default, the poller is configured to poll every 20 seconds. Even if you click on "force build," it actually just sets a flag in DB for poller to build the project irrespective of the updates. If you want to it to do a build immediately after clicking on "force build", then change the frequency to 1 second.
 
 === Help
 
