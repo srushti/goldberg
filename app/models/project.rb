@@ -43,8 +43,14 @@ class Project < ActiveRecord::Base
     builds.first || Build.nil
   end
 
+  def cleanup_codebase
+    #TODO Remove the Gemfile.lock only if Gemfile has been modified since last commit
+    File.delete(File.expand_path('Gemfile.lock', self.code_path)) unless self.repository.versioned?('Gemfile.lock')
+  end
+
   def run_build
     if self.repository.update || build_required?
+      cleanup_codebase
       build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision).run
       self.build_requested = false
       self.save
