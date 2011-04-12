@@ -93,4 +93,19 @@ class Project < ActiveRecord::Base
   def self.find_by_name(name)
     all.detect { |project| project.name == name }
   end
+
+  def config
+    if File.exists?(File.expand_path('goldberg_config.rb',self.code_path))
+      config_code = File.read(File.expand_path('goldberg_config.rb',self.code_path))
+      eval(config_code)
+    else
+      ProjectConfig.new
+    end
+  end
+
+  def self.configure
+    config = ProjectConfig.new
+    yield config
+    config
+  end
 end

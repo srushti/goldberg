@@ -197,4 +197,20 @@ module Goldberg
       project.prepare_for_build
     end
   end
+
+  describe "project configuration" do
+    let(:project) { Factory(:project, :name => 'goldberg') }
+    
+    it "loads a new configuration object with default values if goldberg_config.rb is not found" do
+      File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb',project.code_path)).and_return(false)
+      File.should_not_receive(:read).with(File.expand_path('goldberg_config.rb',project.code_path))
+      project.config.should_not be_nil
+    end
+
+    it "evals the goldberg_config.rb and returns the modified config as project config when file exists" do
+      File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb',project.code_path)).and_return(true)
+      File.should_receive(:read).with(File.expand_path('goldberg_config.rb',project.code_path)).and_return("Project.configure{|c| c.frequency = 30 }")
+      project.config.frequency.should == 30
+    end
+  end
 end
