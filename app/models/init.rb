@@ -64,8 +64,8 @@ class Init
   def start_poller
     while true
       poll
-      Rails.logger.info "Sleeping for #{BuildConfig.frequency} seconds."
-      Environment.sleep(BuildConfig.frequency)
+      Rails.logger.info "Sleeping for #{GlobalConfig.frequency} seconds."
+      Environment.sleep(GlobalConfig.frequency)
     end
   end
 end

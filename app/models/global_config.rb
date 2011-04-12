@@ -1,4 +1,4 @@
-class BuildConfig
+class GlobalConfig
 
   DEFAULT_CONFIG = {'frequency' => 20}
 
