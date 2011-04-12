@@ -24,4 +24,8 @@ class Repository
     return "" if old_sha.blank?
     Environment.system_call_output("cd #{@code_path} && git whatchanged #{old_sha}..#{new_sha} --pretty=oneline --name-status")
   end
+
+  def versioned?(file_path)
+    not Environment.system_call_output("cd #{@code_path} && git co #{file_path} 2>>/dev/null || echo 'not versioned'").include?('not versioned')
+  end
 end

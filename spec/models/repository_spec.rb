@@ -44,4 +44,16 @@ describe Repository do
       repo.change_list("old_sha", nil).should == "change list"
     end
   end
+
+  describe "check if file is versioned" do
+    it "should return false if the file is not versioned" do
+      Environment.should_receive(:system_call_output).with("cd code_path && git co some_file 2>>/dev/null || echo 'not versioned'").and_return("not versioned")
+      repo.versioned?("some_file").should be_false
+    end
+    
+    it "should return true if the file is versioned" do
+      Environment.should_receive(:system_call_output).with("cd code_path && git co some_file 2>>/dev/null || echo 'not versioned'").and_return("")
+      repo.versioned?("some_file").should be_true
+    end
+  end
 end
