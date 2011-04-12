@@ -113,8 +113,6 @@ module Goldberg
     context "run build" do
       let(:project) { Factory(:project, :name => "goldberg") }
 
-      # all tests in this context are testing mock calls Grrrhhhhh
-
       context "without changes or requested build" do
         it "does not run the build if there are no updates from repository or build is not required" do
           project.should respond_to(:build_required?)
@@ -122,6 +120,21 @@ module Goldberg
           project.repository.should_receive(:update).and_return(false)
           lambda { project.run_build }.should_not change(project.builds, :size)
         end
+      end
+
+      # all tests in this context are testing mock calls Grrrhhhhh
+      
+      it "preprocesses the codebase before calling build" do
+        build = Build.new
+        project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
+        build.should respond_to(:run)
+        build.should_receive(:run)
+
+        project.should respond_to(:prepare_for_build)
+        project.should_receive(:prepare_for_build)
+        project.repository.should_receive(:update).and_return(true)
+        
+        project.run_build
       end
 
       it "runs the build even if there are no updates but a build is requested" do
@@ -164,6 +177,24 @@ module Goldberg
       first_build = Factory(:build, :project => project)
       last_build = Factory(:build, :project => project)
       project.latest_build.should == last_build
+    end
+  end
+
+  describe "build preprocessing" do
+    let(:project) { Factory(:project, :name => "goldberg") }
+    
+    it "removes Gemfile.lock if the file exists and is not being versioned" do
+      File.should_receive(:exists?).with(File.expand_path('Gemfile.lock', project.code_path)).and_return(true)
+      project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(false)
+      File.should_receive(:delete).with(File.expand_path('Gemfile.lock', project.code_path))
+      project.prepare_for_build
+    end
+
+    it "does not remove Gemfile.lock if the file exists but it' being versioned" do
+      File.should_receive(:exists?).with(File.expand_path('Gemfile.lock', project.code_path)).and_return(true)
+      project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(true)
+      File.should_not_receive(:delete).with(File.expand_path('Gemfile.lock', project.code_path))
+      project.prepare_for_build
     end
   end
 end

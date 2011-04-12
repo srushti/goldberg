@@ -43,17 +43,20 @@ class Project < ActiveRecord::Base
     builds.first || Build.nil
   end
 
-  def cleanup_codebase
+  def prepare_for_build
     #TODO Remove the Gemfile.lock only if Gemfile has been modified since last commit
-    if File.exists?(File.expand_path('Gemfile.lock', self.code_path))
-      Rails.logger.info("removing Gemfile.lock if its not versioned")
-      File.delete(File.expand_path('Gemfile.lock', self.code_path)) unless self.repository.versioned?('Gemfile.lock')
+    
+    gemfile = File.expand_path('Gemfile.lock', self.code_path)
+    
+    if File.exists?(gemfile) && !repository.versioned?('Gemfile.lock')
+      Rails.logger.info("removing Gemfile.lock as it's not versioned")
+      File.delete(gemfile)
     end
   end
 
   def run_build
     if self.repository.update || build_required?
-      cleanup_codebase
+      prepare_for_build
       build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision).run
       self.build_requested = false
       self.save
