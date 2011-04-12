@@ -6,7 +6,7 @@ class Project < ActiveRecord::Base
   delegate :number, :status, :log, :timestamp, :to => :latest_build, :prefix => true
 
   validates_presence_of :branch, :name, :url
-  
+
   def self.add(options)
     Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch]).tap do |project|
       project.checkout
@@ -45,7 +45,9 @@ class Project < ActiveRecord::Base
 
   def cleanup_codebase
     #TODO Remove the Gemfile.lock only if Gemfile has been modified since last commit
-    File.delete(File.expand_path('Gemfile.lock', self.code_path)) unless self.repository.versioned?('Gemfile.lock')
+    if File.exists?(File.expand_path('Gemfile.lock', self.code_path))
+      File.delete(File.expand_path('Gemfile.lock', self.code_path)) unless self.repository.versioned?('Gemfile.lock')
+    end
   end
 
   def run_build
@@ -54,7 +56,7 @@ class Project < ActiveRecord::Base
       build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision).run
       self.build_requested = false
       self.save
-      Rails.logger.info "Build #{ build_successful  ? "passed" : "failed!" }"
+      Rails.logger.info "Build #{ build_successful ? "passed" : "failed!" }"
     end
   end
 
@@ -65,7 +67,7 @@ class Project < ActiveRecord::Base
   end
 
   def command
-    bundler_command = File.exists?(File.join(self.code_path,'Gemfile')) ? "(bundle check || bundle install) && " : ""
+    bundler_command = File.exists?(File.join(self.code_path, 'Gemfile')) ? "(bundle check || bundle install) && " : ""
     bundler_command << (custom_command || "rake")
   end
 
