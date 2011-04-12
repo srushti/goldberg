@@ -47,8 +47,19 @@ Goldberg generates feeds that work with all CruiseControl-compatible monitors li
 
 Goldberg will be checking out your code in ~/.goldberg. If you want to override this create an environment variable called GOLDBERG_PATH.                   
 
-You can configure the poller by copy the config/goldberg.yml.sample to config/goldberg.yml -- By default, the poller is configured to poll every 20 seconds. Even if you click on "force build," it actually just sets a flag in DB for poller to build the project irrespective of the updates. If you want to it to do a build immediately after clicking on "force build", then change the frequency to 1 second.
+You can configure the poller by copy the config/goldberg.yml.sample to config/goldberg.yml -- By default, the poller is configured to poll every 10 seconds. Even if you click on "force build," it actually just sets a flag in DB for poller to build the project irrespective of the updates. If you want to it to do a build immediately after clicking on "force build", then change the frequency to 1 second.
+Changing the frequency of poller to 1 second will not cause git calls every one second, as the project controls the frequency at which it should be polled as explained below.
 
+==== Project Base Configuration
+
+Every project in goldberg can have it's own custom configuration by means of adding (either on goldberg instance or by checking it into your codebase) <tt>goldberg_config.rb</tt> at the root of your codebase. As of now only frequency can be updated, but going further this configuration will be used to configure rubies, pipelines, pre/post build hooks etc.
+
+  #Goldberg configuration
+  Project.configure do |config|
+    config.frequency = 20
+  end
+
+If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using <tt>goldberg.yml</tt> as mentioned above.
 === Help
 
   # To get man page style help
