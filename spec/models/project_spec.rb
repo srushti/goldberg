@@ -38,7 +38,7 @@ module Goldberg
         end
 
         it "removes all the builds from DB" do
-          build = project.builds.create
+          build = Factory(:build, :project => project)
           project.destroy
           Build.find_by_id(build.id).should be_nil
         end
@@ -207,10 +207,14 @@ module Goldberg
     describe "build preprocessing" do
       let(:project) { Factory(:project, :name => "goldberg") }
 
-      it "removes Gemfile.lock if the file exists and is not being versioned" do
-        File.should_receive(:exists?).with(File.expand_path('Gemfile.lock', project.code_path)).and_return(true)
+      it "removes Gemfile.lock if the file exists and is not being versioned and if it is newer than the Gemfile" do
+        gemfilelock_path = File.expand_path('Gemfile.lock', project.code_path)
+        gemfile_path = File.expand_path('Gemfile', project.code_path)
+        File.should_receive(:exists?).with(gemfilelock_path).and_return(true)
         project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(false)
-        File.should_receive(:delete).with(File.expand_path('Gemfile.lock', project.code_path))
+        File.should_receive(:delete).with(gemfilelock_path)
+        File.should_receive(:mtime).with(gemfilelock_path).and_return(2.days.ago)
+        File.should_receive(:mtime).with(gemfile_path).and_return(1.days.ago)
         project.prepare_for_build
       end
 
