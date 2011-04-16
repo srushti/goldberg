@@ -7,6 +7,8 @@ class Project < ActiveRecord::Base
 
   validates_presence_of :branch, :name, :url
 
+  delegate :frequency, :ruby, :rails_env, :to => :config
+
   def self.add(options)
     Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch]).tap do |project|
       project.checkout
@@ -60,7 +62,7 @@ class Project < ActiveRecord::Base
       self.build_requested = false
       Rails.logger.info "Build #{ build_successful ? "passed" : "failed!" }"
     end
-    self.next_build_at = Time.now + self.config.frequency.seconds
+    self.next_build_at = Time.now + frequency.seconds
     self.save
   end
 
