@@ -15,12 +15,12 @@ module Goldberg
     it "is not a nil build" do
       Build.new.should_not be_nil_build
     end
-    
+
     it "sorts correctly" do
       builds = [10, 9, 1, 500].map{|i| Factory(:build, :number => i)}
       builds.sort.map(&:number).map(&:to_i).should == [1, 9, 10, 500]
     end
-    
+
     it "is able to read the build log file to retrieve associated log" do
       build = Factory.build(:build)
       Environment.should_receive(:read_file).with(build.build_log_path).and_return("build_log")
@@ -28,30 +28,30 @@ module Goldberg
     end
 
     context "paths" do
-      it "knows where to store the build artifacts on the file system" do
+      it "knows where to store the build artefacts on the file system" do
         project = Factory.build(:project, :name => "name")
         build = Factory.build(:build, :project => project, :number => 5)
-        build.artifacts_path.should == File.join(project.path, "builds", "5")
+        build.artefacts_path.should == File.join(project.path, "builds", "5")
       end
-      
-      [:change_list, :build_log].each do |artifact|
-        it "appends build number to the project path to create a path for #{artifact}" do
+
+      [:change_list, :build_log].each do |artefact|
+        it "appends build number to the project path to create a path for #{artefact}" do
           project = Factory.build(:project, :name => "name")
           build = Factory.build(:build, :project => project, :number => 5)
-          build.send("#{artifact}_path").should == File.join(project.path, "builds", "5", artifact.to_s)
+          build.send("#{artefact}_path").should == File.join(project.path, "builds", "5", artefact.to_s)
         end
       end
     end
-    
+
     context "after create" do
-      it "creates a directory for storing build artifacts" do
+      it "creates a directory for storing build artefacts" do
         project = Factory.build(:project, :name => 'ooga')
         build = Factory.build(:build, :project => project, :number => 5)
-        FileUtils.should_receive(:mkdir_p).with(build.artifacts_path)
+        FileUtils.should_receive(:mkdir_p).with(build.artefacts_path)
         build.save.should be_true
       end
     end
-    
+
     context "before create" do
       it "updates the revision of the build if it is blank" do
         project = Factory.build(:project, :name => 'ooga')
@@ -61,7 +61,7 @@ module Goldberg
         build.reload
         build.revision.should == "new_sha"
       end
-      
+
       it "does not update the build revision if it is already set" do
         project = Factory.build(:project, :name => 'ooga')
         build = Factory.build(:build, :project => project, :number => 5, :revision => "some_sha")
@@ -70,7 +70,7 @@ module Goldberg
         build.revision.should == "some_sha"
       end
     end
-    
+
     context "changes" do
       it "writes a file with all the changes since the previous build" do
         project = Factory.build(:project, :name => 'ooga')
@@ -82,7 +82,7 @@ module Goldberg
         build.persist_change_list
       end
     end
-    
+
     context "run" do
       let(:project) { Factory.build(:project) }
       let(:build) { Factory.create(:build, :project => project) }
@@ -111,14 +111,14 @@ module Goldberg
         ENV.should_receive(:[]=).with('RUBYOPT',nil)
         build.run
       end
-      
+
       it "runs the build command and update the build status" do
         Environment.should_receive(:system).and_return(true)
         build.run.should be_true
         build.reload
         build.status.should == "passed"
       end
-      
+
       it "sets build status to failed if the build command fails" do
         Environment.should_receive(:system).and_return(false)
         build.run.should be_false
@@ -126,7 +126,7 @@ module Goldberg
         build.status.should == "failed"
       end
     end
-    
+
     context "before build" do
       it "sets build status to 'building' and persist the change list" do
         build = Factory.build(:build)

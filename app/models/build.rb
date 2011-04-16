@@ -3,11 +3,11 @@ require 'fileutils'
 
 class Build < ActiveRecord::Base
   include Comparable
-  
+
   attr_accessor :previous_build_revision
-  after_create :create_artifacts_dir
+  after_create :create_artefacts_dir
   before_create :update_revision
-  
+
   belongs_to :project
 
   default_scope order('number DESC')
@@ -28,20 +28,20 @@ class Build < ActiveRecord::Base
     self.created_at
   end
 
-  def artifacts_path
+  def artefacts_path
     File.join(project.path, "builds", number.to_s)
   end
-  
+
   %w(change_list build_log).each do |file_name|
     define_method "#{file_name}_path".to_sym do
-      File.join(artifacts_path, file_name)
+      File.join(artefacts_path, file_name)
     end
   end
 
   def <=>(other)
     number.to_i <=> other.number.to_i
   end
-  
+
   def run
     before_build
     Bundler.with_clean_env do
@@ -62,28 +62,28 @@ class Build < ActiveRecord::Base
       end
     end
   end
-  
+
   def before_build
     self.status = "building"
     save
     persist_change_list
   end
-  
+
   def persist_change_list
     change_list = project.repository.change_list(previous_build_revision, revision)
     File.open(change_list_path, "w+") do |file|
       file.write(change_list)
     end
   end
-  
-  def create_artifacts_dir
-    FileUtils.mkdir_p(artifacts_path)
+
+  def create_artefacts_dir
+    FileUtils.mkdir_p(artefacts_path)
   end
-  
+
   def update_revision
     self.revision = project.repository.revision if self.revision.blank?
   end
-  
+
   def nil_build?
     false
   end
