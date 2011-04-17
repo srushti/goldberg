@@ -11,7 +11,7 @@ class Init
         Rails.logger.info "Aborting"
       end
     else
-      Rails.logger.info "RVM doesn't seem to be installed! You can use Goldberg but all projects will be run on the default ruby: #{RUBY_VERSION}. If you wish to run on different rubies install rvm and run this 'bin/goldberg bootstrap' again."
+      Rails.logger.info "RVM doesn't seem to be installed!\nYou can use Goldberg but all projects will be run on the default ruby: #{RUBY_ENGINE} #{RUBY_VERSION}.\nIf you wish to run on different rubies install rvm and run this 'bin/goldberg bootstrap' again."
     end
   end
 
