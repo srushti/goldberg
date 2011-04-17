@@ -10,6 +10,9 @@
     background-color: #f0cccc;
 }
 
+#all_projects tr.project_row.building td {
+    background-color: yellow
+}
 
 /* Table Columns */
 
@@ -18,7 +21,7 @@
     background-color: white;
 }
 
-#all_projects tr.project_row td.project_name {
+#all_projects tr.project_row td {
     width: 40%;
 }
 
