@@ -1,5 +1,9 @@
+- content_for(:head) do
+  = stylesheet_link_tag 'projects'
 %p
-  %h2= @project.name
+  %h2.project
+    = @project.name
+    %em.project_ruby (#{@project.ruby})
   %strong{:class => project_status(@project)}= "#{project_status(@project)}"
   %form{:method => 'post', :action => "/projects/#{@project.id}/force"}
     %input{:type => 'submit', :value => 'force build'}

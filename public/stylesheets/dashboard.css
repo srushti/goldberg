@@ -32,3 +32,7 @@
 #all_projects tr.project_row td.number_of_tests {
     width: 20%;
 }
+
+#all_projects em.project_ruby {
+    font-size: 10px;
+}

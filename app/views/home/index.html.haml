@@ -10,14 +10,15 @@
     
   - @projects.each do |project|
     - status = project_status(project)
-    %tr{:class => "project_row #{status}"}
+    %tr.project_row{:class => status}
 
       %td.status_icon
         = project_status_image(status)
 
-      %td.project_name{:class => status}
+      %td{:class => status}
         %a{:href => "/projects/#{project.name}"}
-          %b= project.name
+          %strong.project_name= project.name
+          %em.project_ruby (#{project.ruby})
 
       %td.last_built_at
         - if project.latest_build_timestamp
