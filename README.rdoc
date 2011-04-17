@@ -50,6 +50,7 @@ Goldberg will be checking out your code in ~/.goldberg. If you want to override 
 You can configure the poller by copying the <tt>config/goldberg.yml.sample</tt> to <tt>config/goldberg.yml</tt>.
 
 ==== Force build
+
 By default, the poller is configured to poll every 10 seconds. Even if you click on "force build," it actually just sets a flag in DB for poller to build the project irrespective of the updates. If you want to it to do a build immediately after clicking on "force build", then change the frequency to 1 second.
 
 PS: Changing the frequency of poller to 1 second will not cause git calls every one second, as the project controls the frequency at which it should be polled as explained below.
@@ -64,6 +65,7 @@ Every project in goldberg can have its own custom configuration by means of addi
   end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using <tt>goldberg.yml</tt> as mentioned above.
+
 === Help
 
   # To get man page style help
@@ -77,3 +79,4 @@ If you want the project to be checked for updates every 5 seconds, you will need
 * Tejas Dinkar ({gja}[http://github.com/gja])
 * Niranjan Parajape ({achamian}[http://github.com/achamian])
 * Todd Sedano ({professor}[http://github.com/professor])
+* Drew Olson ({drewolson}[http://github.com/drewolson])
