@@ -85,23 +85,24 @@ module Goldberg
 
     context "run" do
       let(:project) { Factory.build(:project) }
-      let(:build) { Factory.create(:build, :project => project) }
+      let(:build) { Factory.create(:build, :number => 1, :project => project) }
 
       before(:each) do
         build.stub(:before_build)
       end
 
       it "executes in a clean environment" do
-        pending "Need to write spec to make sure all code is getting executed withing Bundle.with_clean_env"
+        pending "Need to write spec to make sure all code is getting executed within Bundle.with_clean_env"
       end
 
       it "performs prebuild setup before building the project" do
+        Bundler.stub(:with_clean_env)
         build.should_receive(:before_build)
         build.run
       end
 
       it "resets the bundler environment before executing command to build the project" do
-        Bundler.should_receive(:with_clean_env)
+        Environment.stub(:system)
         build.run
       end
 
@@ -109,6 +110,7 @@ module Goldberg
         ENV.should_receive(:[]=).with('BUNDLE_GEMFILE',nil)
         ENV.should_receive(:[]=).with('RAILS_ENV',nil)
         ENV.should_receive(:[]=).with('RUBYOPT',nil)
+        Environment.stub(:system)
         build.run
       end
 
