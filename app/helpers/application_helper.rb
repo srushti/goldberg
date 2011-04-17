@@ -4,11 +4,7 @@ module ApplicationHelper
   end                  
   
   def format_timestamp(timestamp)
-#    haml_tag(:div, :class => 'timestamp') do
-       haml_concat timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z") 
-       haml_concat "( "
-       haml_concat time_ago_in_words(timestamp)       
-       haml_concat " ago )"         
-#     end
+    haml_concat timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z") 
+    haml_concat "( #{time_ago_in_words(timestamp)} ago )"
   end  
 end
