@@ -1,14 +1,19 @@
-%p
-  %h2= @project.name
-  %strong{:class => project_status(@project)}= "#{project_status(@project)}"
-  %form{:method => 'post', :action => "/projects/#{@project.id}/force"}
-    %input{:type => 'submit', :value => 'force build'}
-  %pre= @project.latest_build_log
+- content_for(:head) do
+  = stylesheet_link_tag 'projects'
+
+.past-builds
   %ul
     - @project.builds.each do |build|
-      %li
-        %a{:href => "/projects/#{@project.name}/builds/#{build.id}"}= "#{build.number} #{build_status(build)}"
+      %li.build{:class => build_status(build)}
+        %a.name{:href => "/projects/#{@project.name}/builds/#{build.id}"}= "#{build.number} #{build_status(build)}"
+        - if build.revision
+          %span.revision= build.revision.slice(0, 6)
         - if build.timestamp
           = format_timestamp(build.timestamp)
-        - if build.revision
-          = build.revision
+.latest-build{:class => project_status(@project)}
+  %p
+    %h2= @project.name
+    %strong= "#{project_status(@project)}"
+    %form{:method => 'post', :action => project_force_path(@project)}
+      %input{:type => 'submit', :value => 'force build'}
+    %pre= @project.latest_build_log

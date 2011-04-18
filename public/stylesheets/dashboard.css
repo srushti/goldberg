@@ -11,7 +11,7 @@
 }
 
 #all_projects tr.project_row.building td {
-    background-color: yellow
+    background-color: #f0f086;
 }
 
 /* Table Columns */
