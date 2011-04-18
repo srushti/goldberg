@@ -1,34 +1,46 @@
-#all_projects tr.headings td { font-weight: bold; }
-#all_projects tr.project_row td { border-top: white solid 1em; background-color: white; }
+#all-projects .headings span { font-weight: bold; }
 
 /* Red/Green for pass/fail */
-#all_projects tr.project_row.passed td {
+#all-projects .project-row.passed span {
     background-color: #ccf0cc;
 }
 
-#all_projects tr.project_row.failed td {
+#all-projects .project-row.failed span {
     background-color: #f0cccc;
 }
 
-#all_projects tr.project_row.building td {
+#all-projects .project-row.building span {
     background-color: #f0f086;
 }
 
 /* Table Columns */
 
-#all_projects tr.project_row td.status_icon {
+#all-projects .project-row span.status-icon {
     width: 5%;
     background-color: white;
 }
 
-#all_projects tr.project_row td {
+#all-projects .project-row span {
     width: 40%;
 }
 
-#all_projects tr.project_row td.last_built_at {
+#all-projects .project-row span.last-built-at {
     width: 27%;
 }
 
-#all_projects tr.project_row td.number_of_tests {
+#all-projects .project-row span.number-of-tests {
     width: 20%;
+}
+
+#all-projects {
+    display: table;
+    width: 1000px;
+}
+
+#all-projects .headings, #all-projects .project-row {
+    display: table-row
+}
+
+#all-projects div span {
+    display: table-cell;
 }
