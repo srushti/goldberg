@@ -13,6 +13,6 @@
       %li
         %a{:href => "/projects/#{@project.name}/builds/#{build.id}"}= "#{build.number} #{build_status(build)}"
         - if build.timestamp
-          = build.timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")
+          = format_timestamp(build.timestamp)
         - if build.revision
           = build.revision
