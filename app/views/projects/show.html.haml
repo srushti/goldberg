@@ -1,3 +1,5 @@
+- content_for(:head) do
+  %link{:rel => 'stylesheet', :href => '/stylesheets/dashboard.css', :type => 'text/css'}
 %p
   %h2= @project.name
   %strong{:class => project_status(@project)}= "#{project_status(@project)}"
@@ -6,7 +8,7 @@
   %pre= @project.latest_build_log
   %ul
     - @project.builds.each do |build|
-      %li
+      %li{:class => "#{build_status(build)}"}
         %a{:href => "/projects/#{@project.name}/builds/#{build.id}"}= "#{build.number} #{build_status(build)}"
         - if build.timestamp
           = format_timestamp(build.timestamp)

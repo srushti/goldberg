@@ -11,7 +11,19 @@
 }
 
 #all_projects tr.project_row.building td {
-    background-color: yellow
+    background-color: yellow;
+}
+
+li.passed {
+    background-color: #ccf0cc;	   
+}
+
+li.failed {
+    background-color: #f0cccc;	   
+}     
+
+li.building {
+    background-color: yellow;  
 }
 
 /* Table Columns */
