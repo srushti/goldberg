@@ -12,7 +12,6 @@ module ApplicationHelper
   end
 
   def format_timestamp(timestamp)
-    haml_concat timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")
-    haml_concat "( #{time_ago_in_words(timestamp)} ago )"
+    content_tag(:div, "#{time_ago_in_words(timestamp)} ago", :title => timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")).tap{|html| puts html}
   end
 end
