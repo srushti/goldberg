@@ -1,0 +1,50 @@
+#all-projects .headings span { font-weight: bold; }
+
+/* Red/Green for pass/fail */
+#all-projects .project-row.passed span {
+    background-color: #ccf0cc;
+}
+
+#all-projects .project-row.failed span {
+    background-color: #f0cccc;
+}
+
+#all-projects .project-row.building span {
+    background-color: #f0f086;
+}
+
+/* Table Columns */
+
+#all-projects .project-row span.status-icon {
+    width: 5%;
+    background-color: white;
+}
+
+#all-projects .project-row span {
+    width: 40%;
+}
+
+#all-projects .project-row span.last-built-at {
+    width: 27%;
+}
+
+#all-projects .project-row span.number-of-tests {
+    width: 20%;
+}
+
+#all_projects em.project_ruby {
+    font-size: 10px;
+}
+
+#all-projects {
+    display: table;
+    width: 1000px;
+}
+
+#all-projects .headings, #all-projects .project-row {
+    display: table-row
+}
+
+#all-projects div span {
+    display: table-cell;
+}

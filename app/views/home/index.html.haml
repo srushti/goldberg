@@ -1,26 +1,21 @@
 - content_for(:head) do
-  %link{:rel => 'stylesheet', :href => '/stylesheets/dashboard.css', :type => 'text/css'}
+  = stylesheet_link_tag 'home'
 
-%table#all_projects
-  %tr.headings
-    %td.status_icon 
-    %td.project_name Project Name
-    %td.last_built_at Last Built at
-    %td.total_tests 
+#all-projects
+  .headings
+    %span.status-icon 
+    %span.project-name Project Name
+    %span.last-built-at Last Built at
     
   - @projects.each do |project|
     - status = project_status(project)
-    %tr.project_row{:class => status}
-
-      %td.status_icon
+    .project-row{:class => status}
+      %span.status-icon
         = project_status_image(status)
-
-      %td{:class => status}
+      %span.project-name{:class => status}
         %a{:href => "/projects/#{project.name}"}
-          %strong.project_name= project.name
+          %strong= project.name
           %em.project_ruby (#{project.ruby})
-
-      %td.last_built_at
+      %span.last-built-at
         - if project.latest_build_timestamp
           = format_timestamp(project.latest_build_timestamp)
-

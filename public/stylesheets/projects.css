@@ -1,3 +1,74 @@
 h2.project em.project_ruby {
     font-size: 12px;
 }
+
+li.build a {
+    color: black;
+}
+
+li.build.passed {
+    background-color: #ccf0cc;
+}
+
+li.build.passed:hover {
+    background-color: #96ff96;
+}
+
+.latest-build.passed strong, .latest-build.passed h2 {
+    color: green;
+}
+
+li.build.failed {
+    background-color: #f0cccc;
+}
+
+li.build.failed:hover {
+    background-color: #ff9696;
+}
+
+.latest-build.failed strong, .latest-build.failed h2 {
+    color: red;
+}
+
+li.build.building {
+    background-color: #f0f086;
+}
+
+li.build.building:hover {
+    background-color: #f0f064;
+}
+
+.latest-build.building strong, .latest-build.building h2 {
+    color: yellow;
+}
+
+li.build .name {
+    width: 75px;
+}
+
+li.build .revision {
+    width: 50px;
+}
+
+li.build .timestamp {
+    width: 140px;
+}
+
+.latest-build {
+    margin-left: 281px;
+}
+
+.past-builds {
+    float: left;
+}
+
+/* table layout */
+.past-builds ul {
+    display: table;
+}
+.past-builds ul li.build {
+    display: table-row;
+}
+.past-builds ul li.build a, .past-builds ul li.build span {
+    display: table-cell;
+}

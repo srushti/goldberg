@@ -12,6 +12,6 @@ module ApplicationHelper
   end
 
   def format_timestamp(timestamp)
-    content_tag(:span, "#{time_ago_in_words(timestamp)} ago", :title => timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z")).tap{|html| puts html}
+    content_tag(:span, "#{time_ago_in_words(timestamp)} ago", :class => 'timestamp', :title => timestamp.strftime("%a, %Y/%m/%d %I:%M%p %Z"))
   end
 end
