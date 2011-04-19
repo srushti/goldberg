@@ -18,6 +18,6 @@
       = @project.name
       %em.project_ruby (#{@project.ruby})
     %strong= "#{project_status(@project)}"
-    %form{:method => 'post', :action => project_force_path(@project)}
+    %form{:method => 'post', :action => "/projects/#{@project.name}/force"}
       %input{:type => 'submit', :value => 'force build'}
     %pre= @project.latest_build_log
