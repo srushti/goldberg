@@ -51,11 +51,15 @@ li.build .revision {
 }
 
 li.build .timestamp {
-    width: 140px;
+    width: 139px;
+}
+
+li.build .build-pointer {
+    width: 5px;
 }
 
 .latest-build {
-    margin-left: 281px;
+    margin-left: 305px;
 }
 
 .past-builds {

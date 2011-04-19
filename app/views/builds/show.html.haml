@@ -3,9 +3,9 @@
 %h3= "Build: #{@build.number}"
 %strong{:class => build_status(@build)}= "#{build_status(@build)}"
 - if @build.revision
-  %div= "Revision: #{@build.revision}"
+  %div= "Revision: #{@build.revision.slice(0, 6)}"
 %div
-  - format_timestamp(@build.timestamp)
+  = format_timestamp(@build.timestamp)
 %pre= @build.change_list
 %pre= @build.log
 
