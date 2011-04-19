@@ -14,7 +14,7 @@
         = project_status_image(status)
       %span.project-name{:class => status}
         %a{:href => "/projects/#{project.name}"}
-          %b= project.name
+          %strong= project.name
       %span.last-built-at
         - if project.latest_build_timestamp
           = format_timestamp(project.latest_build_timestamp)

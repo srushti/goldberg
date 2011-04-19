@@ -6,7 +6,7 @@
 
   %td.project_name{:class => status}
     %a{:href => "/projects/#{project.name}"}
-      %b= project.name
+      %strong= project.name
 
   %td.last_built_at
     - if project.latest_build_timestamp        
