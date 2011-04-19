@@ -1,4 +1,4 @@
 !!! XML
 %Projects
   - @projects.each do |project|
-    %Project{:name => project.name, :activity => project.activity, :lastBuildStatus => project.map_to_cctray_project_status, :lastBuildTime => project.latest_build_timestamp, :nextBuildTime => (project.latest_build_timestamp || Time.now) + 20, :webUrl => project_url(project.name)}
+    %Project{:name => project.name, :activity => project.activity, :lastBuildStatus => project.map_to_cctray_project_status, :lastBuildTime => project.last_complete_build_timestamp, :nextBuildTime => project.next_build_at, :webUrl => project_url(project.name)}

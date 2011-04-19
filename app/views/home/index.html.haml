@@ -18,4 +18,4 @@
           %em.project_ruby (#{project.ruby})
       %span.last-built-at
         - if project.latest_build_timestamp
-          = format_timestamp(project.latest_build_timestamp)
+          = format_timestamp(project.last_complete_build_timestamp)

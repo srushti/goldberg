@@ -4,6 +4,7 @@ class Project < ActiveRecord::Base
   has_many :builds, :dependent => :destroy
   after_destroy :remove
   delegate :number, :status, :log, :timestamp, :to => :latest_build, :prefix => true
+  delegate :timestamp, :to => :last_complete_build, :prefix => true
 
   validates_presence_of :branch, :name, :url
 
@@ -78,10 +79,10 @@ class Project < ActiveRecord::Base
   end
 
   def map_to_cctray_project_status
-    {'passed' => 'Success', 'failed' => 'Failure'}[latest_complete_build.status] || 'Unknown'
+    {'passed' => 'Success', 'failed' => 'Failure'}[last_complete_build.status] || 'Unknown'
   end
 
-  def latest_complete_build
+  def last_complete_build
     builds.detect{|build| build.status != 'building'}
   end
 
