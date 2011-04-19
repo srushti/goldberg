@@ -71,24 +71,24 @@ module Goldberg
         project = Factory(:project)
         File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(false)
         File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
-        project.command.starts_with?("(bundle check || bundle install)").should be_false
+        project.build_command.starts_with?("(bundle check || bundle install)").should be_false
       end
 
       it "prefixes bundler related command if Gemfile is present" do
         project = Factory(:project)
         File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(true)
         File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
-        project.command.starts_with?("(bundle check || bundle install)").should be_true
+        project.build_command.starts_with?("(bundle check || bundle install)").should be_true
       end
 
       it "is able to retrieve the custom command" do
         project = Factory(:project, :custom_command => 'cmake')
-        project.command.should == 'cmake'
+        project.build_command.should == 'cmake'
       end
 
       it "defaults the custom command to rake" do
         project = Factory(:project, :custom_command => nil)
-        project.command.should == 'rake default'
+        project.build_command.should == 'rake default'
       end
     end
 

@@ -61,10 +61,12 @@ describe Init do
   it "continues on with the next project even if one build fails" do
     one = Factory(:project, :name => 'one')
     two = Factory(:project, :name => 'two')
-    one.stub!(:run_build).and_raise(Exception.new("An exception"))
+    exception = Exception.new("An exception")
+    one.stub!(:run_build).and_raise(exception)
     two.should_receive(:run_build)
     Project.stub!(:projects_to_build).and_return([one, two])
     Rails.logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
+    Rails.logger.should_receive(:error)
     Init.new.poll
   end
 end

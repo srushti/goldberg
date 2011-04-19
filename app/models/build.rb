@@ -50,7 +50,7 @@ class Build < ActiveRecord::Base
       ENV["RUBYOPT"] = nil # having RUBYOPT was causing problems while doing bundle install resulting in gems not being installed - aakash
       require_rvm = RVM.installed? ? "source $HOME/.rvm/scripts/rvm && rvm use #{project.ruby}@#{project.name}" : ''
       go_to_project_path = "cd #{project.code_path}"
-      build_command = "#{project.command}"
+      build_command = "#{project.build_command}"
       output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
       Environment.system("(#{require_rvm} ; #{go_to_project_path};  #{build_command}) #{output_redirects}").tap do |success|
         if success

@@ -72,7 +72,7 @@ class Project < ActiveRecord::Base
     save
   end
 
-  def command
+  def build_command
     bundler_command = File.exists?(File.join(self.code_path, 'Gemfile')) ? "(#{Bundle.check_and_install}) && " : ""
     bundler_command << (custom_command || "rake #{config.rake_task}")
   end
