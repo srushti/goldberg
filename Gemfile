@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.6'
+gem 'rails', '3.0.7'
 
 gem 'sqlite3', '~> 1.3.3', :platforms => :ruby
 gem 'haml', '~> 3.0.25'
