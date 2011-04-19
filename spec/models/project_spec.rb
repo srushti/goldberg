@@ -255,4 +255,42 @@ module Goldberg
       Project.projects_to_build.should_not include(build_not_due_project)
     end
   end
+
+  describe "activity" do
+    let(:project){Factory(:project)}
+
+    ['passed', 'failed'].each do |status|
+      it "is Sleeping if no build is currently happening and if the last build #{status}" do
+        Factory(:build, :project => project, :status => status)
+        project.activity.should == 'Sleeping'
+      end
+    end
+
+    it "is Building if a build is currently happening" do
+      Factory(:build, :project => project, :status => 'building')
+      project.activity.should == 'Building'
+    end
+
+    it "is Unknown for any status" do
+      Factory(:build, :project => project, :status => 'foo bar')
+      project.activity.should == 'Unknown'
+    end
+  end
+
+  describe "cctray project status" do
+    let(:project){Factory(:project)}
+
+    {'passed' => 'Success', 'failed' => 'Failure'}.each do |status, message|
+      it "is '#{message}' when the last build is '#{status}'" do
+        Factory(:build, :project => project, :status => status)
+        project.map_to_cctray_project_status.should == message
+      end
+
+      it "is '#{message}' when the last build is building & the second to last is '#{status}'" do
+        Factory(:build, :project => project, :status => status, :number => 10)
+        Factory(:build, :project => project, :status => 'building', :number => 11)
+        project.map_to_cctray_project_status.should == message
+      end
+    end
+  end
 end

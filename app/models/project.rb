@@ -78,14 +78,11 @@ class Project < ActiveRecord::Base
   end
 
   def map_to_cctray_project_status
-    case latest_build_status
-      when 'passed' then
-        'Success'
-      when 'failed' then
-        'Failure'
-      else
-        'Unknown'
-    end
+    {'passed' => 'Success', 'failed' => 'Failure'}[latest_complete_build.status] || 'Unknown'
+  end
+
+  def latest_complete_build
+    builds.detect{|build| build.status != 'building'}
   end
 
   def repository
@@ -113,5 +110,9 @@ class Project < ActiveRecord::Base
 
   def self.projects_to_build
     Project.where("build_requested = 't' or next_build_at is null or next_build_at <= :next_build_at", :next_build_at => Time.now)
+  end
+
+  def activity
+    {'passed' => 'Sleeping', 'failed' => 'Sleeping', 'building' => 'Building'}[latest_build_status] || 'Unknown'
   end
 end
