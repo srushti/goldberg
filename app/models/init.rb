@@ -57,6 +57,7 @@ class Init
         p.run_build
       rescue Exception => e
         Rails.logger.error "Build on project #{p.name} failed because of #{e}"
+        Rails.logger.error e.backtrace
       end
     end
   end
