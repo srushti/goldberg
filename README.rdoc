@@ -10,9 +10,10 @@ Visit http://goldberg.c42.in to see a live Goldberg server.
 
 === Prerequisites
 
-RVM, Git and Ruby (we usually use MRI 1.9.2, but any flavour should work). 
+Git and Ruby (we usually use MRI 1.9.2, but any flavour should work). 
+RVM if you want to be able to run projects on different rubies.
                                                    
-Your project should have a Gemfile for {Bundler}[http://gembundler.com/] and a .rvmrc file for {rvm}[https://rvm.beginrescueend.com] A simple one might contain the line "rvm ruby-1.9.2@rails3" 
+Your project should have a Gemfile for {Bundler}[http://gembundler.com/].
 
 Goldberg currently runs only on Linux/Mac OS X.    
 
@@ -62,6 +63,7 @@ Every project in goldberg can have its own custom configuration by means of addi
   #Goldberg configuration
   Project.configure do |config|
     config.frequency = 20
+    config.ruby = '1.9.2' # Your server needs to have rvm installed for this setting to be considered
   end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using <tt>goldberg.yml</tt> as mentioned above.
