@@ -1,8 +1,12 @@
+- content_for(:head) do
+  = stylesheet_link_tag 'builds'
+
 %h2
   %a{:href => "/projects/#{@project.name}"}= @project.name
-%h3= "Build: #{@build.number}"
+%h3.build
+  = "Build: #{@build.number}"
+  %em.ruby (#{@build.ruby})
 %strong{:class => build_status(@build)}= build_status(@build)
-%em= @build.ruby
 - if @build.revision
   %div= "Revision: #{@build.revision.slice(0, 6)}"
 %div
