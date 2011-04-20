@@ -13,7 +13,16 @@ module RVM
     end
 
     def use_script(ruby, gemset)
-      "source $HOME/.rvm/scripts/rvm && rvm use #{ruby}@#{gemset}"
+      installed? ? "#{source_script} $HOME/.rvm/scripts/rvm && rvm use #{ruby}@#{gemset}" : ''
+    end
+
+    def source_script
+      "source $HOME/.rvm/scripts/rvm"
+    end
+
+    def prepare_ruby(ruby)
+      return unless installed?
+      Environment.system("#{use_script(ruby, 'global')} && (gem list | grep bundler) || gem install bundler")
     end
   end
 end

@@ -17,11 +17,11 @@ class Build < ActiveRecord::Base
   end
 
   def log
-    Environment.read_file(build_log_path)
+    Environment.file_exist?(build_log_path) ? Environment.read_file(build_log_path) : ''
   end
 
   def change_list
-    File.exist?(change_list_path) ? Environment.read_file(change_list_path) : nil
+    Environment.file_exist?(change_list_path) ? Environment.read_file(change_list_path) : nil
   end
 
   def timestamp
@@ -48,11 +48,11 @@ class Build < ActiveRecord::Base
       ENV['BUNDLE_GEMFILE'] = nil
       ENV['RAILS_ENV'] = project.rails_env
       ENV["RUBYOPT"] = nil # having RUBYOPT was causing problems while doing bundle install resulting in gems not being installed - aakash
-      require_rvm = RVM.installed? ? RVM.use_script(ruby, project.name) : ''
+      RVM.prepare_ruby(ruby)
       go_to_project_path = "cd #{project.code_path}"
       build_command = "#{project.build_command}"
       output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
-      Environment.system("(#{require_rvm} ; #{go_to_project_path};  #{build_command}) #{output_redirects}").tap do |success|
+      Environment.system("(#{RVM.use_script(ruby, project.name)} ; #{go_to_project_path};  #{build_command}) #{output_redirects}").tap do |success|
         if success
           self.status = "passed"
         else

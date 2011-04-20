@@ -23,6 +23,7 @@ module Goldberg
 
     it "is able to read the build log file to retrieve associated log" do
       build = Factory.build(:build)
+      Environment.should_receive(:file_exist?).with(build.build_log_path).and_return(true)
       Environment.should_receive(:read_file).with(build.build_log_path).and_return("build_log")
       build.log.should == "build_log"
     end
@@ -115,6 +116,7 @@ module Goldberg
       end
 
       it "runs the build command and update the build status" do
+        Environment.should_receive(:system)
         Environment.should_receive(:system).and_return(true)
         build.run.should be_true
         build.reload
@@ -122,6 +124,7 @@ module Goldberg
       end
 
       it "sets build status to failed if the build command fails" do
+        Environment.should_receive(:system)
         Environment.should_receive(:system).and_return(false)
         build.run.should be_false
         build.reload
