@@ -1,7 +1,8 @@
 %h2
   %a{:href => "/projects/#{@project.name}"}= @project.name
 %h3= "Build: #{@build.number}"
-%strong{:class => build_status(@build)}= "#{build_status(@build)}"
+%strong{:class => build_status(@build)}= build_status(@build)
+%em= @build.ruby
 - if @build.revision
   %div= "Revision: #{@build.revision.slice(0, 6)}"
 %div

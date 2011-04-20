@@ -50,7 +50,7 @@ class Project < ActiveRecord::Base
     gemfile = File.expand_path('Gemfile', self.code_path)
     gemfilelock = File.expand_path('Gemfile.lock', self.code_path)
 
-    if File.exists?(gemfilelock) && !repository.versioned?('Gemfile.lock') && File.mtime(gemfile) > File.mtime(gemfilelock)
+    if File.exists?(gemfilelock) && !repository.versioned?('Gemfile.lock') && (File.mtime(gemfile) > File.mtime(gemfilelock) || ruby != latest_build.ruby)
       Rails.logger.info("removing Gemfile.lock as it's not versioned")
       File.delete(gemfilelock)
     end
@@ -59,7 +59,7 @@ class Project < ActiveRecord::Base
   def run_build
     if self.repository.update || build_required?
       prepare_for_build
-      build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision).run
+      build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby).run
       self.build_requested = false
       Rails.logger.info "Build #{ build_successful ? "passed" : "failed!" }"
     end

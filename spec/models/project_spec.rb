@@ -82,14 +82,14 @@ module Goldberg
         project = Factory(:project)
         File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(false)
         File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
-        project.build_command.starts_with?("(bundle check || bundle install)").should be_false
+        project.build_command.should_not include(Bundle.check_and_install)
       end
 
       it "prefixes bundler related command if Gemfile is present" do
         project = Factory(:project)
         File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(true)
         File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
-        project.build_command.starts_with?("(bundle check || bundle install)").should be_true
+        project.build_command.should include(Bundle.check_and_install)
       end
 
       it "is able to retrieve the custom command" do
@@ -132,7 +132,7 @@ module Goldberg
 
       it "preprocesses the codebase before calling build" do
         build = Build.new
-        project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
+        project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :ruby => RUBY_VERSION).and_return(build)
         build.should respond_to(:run)
         build.should_receive(:run)
 
@@ -148,7 +148,7 @@ module Goldberg
           build = Build.new
           project.build_requested = true
           project.repository.should_receive(:update).and_return(false)
-          project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
+          project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :ruby => RUBY_VERSION).and_return(build)
           build.should respond_to(:run)
           build.should_receive(:run)
           project.run_build
@@ -187,13 +187,13 @@ module Goldberg
         end
 
         it "creates a new build for a project with build number set to 1 in case of first build  and run it" do
-          project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "").and_return(build)
+          project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :ruby => RUBY_VERSION).and_return(build)
           project.run_build
         end
 
         it "creates a new build for a project with build number one greater than last build and run it" do
           project.builds << Factory(:build, :number => 5, :revision => "old_sha", :project => project)
-          project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "old_sha").and_return(build)
+          project.builds.should_receive(:create!).with(:number => 6, :previous_build_revision => "old_sha", :ruby => RUBY_VERSION).and_return(build)
           project.run_build
         end
 

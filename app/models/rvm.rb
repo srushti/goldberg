@@ -11,5 +11,9 @@ module RVM
     def write_goldberg_rvmrc_contents
       File.open(File.join(Env['HOME'], '.rvmrc'), 'a') {|f| f.write(goldberg_rvmrc_contents)}
     end
+
+    def use_script(ruby, gemset)
+      "source $HOME/.rvm/scripts/rvm && rvm use #{ruby}@#{gemset}"
+    end
   end
 end
