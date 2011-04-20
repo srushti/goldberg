@@ -1,4 +1,4 @@
 Project.configure do |config|
   config.rake_task = 'ci'
-  config.ruby = '1.8.7'
+  config.ruby = 'jruby-1.6.0'
 end
