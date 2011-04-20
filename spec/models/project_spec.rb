@@ -292,12 +292,12 @@ module Goldberg
     let(:project){Factory(:project)}
 
     {'passed' => 'Success', 'failed' => 'Failure'}.each do |status, message|
-      it "is '#{message}' when the last build is '#{status}'" do
+      it "is '#{message}' when the last build '#{status}'" do
         Factory(:build, :project => project, :status => status)
         project.map_to_cctray_project_status.should == message
       end
 
-      it "is '#{message}' when the last build is building & the second to last is '#{status}'" do
+      it "is '#{message}' when the last build is building & the second to last '#{status}'" do
         Factory(:build, :project => project, :status => status, :number => 10)
         Factory(:build, :project => project, :status => 'building', :number => 11)
         project.map_to_cctray_project_status.should == message

@@ -13,7 +13,7 @@
       %span.status-icon
         = project_status_image(status)
       %span.project-name{:class => status}
-        %a{:href => "/projects/#{project.name}"}
+        %a{:href => project_path(:project_name => project.name)}
           %strong= project.name
           %em.project_ruby (#{project.ruby})
       %span.last-built-at
