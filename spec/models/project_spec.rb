@@ -70,8 +70,8 @@ module Goldberg
       [:timestamp].each do |field|
         it "delegates last_complete_build_#{field} to the last complete build" do
           project = Factory(:project)
-          Factory(:build, project: project, number: 4, status: 'passed').update_attribute(:created_at, 2.days.ago)
-          Factory(:build, project: project, number: 5, status: 'building').update_attribute(:created_at, 1.day.ago)
+          Factory(:build, :project => project, :number => 4, :status => 'passed').update_attribute(:created_at, 2.days.ago)
+          Factory(:build, :project => project, :number => 5, :status => 'building').update_attribute(:created_at, 1.day.ago)
           project.last_complete_build_timestamp.to_s.should == 2.days.ago.to_s
         end
       end
