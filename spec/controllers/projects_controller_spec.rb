@@ -11,7 +11,7 @@ describe ProjectsController do
   it "allows forcing a build" do
     project = Factory.create(:project, :name => 'some_project')
     @request.env['HTTP_REFERER'] = 'http://referer/'
-    post :force, :project_id => project.id
+    post :force, :project_id => project.name
     response.should redirect_to('http://referer/')
     project.reload.should be_build_requested
   end
