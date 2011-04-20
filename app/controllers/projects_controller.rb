@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   end
 
   def force
-    project = Project.find_by_id(params[:project_id])
+    project = Project.find_by_name(params[:project_id])
     if project
       project.force_build
       redirect_to :back
