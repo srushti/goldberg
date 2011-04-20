@@ -19,7 +19,7 @@ module Environment
         super(command_to_exec)
       end
     end
-    
+
     [:sleep, :exec].each do |method_name|
       define_method method_name do |args|
         super(args)
@@ -36,6 +36,10 @@ module Environment
         f.each_line { |line| result << line }
       end
       result
+    end
+
+    def file_exist?(path)
+      File.exist?(path)
     end
   end
 end
