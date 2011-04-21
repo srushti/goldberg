@@ -1,7 +1,7 @@
 defaults: &defaults
   frequency: 20
 
-developent:
+development:
   <<: *defaults
 
 production:
