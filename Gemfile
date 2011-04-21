@@ -16,7 +16,7 @@ group :development, :test do
   gem 'ruby-debug19', :platforms => :ruby_19
   gem 'ffi-ncurses', :platforms => :jruby
   gem 'rspec-rails', '~> 2.5.0'
-  gem 'rspec-http'
+  gem 'rspec-http', '~> 0.0.2'
   gem 'stirlitz', '~> 0.0.1.1'
   if RUBY_PLATFORM == 'java'
     # See https://github.com/carlhuda/bundler/issues/1100
