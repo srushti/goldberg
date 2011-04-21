@@ -1,9 +1,7 @@
 class ProjectsController < ApplicationController
   def show
     @project = Project.find_by_name(params[:project_name])
-    if @project.nil?
-      render :text => 'Unknown project', :status => :not_found
-    end
+    render :text => 'Unknown project', :status => :not_found if @project.nil?
   end
 
   def force
