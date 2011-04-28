@@ -87,6 +87,10 @@ class Build < ActiveRecord::Base
   end
 
   def artefacts
-    Dir.entries(artefacts_path).select{|entry| !File.directory?(File.join(artefacts_path, entry))}
+    if File.exist?(artefacts_path)
+      Dir.entries(artefacts_path).select{|entry| !File.directory?(File.join(artefacts_path, entry))}
+    else
+      []
+    end
   end
 end
