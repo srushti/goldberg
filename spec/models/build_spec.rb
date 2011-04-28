@@ -32,7 +32,7 @@ module Goldberg
       it "knows where to store the build artefacts on the file system" do
         project = Factory.build(:project, :name => "name")
         build = Factory.build(:build, :project => project, :number => 5)
-        build.artefacts_path.should == File.join(project.path, "builds", "5")
+        build.path.should == File.join(project.path, "builds", "5")
       end
 
       [:change_list, :build_log].each do |artefact|
@@ -48,7 +48,7 @@ module Goldberg
       it "creates a directory for storing build artefacts" do
         project = Factory.build(:project, :name => 'ooga')
         build = Factory.build(:build, :project => project, :number => 5)
-        FileUtils.should_receive(:mkdir_p).with(build.artefacts_path)
+        FileUtils.should_receive(:mkdir_p).with(build.path)
         build.save.should be_true
       end
     end
@@ -108,9 +108,12 @@ module Goldberg
       end
 
       it "resets the RAILS_ENV before executing the command to build the project" do
-        ENV.should_receive(:[]=).with('BUNDLE_GEMFILE',nil)
-        ENV.should_receive(:[]=).with('RAILS_ENV',nil)
-        ENV.should_receive(:[]=).with('RUBYOPT',nil)
+        Env.should_receive(:[]=).with('BUNDLE_GEMFILE', nil)
+        Env.should_receive(:[]=).with('RAILS_ENV', nil)
+        Env.should_receive(:[]=).with('RUBYOPT', nil)
+        build.stub!(:artefacts_path).and_return('artefacts path')
+        Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
+        Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
         Environment.stub(:system)
         build.run
       end
@@ -136,6 +139,7 @@ module Goldberg
       it "sets build status to 'building' and persist the change list" do
         build = Factory.build(:build)
         build.should_receive(:persist_change_list)
+        FileUtils.should_receive(:mkdir_p).with(build.artefacts_path)
         build.before_build
         build.reload.status.should == 'building'
       end

@@ -13,4 +13,9 @@
   = format_timestamp(@build.timestamp)
 %pre= @build.change_list
 %pre= @build.log
+- unless @build.artefacts.empty?
+  %ul
+    Build artefacts
+    - @build.artefacts.each do |artefact|
+      %li= link_to artefact, "/projects/#{@project.name}/builds/#{@build.number}/artefacts/#{artefact}"
 

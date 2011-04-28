@@ -5,7 +5,7 @@ class Build < ActiveRecord::Base
   include Comparable
 
   attr_accessor :previous_build_revision
-  after_create :create_artefacts_dir
+  after_create :create_dir
   before_create :update_revision
 
   belongs_to :project
@@ -28,13 +28,13 @@ class Build < ActiveRecord::Base
     self.created_at
   end
 
-  def artefacts_path
+  def path
     File.join(project.path, "builds", number.to_s)
   end
 
-  %w(change_list build_log).each do |file_name|
+  %w(change_list build_log artefacts).each do |file_name|
     define_method "#{file_name}_path".to_sym do
-      File.join(artefacts_path, file_name)
+      File.join(path, file_name)
     end
   end
 
@@ -45,19 +45,16 @@ class Build < ActiveRecord::Base
   def run
     before_build
     Bundler.with_clean_env do
-      ENV['BUNDLE_GEMFILE'] = nil
-      ENV['RAILS_ENV'] = project.rails_env
-      ENV["RUBYOPT"] = nil # having RUBYOPT was causing problems while doing bundle install resulting in gems not being installed - aakash
+      Env['BUNDLE_GEMFILE'] = nil
+      Env['RAILS_ENV'] = project.rails_env
+      Env["RUBYOPT"] = nil # having RUBYOPT was causing problems while doing bundle install resulting in gems not being installed - aakash
+      Env['BUILD_ARTIFACTS'] = Env['BUILD_ARTEFACTS'] = artefacts_path
       RVM.prepare_ruby(ruby)
       go_to_project_path = "cd #{project.code_path}"
       build_command = "#{project.build_command}"
       output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
-      Environment.system("(#{RVM.use_script(ruby, project.name)} ; #{go_to_project_path};  #{build_command}) #{output_redirects}").tap do |success|
-        if success
-          self.status = "passed"
-        else
-          self.status = "failed"
-        end
+      Environment.system("(#{RVM.use_script(ruby, project.name)} ; #{go_to_project_path}; #{build_command}) #{output_redirects}").tap do |success|
+        self.status = success ? 'passed' : 'failed'
         save
       end
     end
@@ -67,6 +64,7 @@ class Build < ActiveRecord::Base
     self.status = "building"
     save
     persist_change_list
+    FileUtils.mkdir_p(artefacts_path)
   end
 
   def persist_change_list
@@ -76,8 +74,8 @@ class Build < ActiveRecord::Base
     end
   end
 
-  def create_artefacts_dir
-    FileUtils.mkdir_p(artefacts_path)
+  def create_dir
+    FileUtils.mkdir_p(path)
   end
 
   def update_revision
@@ -86,5 +84,9 @@ class Build < ActiveRecord::Base
 
   def nil_build?
     false
+  end
+
+  def artefacts
+    Dir.entries(artefacts_path).select{|entry| !File.directory?(File.join(artefacts_path, entry))}
   end
 end
