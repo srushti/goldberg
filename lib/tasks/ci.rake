@@ -1,5 +1,5 @@
-task :ci => ['db:migrate', 'spec:rcov', 'copy_rcov_report']
+task :ci => ['db:migrate', 'spec', 'copy_coverage_report']
 
-task :copy_rcov_report do
+task :copy_coverage_report do
   FileUtils.cp_r('coverage/index.html', ENV['BUILD_ARTEFACTS'], :verbose => true)
 end
