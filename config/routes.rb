@@ -9,5 +9,5 @@ Goldberg::Application.routes.draw do
   post '/projects/:project_name/force' => 'projects#force', :as => :project_force
 
   get '/projects/:project_name/builds/:build_number' => 'builds#show', :as => :project_build
-  get '/projects/:project_name/builds/:build_number/artefacts/:path' => 'builds#artefact', :as => :project_build_artefact
+  get '/projects/:project_name/builds/:build_number/artefacts/:path' => 'builds#artefact', :constraints => {:path => /.*/}, :as => :project_build_artefact
 end

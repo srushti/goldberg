@@ -11,12 +11,25 @@ class BuildsController < ApplicationController
     end
   end
 
+  def artefact_path(path = '')
+    artefact_path = File.join(Paths.projects, @project.name, 'builds', @build.number.to_s, 'artefacts', path)
+  end
+
   def artefact
-    artefact_path = File.join(Paths.projects, @project.name, 'builds', @build.number.to_s, 'artefacts', "#{params[:path]}.txt")
-    if File.exist?(artefact_path)
-      render :file => artefact_path
+    @path = artefact_path(params[:path])
+    if File.expand_path(File.join(@path)).match(/^#{Regexp.escape(artefact_path)}/)
+      if File.directory?(@path)
+        @entries = (Dir.entries(@path) - ['.', '..']).map{|entry| File.join(params[:path], entry)}
+        render 'artefact_directory'
+      elsif File.exist?(@path)
+        extension = File.extname(@path)
+        mime_type = Mime::Type.lookup_by_extension(extension[1, extension.size])
+        send_file @path, :disposition => 'inline', :content_type => mime_type
+      else
+        render :text => 'Unknown file', :status => :not_found
+      end
     else
-      render :text => 'Unknown file', :status => :not_found
+      render :text => 'Naughty, naughty', :status => 500
     end
   end
 end

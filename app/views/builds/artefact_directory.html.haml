@@ -1,0 +1,4 @@
+%ul
+  = params[:path]
+  - @entries.each do |entry|
+    %li= link_to File.basename(entry), "/projects/#{@project.name}/builds/#{@build.number}/artefacts/#{entry}"
