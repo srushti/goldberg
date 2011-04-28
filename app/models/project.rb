@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
 
   validates_presence_of :branch, :name, :url
 
-  delegate :frequency, :ruby, :rails_env, :to => :config
+  delegate :frequency, :ruby, :to => :config
 
   def self.add(options)
     Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch]).tap do |project|

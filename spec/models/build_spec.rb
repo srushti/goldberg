@@ -107,9 +107,8 @@ module Goldberg
         build.run
       end
 
-      it "resets the RAILS_ENV before executing the command to build the project" do
+      it "resets the appropriate environment variables before executing the command to build the project" do
         Env.should_receive(:[]=).with('BUNDLE_GEMFILE', nil)
-        Env.should_receive(:[]=).with('RAILS_ENV', nil)
         Env.should_receive(:[]=).with('RUBYOPT', nil)
         build.stub!(:artefacts_path).and_return('artefacts path')
         Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')

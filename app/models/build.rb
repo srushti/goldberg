@@ -46,7 +46,6 @@ class Build < ActiveRecord::Base
     before_build
     Bundler.with_clean_env do
       Env['BUNDLE_GEMFILE'] = nil
-      Env['RAILS_ENV'] = project.rails_env
       Env["RUBYOPT"] = nil # having RUBYOPT was causing problems while doing bundle install resulting in gems not being installed - aakash
       Env['BUILD_ARTIFACTS'] = Env['BUILD_ARTEFACTS'] = artefacts_path
       RVM.prepare_ruby(ruby)
