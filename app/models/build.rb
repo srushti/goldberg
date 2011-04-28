@@ -88,7 +88,7 @@ class Build < ActiveRecord::Base
 
   def artefacts
     if File.exist?(artefacts_path)
-      Dir.entries(artefacts_path).select{|entry| !File.directory?(File.join(artefacts_path, entry))}
+      Dir.entries(artefacts_path) - ['.', '..']
     else
       []
     end

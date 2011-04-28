@@ -1,11 +1,14 @@
 require 'rubygems'
 require 'spork'
+require 'simplecov'
+
+SimpleCov.start 'rails'
 
 Spork.prefork do
   # This file is copied to spec/ when you run 'rails generate rspec:install'
   ENV["RAILS_ENV"] ||= 'test'
   ENV["GOLDBERG_PATH"] ||= File.join(File.expand_path('../../', __FILE__), 'tmp', 'goldberg')
-  
+
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/http'
@@ -28,7 +31,7 @@ Spork.prefork do
     # examples within a transaction, remove the following line or assign false
     # instead of true.
     config.use_transactional_fixtures = true
-    
+
     config.before(:each) do
       # sleep(0.2)
       FileUtils.stub!(:mkdir_p)
