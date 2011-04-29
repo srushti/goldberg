@@ -20,6 +20,11 @@ describe Init do
     Project.find_by_id(project.id).should_not be
   end
 
+  it "fails gracefully if it can't find the project to remove" do
+    Rails.logger.should_receive(:error).with("Project unknown does not exist.")
+    Init.new.remove('unknown')
+  end
+
   it "lists all projects" do
     project = Factory(:project, :name => 'a_project')
     Rails.logger.should_receive(:info).with(project.name)
@@ -68,6 +73,37 @@ describe Init do
     Rails.logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
     Rails.logger.should_receive(:error)
     Init.new.poll
+  end
+
+  describe "bootstrap" do
+    it "suggests the user install rvm if it isn't" do
+      RVM.stub!(:installed?).and_return(false)
+      Rails.logger.should_receive(:info).with("RVM doesn't seem to be installed!\nYou can use Goldberg but all projects will be run on the default ruby: #{RUBY_ENGINE} #{RUBY_VERSION}.\nIf you wish to run on different rubies install rvm and run this 'bin/goldberg bootstrap' again.")
+      Init.new.bootstrap
+    end
+
+    context "rvm installed" do
+      before(:each) do
+        RVM.stub!(:installed?).and_return(true)
+        Rails.logger.should_receive(:info).with("It looks like you have RVM installed. We will now add the following settings to your global .rvmrc located at #{Env['HOME']}.")
+        Rails.logger.should_receive(:info).with("#{RVM.goldberg_rvmrc_contents}\n(Y/n)")
+      end
+
+      ["YeS\n", "Y\r"].each do |response|
+        it "adds the required settings to .rvmrc if the user says #{response}" do
+          Environment.stub!(:STDIN).and_return(mock(:stdin, :gets => response))
+          RVM.should_receive(:write_goldberg_rvmrc_contents)
+          Init.new.bootstrap
+        end
+      end
+
+      it "doesn't add the required settings to .rvmrc if the user says 'no'" do
+        Environment.stub!(:STDIN).and_return(mock(:stdin, :gets => 'no'))
+        RVM.should_not_receive(:write_goldberg_rvmrc_contents)
+        Rails.logger.should_receive(:info).with('Aborting')
+        Init.new.bootstrap
+      end
+    end
   end
 end
 

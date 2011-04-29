@@ -2,7 +2,9 @@ require 'rubygems'
 require 'spork'
 require 'simplecov'
 
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' do
+  add_filter 'environment.rb'
+end
 
 Spork.prefork do
   # This file is copied to spec/ when you run 'rails generate rspec:install'
