@@ -1,5 +1,7 @@
 module Environment
   class << self
+    delegate :expand_path, :exist?, :directory?, :to => File
+
     def argv
       ARGV
     end

@@ -17,11 +17,11 @@ class BuildsController < ApplicationController
 
   def artefact
     @path = artefact_path(params[:path])
-    if File.expand_path(File.join(@path)).match(/^#{Regexp.escape(artefact_path)}/)
-      if File.directory?(@path)
+    if Environment.expand_path(@path).match(/^#{Regexp.escape(artefact_path)}/)
+      if Environment.directory?(@path)
         @entries = (Dir.entries(@path) - ['.', '..']).map{|entry| File.join(params[:path], entry)}
         render 'artefact_directory'
-      elsif File.exist?(@path)
+      elsif Environment.exist?(@path)
         extension = File.extname(@path)
         mime_type = Mime::Type.lookup_by_extension(extension[1, extension.size])
         send_file @path, :disposition => 'inline', :content_type => mime_type
@@ -29,7 +29,7 @@ class BuildsController < ApplicationController
         render :text => 'Unknown file', :status => :not_found
       end
     else
-      render :text => 'Naughty, naughty', :status => 500
+      render :text => 'Naughty, naughty', :status => 403
     end
   end
 end

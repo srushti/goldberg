@@ -20,4 +20,4 @@
     %strong= "#{project_status(@project)}"
     %form{:method => 'post', :action => "/projects/#{@project.name}/force"}
       %input{:type => 'submit', :value => 'force build'}
-    %pre= @project.latest_build_log
+    %pre= @project.latest_build_build_log

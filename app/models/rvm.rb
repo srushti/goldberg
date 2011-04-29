@@ -9,7 +9,7 @@ module RVM
     end
 
     def write_goldberg_rvmrc_contents
-      File.open(File.join(Env['HOME'], '.rvmrc'), 'a') {|f| f.write(goldberg_rvmrc_contents)}
+      Environment.write_file(File.join(Env['HOME'], '.rvmrc'), goldberg_rvmrc_contents)
     end
 
     def use_script(ruby, gemset)

@@ -12,7 +12,7 @@
 %div
   = format_timestamp(@build.timestamp)
 %pre= @build.change_list
-%pre= @build.log
+%pre= @build.build_log
 - unless @build.artefacts.empty?
   %ul
     Build artefacts

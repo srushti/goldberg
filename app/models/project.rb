@@ -3,7 +3,7 @@ require "fileutils"
 class Project < ActiveRecord::Base
   has_many :builds, :dependent => :destroy
   after_destroy :remove
-  delegate :number, :status, :log, :timestamp, :to => :latest_build, :prefix => true
+  delegate :number, :status, :build_log, :timestamp, :to => :latest_build, :prefix => true
   delegate :timestamp, :status, :to => :last_complete_build, :prefix => true
 
   validates_presence_of :branch, :name, :url

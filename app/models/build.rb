@@ -13,15 +13,7 @@ class Build < ActiveRecord::Base
   default_scope order('number DESC')
 
   def self.nil
-    OpenStruct.new(:number => 0, :status => 'not available', :revision => '', :nil_build? => true, :timestamp => nil, :log => '')
-  end
-
-  def log
-    Environment.file_exist?(build_log_path) ? Environment.read_file(build_log_path) : ''
-  end
-
-  def change_list
-    Environment.file_exist?(change_list_path) ? Environment.read_file(change_list_path) : nil
+    OpenStruct.new(:number => 0, :status => 'not available', :revision => '', :nil_build? => true, :timestamp => nil, :build_log => '')
   end
 
   def timestamp
@@ -32,10 +24,19 @@ class Build < ActiveRecord::Base
     File.join(project.path, "builds", number.to_s)
   end
 
-  %w(change_list build_log artefacts).each do |file_name|
+  %w(change_list build_log).each do |file_name|
     define_method "#{file_name}_path".to_sym do
       File.join(path, file_name)
     end
+
+    define_method "#{file_name}" do
+      file_path = send("#{file_name}_path")
+      Environment.file_exist?(file_path) ? Environment.read_file(file_path) : ''
+    end
+  end
+
+  def artefacts_path
+    File.join(path, "artefacts")
   end
 
   def <=>(other)
@@ -86,7 +87,7 @@ class Build < ActiveRecord::Base
   end
 
   def artefacts
-    if File.exist?(artefacts_path)
+    if Environment.exist?(artefacts_path)
       Dir.entries(artefacts_path) - ['.', '..']
     else
       []
