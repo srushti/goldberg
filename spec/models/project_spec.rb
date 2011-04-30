@@ -131,7 +131,7 @@ describe Project do
 
     it "preprocesses the codebase before calling build" do
       build = Build.new
-      project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :ruby => RUBY_VERSION).and_return(build)
+      project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :ruby => RUBY_VERSION, :environment_string => "").and_return(build)
       build.should respond_to(:run)
       build.should_receive(:run)
 
@@ -205,6 +205,13 @@ describe Project do
         project.run_build
 
         Time.parse(project.reload.next_build_at.to_s).should == Time.parse((current_time + project.config.frequency.seconds).to_s)
+      end
+
+      it "should read the environment variables from the config" do
+        config = ProjectConfig.new.tap{ |c| c.stub(:environment_string).and_return("FOO=bar") }
+        project.stub(:config).and_return(config)
+        project.builds.should_receive(:create!).with(hash_including(:environment_string => "FOO=bar")).and_return(build)
+        project.run_build
       end
     end
   end
