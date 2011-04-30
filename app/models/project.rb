@@ -11,7 +11,8 @@ class Project < ActiveRecord::Base
   delegate :frequency, :ruby, :to => :config
 
   def self.add(options)
-    Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch]).tap do |project|
+    Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch], 
+                :environment_variables => options[:environment_variables] ).tap do |project|
       project.checkout
       project.save!
     end
@@ -59,7 +60,7 @@ class Project < ActiveRecord::Base
   def run_build
     if self.repository.update || build_required?
       prepare_for_build
-      build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby).run
+      build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby, :environment_variables => environment_variables).run
       self.build_requested = false
       Rails.logger.info "Build #{ build_successful ? "passed" : "failed!" }"
     end
