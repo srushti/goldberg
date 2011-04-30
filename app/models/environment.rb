@@ -2,6 +2,10 @@ module Environment
   class << self
     delegate :expand_path, :exist?, :directory?, :to => File
 
+    def stdin
+      STDIN
+    end
+
     def argv
       ARGV
     end
@@ -22,9 +26,9 @@ module Environment
       end
     end
 
-    [:sleep, :exec].each do |method_name|
-      define_method method_name do |args|
-        super(args)
+    [:sleep, :exec,].each do |method_name|
+      define_method method_name do |*args|
+        super(*args)
       end
     end
 

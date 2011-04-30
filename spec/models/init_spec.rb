@@ -91,14 +91,14 @@ describe Init do
 
       ["YeS\n", "Y\r"].each do |response|
         it "adds the required settings to .rvmrc if the user says #{response}" do
-          Environment.stub!(:STDIN).and_return(mock(:stdin, :gets => response))
+          Environment.stub!(:stdin).and_return(mock(:stdin, :gets => response))
           RVM.should_receive(:write_goldberg_rvmrc_contents)
           Init.new.bootstrap
         end
       end
 
       it "doesn't add the required settings to .rvmrc if the user says 'no'" do
-        Environment.stub!(:STDIN).and_return(mock(:stdin, :gets => 'no'))
+        Environment.stub!(:stdin).and_return(mock(:stdin, :gets => 'no'))
         RVM.should_not_receive(:write_goldberg_rvmrc_contents)
         Rails.logger.should_receive(:info).with('Aborting')
         Init.new.bootstrap
