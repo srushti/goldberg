@@ -7,9 +7,15 @@ class ProjectConfig
     @ruby = RUBY_VERSION
     @rake_task = :default
     @environment_variables = {}
+    @after_build = []
   end
 
   def environment_string
     @environment_variables.each_pair.map { |k, v| "#{k}=#{v}" }.join(" ")
+  end
+
+  def after_build(*args)
+    @after_build = args unless args.empty?
+    @after_build
   end
 end
