@@ -11,6 +11,8 @@
   %div= "Revision: #{@build.revision.slice(0, 6)}"
 %div
   = format_timestamp(@build.timestamp)
+- if @build.environment_string != ""
+  %div= "Environment Variables: #{@build.environment_string}"
 %pre= @build.change_list
 %pre= @build.build_log
 - unless @build.artefacts.empty?
