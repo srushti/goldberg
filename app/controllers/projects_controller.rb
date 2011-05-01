@@ -13,4 +13,10 @@ class ProjectsController < ApplicationController
       render :text => 'Unknown project', :status => :not_found
     end
   end
+
+  def index
+    respond_to do |format|
+      format.json { render :json => Project.all.to_json(:except => [:created_at, :modified_at], :methods => [:activity, :last_complete_build_status]) }
+    end
+  end
 end

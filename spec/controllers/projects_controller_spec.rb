@@ -23,5 +23,17 @@ describe ProjectsController do
       response.should be_not_found
     end
   end
+
+  it "gives a json representation of all projects" do
+    project = Factory(:project, :name => 'project1')
+    Factory(:build, :status => 'passed', :project => project)
+    get :index, :format => 'json'
+    response.should be_ok
+    builds_hash = JSON.parse(response.body)
+    builds_hash[0]['project']['name'].should == 'project1'
+    builds_hash[0]['project']['activity'].should == 'Sleeping'
+    builds_hash[0]['project']['last_complete_build_status'].should == 'passed'
+    puts builds_hash[0]
+  end
 end
 
