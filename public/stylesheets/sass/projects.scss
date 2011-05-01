@@ -1,3 +1,7 @@
+$light-red: #f0cccc;
+$light-green: #ccf0cc;
+$light-yellow: #f0f096;
+
 h2.project {
   em.project_ruby {
     font-size: 12px;
@@ -27,58 +31,46 @@ h2.project {
   }
 }
 
-li.build a {
-  color: black;
-}
-
-li.build.passed {
-  background-color: #ccf0cc;
-}
-
-li.build.passed:hover {
-  background-color: #96ff96;
-}
-
-.latest-build.passed {
-  strong, h2 { color: green; }
-  .project_heading { background-color: #ccf0cc; }
-}
-
-li.build.failed {
-  background-color: #f0cccc;
-}
-
-li.build.failed:hover {
-  background-color: #ff9696;
-}
-
-.latest-build.failed {
-  strong, h2 { color: red; }
-  .project_heading { background-color: #f0cccc; }
-}
-
-li.build.building {
-  background-color: #f0f086;
-}
-
-li.build.building:hover {
-  background-color: #f0f064;
-}
-
-.latest-build.building {
-  strong, h2 { color: yellow; }
-  .project_heading { background-color: #f0f096; }
-}
-
 li.build {
   .name { width: 75px; }
   .revision { width: 50px; }
   .timestamp { width: 139px; }
   .build-pointer { width: 5px; }
+  a { color: black }
+
+  &.passed {
+    background-color: $light-green;
+    &:hover  { background-color: #96ff96; }
+  }
+
+  &.failed {
+    background-color: $light-red;
+    &:hover  { background-color: #ff9696; }
+  }
+
+  &.building {
+    background-color: $light-yellow;
+    &:hover  { background-color: #f0f064; }
+  }
 }
 
 .latest-build {
   margin-left: 314px;
+
+  &.passed {
+    strong, h2 { color: green; }
+    .project_heading { background-color: $light-green; }
+  }
+
+  &.failed {
+    strong, h2 { color: red; }
+    .project_heading { background-color: $light-red; }
+  }
+
+  &.building {
+    strong, h2 { color: yellow; }
+    .project_heading { background-color: $light-yellow; }
+  }
 }
 
 .past-builds {
@@ -94,4 +86,3 @@ li.build {
     }
   }
 }
-
