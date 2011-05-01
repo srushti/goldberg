@@ -6,6 +6,23 @@ h2.project em.project_ruby {
     position: relative;
     border-radius: 15px;
     box-shadow: 5px 5px 5px #ccc;
+    min-width: 480px;
+}
+
+.project_heading .project {
+    padding-left: 10px;
+}
+
+h2.project .project_status {
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+.project_heading .force_build {
+    position: absolute;
+    padding-right: 10px;
+    top: 8px;
+    right: 0;
 }
 
 li.build a {
