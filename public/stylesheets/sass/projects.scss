@@ -1,0 +1,97 @@
+h2.project {
+  em.project_ruby {
+    font-size: 12px;
+  }
+
+  .project_status {
+    padding-left: 10px;
+    font-size: 14px;
+  }
+}
+
+.project_heading {
+  position: relative;
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px #ccc;
+  min-width: 480px;
+
+  .project {
+    padding-left: 10px;
+  }
+
+  .force_build {
+    position: absolute;
+    padding-right: 10px;
+    top: 8px;
+    right: 0;
+  }
+}
+
+li.build a {
+  color: black;
+}
+
+li.build.passed {
+  background-color: #ccf0cc;
+}
+
+li.build.passed:hover {
+  background-color: #96ff96;
+}
+
+.latest-build.passed {
+  strong, h2 { color: green; }
+  .project_heading { background-color: #ccf0cc; }
+}
+
+li.build.failed {
+  background-color: #f0cccc;
+}
+
+li.build.failed:hover {
+  background-color: #ff9696;
+}
+
+.latest-build.failed {
+  strong, h2 { color: red; }
+  .project_heading { background-color: #f0cccc; }
+}
+
+li.build.building {
+  background-color: #f0f086;
+}
+
+li.build.building:hover {
+  background-color: #f0f064;
+}
+
+.latest-build.building {
+  strong, h2 { color: yellow; }
+  .project_heading { background-color: #f0f096; }
+}
+
+li.build {
+  .name { width: 75px; }
+  .revision { width: 50px; }
+  .timestamp { width: 139px; }
+  .build-pointer { width: 5px; }
+}
+
+.latest-build {
+  margin-left: 314px;
+}
+
+.past-builds {
+  float: left;
+
+  ul {
+    display: table;
+
+    li.build { 
+      display: table-row;
+
+      a, span { display: table-cell; }
+    }
+  }
+}
+

@@ -1,0 +1,41 @@
+#all_projects {
+  tr.headings td { font-weight: bold; }
+
+  /* Red/Green for pass/fail */
+  tr.project_row.passed td {
+    background-color: #ccf0cc;
+  }
+
+  tr.project_row.failed td {
+    background-color: #f0cccc;
+  }
+
+  tr.project_row.building td {
+    background-color: yellow
+  }
+
+  tr.project_row {
+    td.status_icon {
+      width: 5%;
+      background-color: white;
+    }
+
+    td {
+      width: 40%;
+      border-top: white solid 1em;
+      background-color: white;
+    }
+
+    td.last_built_at {
+      width: 27%;
+    }
+
+    td.number_of_tests {
+      width: 20%;
+    }
+
+    em.project_ruby {
+      font-size: 10px;
+    }
+  }
+}
