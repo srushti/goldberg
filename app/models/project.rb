@@ -63,9 +63,14 @@ class Project < ActiveRecord::Base
                                               :environment_string => environment_string).run
       self.build_requested = false
       Rails.logger.info "Build #{ build_successful ? "passed" : "failed!" }"
+      after_build_runner.execute(latest_build, self)
     end
     self.next_build_at = Time.now + frequency.seconds
     self.save
+  end
+
+  def after_build_runner
+    HookRunner.new config.after_build
   end
 
   def force_build
