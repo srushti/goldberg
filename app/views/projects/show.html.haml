@@ -14,10 +14,11 @@
         %span.build-pointer= build == @project.latest_build ? '=>' : ''
 .latest-build{:class => project_status(@project)}
   %p
-    %h2.project
-      = @project.name
-      %em.project_ruby (#{@project.ruby})
-    %strong= "#{project_status(@project)}"
-    %form{:method => 'post', :action => "/projects/#{@project.name}/force"}
-      %input{:type => 'submit', :value => 'force build'}
+    %div.project_heading
+      %h2.project
+        = @project.name
+        %em.project_ruby (#{@project.ruby})
+      %strong.project_status= "#{project_status(@project)}"
+      %form.force_build{:method => 'post', :action => "/projects/#{@project.name}/force"}
+        %input{:type => 'submit', :value => 'force build'}
     %pre= @project.latest_build_build_log

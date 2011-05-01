@@ -2,6 +2,12 @@ h2.project em.project_ruby {
     font-size: 12px;
 }
 
+.project_heading {
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px #ccc;
+}
+
 li.build a {
     color: black;
 }
@@ -18,6 +24,11 @@ li.build.passed:hover {
     color: green;
 }
 
+.latest-build.passed .project_heading {
+    background-color: #ccf0cc;
+}
+
+
 li.build.failed {
     background-color: #f0cccc;
 }
@@ -30,6 +41,11 @@ li.build.failed:hover {
     color: red;
 }
 
+.latest-build.failed .project_heading {
+    background-color: #f0cccc;
+}
+
+
 li.build.building {
     background-color: #f0f086;
 }
@@ -41,6 +57,11 @@ li.build.building:hover {
 .latest-build.building strong, .latest-build.building h2 {
     color: yellow;
 }
+
+.latest-build.building .project_heading {
+    background-color: #f0f096;
+}
+
 
 li.build .name {
     width: 75px;
