@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
 
   validates_presence_of :branch, :name, :url
 
-  delegate :frequency, :ruby, :to => :config
+  delegate :frequency, :ruby, :environment_string, :to => :config
 
   def self.add(options)
     Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch]).tap do |project|
@@ -59,7 +59,8 @@ class Project < ActiveRecord::Base
   def run_build
     if self.repository.update || build_required?
       prepare_for_build
-      build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby).run
+      build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby,
+                                              :environment_string => environment_string).run
       self.build_requested = false
       Rails.logger.info "Build #{ build_successful ? "passed" : "failed!" }"
     end

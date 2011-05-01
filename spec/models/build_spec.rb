@@ -133,6 +133,18 @@ describe Build do
     end
   end
 
+  context "run with environment variables" do
+    let(:project) { Factory.build(:project) }
+    let(:build) { Factory.create(:build, :number => 1, :project => project, :environment_string => "FOO=bar") }
+
+    it "should pass the environment variables to the system command" do
+      build.stub(:before_build)
+      RVM.stub(:prepare_ruby)
+      Environment.should_receive(:system).with(/FOO=bar rake default/).and_return(true)
+      build.run.should be_true
+    end
+  end
+
   context "before build" do
     it "sets build status to 'building' and persist the change list" do
       build = Factory.build(:build)
