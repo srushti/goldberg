@@ -18,7 +18,7 @@
       %h2.project
         = @project.name
         %em.project_ruby (#{@project.ruby})
-      %strong.project_status= "#{project_status(@project)}"
+        %strong.project_status= "#{project_status(@project)}"
       %form.force_build{:method => 'post', :action => "/projects/#{@project.name}/force"}
         %input{:type => 'submit', :value => 'force build'}
     %pre= @project.latest_build_build_log
