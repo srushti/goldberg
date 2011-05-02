@@ -112,6 +112,7 @@ describe Build do
       build.stub!(:artefacts_path).and_return('artefacts path')
       Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
+      Env.should_receive(:[]=).with('RAILS_ENV', nil)
       Environment.stub(:system)
       build.run
     end
