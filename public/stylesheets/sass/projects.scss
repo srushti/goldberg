@@ -64,17 +64,14 @@ li.build {
   margin-left: 314px;
 
   &.passed {
-    strong, h2 { color: green; }
     .project_heading { background-color: $light-green; }
   }
 
   &.failed {
-    strong, h2 { color: red; }
     .project_heading { background-color: $light-red; }
   }
 
   &.building {
-    strong, h2 { color: yellow; }
     .project_heading { background-color: $light-yellow; }
   }
 }
