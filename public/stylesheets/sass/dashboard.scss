@@ -1,19 +1,6 @@
 #all_projects {
   tr.headings td { font-weight: bold; }
 
-  /* Red/Green for pass/fail */
-  tr.project_row.passed td {
-    background-color: #ccf0cc;
-  }
-
-  tr.project_row.failed td {
-    background-color: #f0cccc;
-  }
-
-  tr.project_row.building td {
-    background-color: yellow
-  }
-
   tr.project_row {
     td.status_icon {
       width: 5%;
@@ -36,6 +23,19 @@
 
     em.project_ruby {
       font-size: 10px;
+    }
+
+    /* Red/Green for pass/fail */
+    &.passed td {
+      background-color: #ccf0cc;
+    }
+
+    &.failed td {
+      background-color: #f0cccc;
+    }
+
+    &.building td {
+      background-color: yellow
     }
   }
 }

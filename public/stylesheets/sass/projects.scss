@@ -1,6 +1,7 @@
 $light-red: #f0cccc;
 $light-green: #ccf0cc;
 $light-yellow: #f0f096;
+$light-grey: #cccccc;
 
 h2.project {
   em.project_ruby {
@@ -51,6 +52,11 @@ li.build {
   &.building {
     background-color: $light-yellow;
     &:hover  { background-color: #f0f064; }
+  }
+
+  &.cancelled {
+    background-color: $light-grey;
+    &:hover  { background-color: #aaaaaa; }
   }
 }
 

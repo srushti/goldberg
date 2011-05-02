@@ -57,6 +57,7 @@ class Project < ActiveRecord::Base
   end
 
   def run_build
+    clean_up_older_builds
     if self.repository.update || build_required?
       prepare_for_build
       build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby,
@@ -67,6 +68,10 @@ class Project < ActiveRecord::Base
     end
     self.next_build_at = Time.now + frequency.seconds
     self.save
+  end
+
+  def clean_up_older_builds
+    builds.where(:status => 'building').each{|b| b.update_attributes(:status => 'cancelled')}
   end
 
   def after_build_runner

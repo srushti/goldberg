@@ -127,6 +127,9 @@ describe Project do
   context "run build" do
     let(:project) { Factory(:project, :name => "goldberg") }
 
+    before(:each) do
+      File.stub!(:exist?).with(File.expand_path('Gemfile', project.code_path)).and_return(false)
+    end
     # all tests in this context are testing mock calls Grrrhhhhh
 
     it "preprocesses the codebase before calling build" do
@@ -135,10 +138,7 @@ describe Project do
       build.should respond_to(:run)
       build.should_receive(:run)
 
-      project.should respond_to(:prepare_for_build)
-      project.should_receive(:prepare_for_build)
       project.repository.should_receive(:update).and_return(true)
-
       project.run_build
     end
 
@@ -217,7 +217,7 @@ describe Project do
       it "should execute the post_build hooks from the config" do
         hook = Object.new.tap { |h| h.should_receive(:execute).with(build, project) }
         config = ProjectConfig.new.tap{ |c| c.stub(:after_build).and_return(hook) }
-        
+
         project.stub(:config).and_return(config)
         project.builds.stub(:create!).and_return(build)
 
@@ -231,6 +231,17 @@ describe Project do
     first_build = Factory(:build, :project => project)
     last_build = Factory(:build, :project => project)
     project.latest_build.should == last_build
+  end
+
+  it "cleans up older 'building' builds" do
+    project = Factory(:project)
+    passed_build = Factory(:build, :project => project, :status => 'passed')
+    failed_build = Factory(:build, :project => project, :status => 'failed')
+    interrupted_build = Factory(:build, :project => project, :status => 'building')
+    project.clean_up_older_builds
+    interrupted_build.reload.status.should == 'cancelled'
+    passed_build.reload.status.should == 'passed'
+    failed_build.reload.status.should == 'failed'
   end
 
   describe "build preprocessing" do

@@ -4,7 +4,6 @@
 
   .headings span { font-weight: bold; }
 
-  /* Red/Green for pass/fail */
   .project-row.passed span {
     background-color: #ccf0cc;
   }
@@ -15,6 +14,10 @@
 
   .project-row.building span {
     background-color: #f0f086;
+  }
+
+  .project-row.cancelled span {
+    background-color: #cccccc;
   }
 
   /* Table Columns */
