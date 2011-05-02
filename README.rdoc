@@ -1,6 +1,7 @@
 = Goldberg 0.0.1
 
-(c) Copyright 2010-2011 {C42 Engineering}[http://c42.in]. All Rights Reserved. "!http://goldberg.c42.in/projects/goldberg.png!":http://goldberg.c42.in/projects/goldberg
+(c) Copyright 2010-2011 {C42 Engineering}[http://c42.in]. All Rights Reserved.
+{http://goldberg.c42.in/projects/goldberg.png}[http://goldberg.c42.in/projects/goldberg]
 
 A CI server. With pipelines!
 
