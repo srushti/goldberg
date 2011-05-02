@@ -53,7 +53,7 @@ class Build < ActiveRecord::Base
       go_to_project_path = "cd #{project.code_path}"
       build_command = "#{environment_string} #{project.build_command}"
       output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
-      Environment.system("(#{RVM.use_script(ruby, project.name)} ; #{go_to_project_path}; #{build_command}) #{output_redirects}").tap do |success|
+      Environment.system("(#{RVM.use_script(ruby, "goldberg-#{project.name}")} ; #{go_to_project_path}; #{build_command}) #{output_redirects}").tap do |success|
         self.status = success ? 'passed' : 'failed'
         save
       end
