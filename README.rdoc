@@ -30,6 +30,8 @@ Goldberg currently runs only on Linux/Mac OS X.
 
    ./bin/goldberg add <url> <name> [command] [--branch <branch_name>]
 
+By default it assumes the master branch. If you need anything else you can specify it while adding.
+
 === Starting Goldberg
 
    # Start the CI server and web front-end at port 3000.
