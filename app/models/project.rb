@@ -94,7 +94,7 @@ class Project < ActiveRecord::Base
   end
 
   def last_complete_build
-    builds.detect{|build| build.status != 'building'} || Build.nil
+    builds.detect{|build| !['building', 'cancelled'].include?(build.status)} || Build.nil
   end
 
   def repository

@@ -71,7 +71,8 @@ describe Project do
         project = Factory(:project)
         Factory(:build, :project => project, :number => 4, :status => 'passed').update_attribute(:created_at, 2.days.ago)
         Factory(:build, :project => project, :number => 5, :status => 'building').update_attribute(:created_at, 1.day.ago)
-        project.last_complete_build_timestamp.to_s.should == 2.days.ago.to_s
+        Factory(:build, :project => project, :number => 5, :status => 'cancelled').update_attribute(:created_at, Date.today)
+        project.last_complete_build_status.to_s.should == 'passed'
       end
     end
   end
