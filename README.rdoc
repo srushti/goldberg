@@ -84,3 +84,4 @@ If you want the project to be checked for updates every 5 seconds, you will need
 * Niranjan Parajape ({achamian}[http://github.com/achamian])
 * Todd Sedano ({professor}[http://github.com/professor])
 * Drew Olson ({drewolson}[http://github.com/drewolson])
+* Aakash Dharmadhikari ({aakashd}[http://github.com/aakashd])
