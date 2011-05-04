@@ -19,7 +19,6 @@ Your project should have a Gemfile for [Bundler][].
 Goldberg currently runs only on Linux/Mac OS X.
 
 ### Installation
-
      
        # If you're on Ubuntu, you might need:
        sudo apt-get install sqlite3 libsqlite3-dev
@@ -27,61 +26,43 @@ Goldberg currently runs only on Linux/Mac OS X.
        git clone git://github.com/c42/goldberg.git
        bundle install
        rake db:migrate
+       ./bin/goldberg bootstrap
 
 ### Setting up a new repository
-
      
        ./bin/goldberg add <url> <name> [command] [--branch <branch_name>]
 
-By default it assumes the master branch. If you need anything else you
-can specify it while adding.
+By default it assumes the master branch. If you need anything else you can specify it while adding.
 
 ### Starting Goldberg
-
      
        # Start the CI server and web front-end at port 4242.
        bin/goldberg start [4242]
 
 ### Stopping Goldberg
-
      
        # Stop a running CI server
        bin/goldberg stop
 
 ### Tracking build status
 
-Goldberg generates feeds that work with all CruiseControl-compatible
-monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray
-(windows). The feed is located in the root and is named
-`XmlStatusReport.aspx`. eg: [goldberg.c42.in/XmlStatusReport.aspx][]
+Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `XmlStatusReport.aspx`. eg: [goldberg.c42.in/XmlStatusReport.aspx][]
 
 ### Configuration
 
-Goldberg will be checking out your code in \~/.goldberg. If you want to
-override this create an environment variable called GOLDBERG\_PATH.
+Goldberg will be checking out your code in \~/.goldberg. If you want to override this create an environment variable called GOLDBERG\_PATH.
 
-You can configure the poller by copying the `config/goldberg.yml.sample`
-to `config/goldberg.yml`.
+You can configure the poller by copying the `config/goldberg.yml.sample` to `config/goldberg.yml`.
 
 #### Force build
 
-By default, the poller is configured to poll every 10 seconds. Even if
-you click on “force build,” it actually just sets a flag in DB for
-poller to build the project irrespective of the updates. If you want to
-it to do a build immediately after clicking on “force build”, then
-change the frequency to 1 second.
+By default, the poller is configured to poll every 10 seconds. Even if you click on “force build,” it actually just sets a flag in DB for poller to build the project irrespective of the updates. If you want to it to do a build immediately after clicking on “force build”, then change the frequency to 1 second.
 
-PS: Changing the frequency of poller to 1 second will not cause git
-calls every one second, as the project controls the frequency at which
-it should be polled as explained below.
+PS: Changing the frequency of poller to 1 second will not cause git calls every one second, as the project controls the frequency at which it should be polled as explained below.
 
 #### Project based configuration
 
-Every project in goldberg can have its own custom configuration by means
-of adding (either on goldberg instance or by checking it in with the
-codebase) `goldberg_config.rb` at the root of your codebase. As of now
-only the following configurations can be overridden, but going further this configuration will
-be used to configure even more.
+Every project in goldberg can have its own custom configuration by means of adding (either on goldberg instance or by checking it in with the codebase) `goldberg_config.rb` at the root of your codebase. As of now only the following configurations can be overridden, but going further this configuration will be used to configure even more.
      
       #Goldberg configuration
       Project.configure do |config|
@@ -91,12 +72,9 @@ be used to configure even more.
         config.after_build Proc.new { |build, project| `touch ~/Desktop/actually_built`}
       end
 
-If you want the project to be checked for updates every 5 seconds, you
-will need to change the poller frequency to less than 5 seconds using
-`goldberg.yml` as mentioned above.
+If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using `goldberg.yml` as mentioned above.
 
 ### Help
-
      
       # To get man page style help
       ./bin/goldberg help [command]
