@@ -74,6 +74,10 @@ li.build {
   &.building {
     .project_heading { background-color: $light-yellow; }
   }
+
+  &.cancelled {
+    .project_heading { background-color: $light-grey; }
+  }
 }
 
 .past-builds {
