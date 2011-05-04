@@ -4,12 +4,12 @@ module RVM
       File.exist?(File.join(Env['HOME'], '.rvm', 'scripts', 'rvm'))
     end
 
-    def goldberg_rvmrc_contents
-      "rvm_install_on_use_flag=1\nrvm_project_rvmrc=1\nrvm_gemset_create_on_use_flag=1\n"
+    def ci_rvmrc_contents
+      "rvm_install_on_use_flag=1\nrvm_project_rvmrc=0\nrvm_gemset_create_on_use_flag=1\n"
     end
 
-    def write_goldberg_rvmrc_contents
-      Environment.write_file(File.join(Env['HOME'], '.rvmrc'), goldberg_rvmrc_contents)
+    def write_ci_rvmrc_contents
+      Environment.write_file(File.join(Env['HOME'], '.rvmrc'), ci_rvmrc_contents)
     end
 
     def use_script(ruby, gemset)

@@ -86,20 +86,20 @@ describe Init do
       before(:each) do
         RVM.stub!(:installed?).and_return(true)
         Rails.logger.should_receive(:info).with("It looks like you have RVM installed. We will now add the following settings to your global .rvmrc located at #{Env['HOME']}.")
-        Rails.logger.should_receive(:info).with("#{RVM.goldberg_rvmrc_contents}\n(Y/n)")
+        Rails.logger.should_receive(:info).with("#{RVM.ci_rvmrc_contents}\n(Y/n)")
       end
 
       ["YeS\n", "Y\r"].each do |response|
         it "adds the required settings to .rvmrc if the user says #{response}" do
           Environment.stub!(:stdin).and_return(mock(:stdin, :gets => response))
-          RVM.should_receive(:write_goldberg_rvmrc_contents)
+          RVM.should_receive(:write_ci_rvmrc_contents)
           Init.new.bootstrap
         end
       end
 
       it "doesn't add the required settings to .rvmrc if the user says 'no'" do
         Environment.stub!(:stdin).and_return(mock(:stdin, :gets => 'no'))
-        RVM.should_not_receive(:write_goldberg_rvmrc_contents)
+        RVM.should_not_receive(:write_ci_rvmrc_contents)
         Rails.logger.should_receive(:info).with('Aborting')
         Init.new.bootstrap
       end

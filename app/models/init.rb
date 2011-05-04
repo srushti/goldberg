@@ -4,9 +4,9 @@ class Init
   def bootstrap
     if RVM.installed?
       Rails.logger.info "It looks like you have RVM installed. We will now add the following settings to your global .rvmrc located at #{Env['HOME']}."
-      Rails.logger.info "#{RVM.goldberg_rvmrc_contents}\n(Y/n)"
+      Rails.logger.info "#{RVM.ci_rvmrc_contents}\n(Y/n)"
       if ['yes', 'y'].include?(Environment.stdin.gets.chomp.downcase)
-        RVM.write_goldberg_rvmrc_contents
+        RVM.write_ci_rvmrc_contents
       else
         Rails.logger.info "Aborting"
       end
