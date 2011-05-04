@@ -31,8 +31,8 @@ describe Init do
     Init.new.list
   end
 
-  it "starts the app on port 3000 if no port specified" do
-    Environment.should_receive(:exec).with("rackup -p 3000 -D -P #{File.join(ENV["GOLDBERG_PATH"], "pids", "goldberg.pid")} #{File.join(Rails.root, 'app', 'models', '..', '..', 'config.ru')}")
+  it "starts the app on port 4242 if no port specified" do
+    Environment.should_receive(:exec).with("rackup -p 4242 -D -P #{File.join(ENV["GOLDBERG_PATH"], "pids", "goldberg.pid")} #{File.join(Rails.root, 'app', 'models', '..', '..', 'config.ru')}")
     Init.new.start
   end
 

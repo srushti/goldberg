@@ -39,8 +39,8 @@ can specify it while adding.
 ### Starting Goldberg
 
      
-       # Start the CI server and web front-end at port 3000.
-       bin/goldberg start [3000]
+       # Start the CI server and web front-end at port 4242.
+       bin/goldberg start [4242]
 
 ### Stopping Goldberg
 

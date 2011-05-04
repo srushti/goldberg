@@ -34,7 +34,7 @@ class Init
     Project.all.map(&:name).each { |name| Rails.logger.info name }
   end
 
-  def start(port = 3000)
+  def start(port = 4242)
     if !File.exist?(Paths.pid)
       Environment.exec "rackup -p #{port} -D -P #{Paths.pid} #{File.join(File.dirname(__FILE__), '..', '..', 'config.ru')}"
     else
