@@ -44,7 +44,7 @@ li.build {
     &:hover  { background-color: #96ff96; }
   }
 
-  &.failed {
+  &.failed, &.timeout {
     background-color: $light-red;
     &:hover  { background-color: #ff9696; }
   }
@@ -67,7 +67,7 @@ li.build {
     .project_heading { background-color: $light-green; }
   }
 
-  &.failed {
+  &.failed, &.timeout {
     .project_heading { background-color: $light-red; }
   }
 

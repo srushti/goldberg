@@ -1,6 +1,5 @@
 class ProjectConfig
-  KEYS = [:frequency, :ruby, :rake_task]
-  attr_accessor :frequency, :ruby, :rake_task, :environment_variables
+  attr_accessor :frequency, :ruby, :rake_task, :environment_variables, :timeout
 
   def initialize
     @frequency = 20
@@ -8,6 +7,7 @@ class ProjectConfig
     @rake_task = :default
     @environment_variables = {}
     @after_build = []
+    @timeout = 10.minutes
   end
 
   def environment_string

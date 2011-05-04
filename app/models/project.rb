@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
 
   validates_presence_of :branch, :name, :url
 
-  delegate :frequency, :ruby, :environment_string, :to => :config
+  delegate :frequency, :ruby, :environment_string, :timeout, :to => :config
 
   def self.add(options)
     Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch]).tap do |project|
@@ -60,10 +60,10 @@ class Project < ActiveRecord::Base
     clean_up_older_builds
     if self.repository.update || build_required?
       prepare_for_build
-      build_successful = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby,
-                                              :environment_string => environment_string).run
+      new_build = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby,
+                                              :environment_string => environment_string).tap(&:run)
       self.build_requested = false
-      Rails.logger.info "Build #{ build_successful ? "passed" : "failed!" }"
+      Rails.logger.info "Build #{ new_build.status }"
       after_build_runner.execute(latest_build, self)
     end
     self.next_build_at = Time.now + frequency.seconds
@@ -90,7 +90,7 @@ class Project < ActiveRecord::Base
   end
 
   def map_to_cctray_project_status
-    {'passed' => 'Success', 'failed' => 'Failure'}[last_complete_build.status] || 'Unknown'
+    {'passed' => 'Success', 'timeout' => 'Failure', 'failed' => 'Failure'}[last_complete_build.status] || 'Unknown'
   end
 
   def last_complete_build
@@ -125,6 +125,6 @@ class Project < ActiveRecord::Base
   end
 
   def activity
-    {'passed' => 'Sleeping', 'failed' => 'Sleeping', 'building' => 'Building'}[latest_build_status] || 'Unknown'
+    {'passed' => 'Sleeping', 'timeout' => 'Sleeping', 'failed' => 'Sleeping', 'building' => 'Building'}[latest_build_status] || 'Unknown'
   end
 end

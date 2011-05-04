@@ -70,6 +70,7 @@ Every project in goldberg can have its own custom configuration by means of addi
         config.ruby = '1.9.2' # Your server needs to have rvm installed for this setting to be considered
         config.environment_variables = {"FOO" => "bar"}
         config.after_build Proc.new { |build, project| `touch ~/Desktop/actually_built`}
+        config.timeout = 10.minutes
       end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using `goldberg.yml` as mentioned above.

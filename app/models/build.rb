@@ -54,11 +54,24 @@ class Build < ActiveRecord::Base
       go_to_project_path = "cd #{project.code_path}"
       build_command = "#{environment_string} #{project.build_command}"
       output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
-      Environment.system("(#{RVM.use_script(ruby, "goldberg-#{project.name}")} ; #{go_to_project_path}; #{build_command}) #{output_redirects}").tap do |success|
-        self.status = success ? 'passed' : 'failed'
-        save
-      end
+      execute_async("(#{RVM.use_script(ruby, "goldberg-#{project.name}")} ; #{go_to_project_path}; #{build_command}) #{output_redirects}")
     end
+  end
+
+  def execute_async(command)
+    start_time = DateTime.now
+    command = Command.new(command)
+    command.execute_async
+    while(DateTime.now < start_time + project.timeout && command.running?)
+      sleep(10)
+    end
+    if !(DateTime.now < start_time + project.timeout)
+      command.kill
+      self.status = 'timeout'
+    else
+      self.status = Command.success? ? 'passed' : 'failed'
+    end
+    save
   end
 
   def before_build

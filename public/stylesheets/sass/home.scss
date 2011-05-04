@@ -8,7 +8,7 @@
     background-color: #ccf0cc;
   }
 
-  .project-row.failed span {
+  .project-row.failed span, .project-row.timeout span {
     background-color: #f0cccc;
   }
 

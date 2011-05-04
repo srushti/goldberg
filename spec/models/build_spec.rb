@@ -101,11 +101,6 @@ describe Build do
       build.run
     end
 
-    it "resets the bundler environment before executing command to build the project" do
-      Environment.stub(:system)
-      build.run
-    end
-
     it "resets the appropriate environment variables before executing the command to build the project" do
       Env.should_receive(:[]=).with('BUNDLE_GEMFILE', nil)
       Env.should_receive(:[]=).with('RUBYOPT', nil)
@@ -113,23 +108,25 @@ describe Build do
       Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('RAILS_ENV', nil)
-      Environment.stub(:system)
+      Environment.should_receive(:system)
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
+      Command.stub!(:success?)
       build.run
     end
 
     it "runs the build command and update the build status" do
       Environment.should_receive(:system)
-      Environment.should_receive(:system).and_return(true)
-      build.run.should be_true
-      build.reload
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
+      Command.stub!(:success?).and_return(true)
+      build.run
       build.status.should == "passed"
     end
 
     it "sets build status to failed if the build command fails" do
       Environment.should_receive(:system)
-      Environment.should_receive(:system).and_return(false)
-      build.run.should be_false
-      build.reload
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
+      Command.stub!(:success?).and_return(false)
+      build.run
       build.status.should == "failed"
     end
   end
@@ -141,7 +138,8 @@ describe Build do
     it "should pass the environment variables to the system command" do
       build.stub(:before_build)
       RVM.stub(:prepare_ruby)
-      Environment.should_receive(:system).with(/FOO=bar rake default/).and_return(true)
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
+      Command.stub!(:success?).and_return(true)
       build.run.should be_true
     end
   end

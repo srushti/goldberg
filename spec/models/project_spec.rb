@@ -297,7 +297,7 @@ describe Project do
   describe "activity" do
     let(:project){Factory(:project)}
 
-    ['passed', 'failed'].each do |status|
+    ['passed', 'failed', 'timeout'].each do |status|
       it "is Sleeping if no build is currently happening and if the last build #{status}" do
         Factory(:build, :project => project, :status => status)
         project.activity.should == 'Sleeping'
@@ -318,7 +318,7 @@ describe Project do
   describe "cctray project status" do
     let(:project){Factory(:project)}
 
-    {'passed' => 'Success', 'failed' => 'Failure'}.each do |status, message|
+    {'passed' => 'Success', 'failed' => 'Failure', 'timeout' => 'Failure'}.each do |status, message|
       it "is '#{message}' when the last build '#{status}'" do
         Factory(:build, :project => project, :status => status)
         project.map_to_cctray_project_status.should == message

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe ProjectConfig do
-
   context "default value" do
     let(:config) { ProjectConfig.new }
 
@@ -20,7 +19,6 @@ describe ProjectConfig do
   end
 
   context "setting values" do
-    
     it "should be able to add environment variables" do
       c = Project.configure do |config|
         config.environment_variables.update("FOO" => "bar")
