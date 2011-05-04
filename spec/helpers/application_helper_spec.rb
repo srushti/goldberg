@@ -9,4 +9,8 @@ describe ApplicationHelper do
   it "formats timestamp" do
     helper.format_timestamp(2.days.ago).should == "<span class=\"timestamp\" title=\"#{2.days.ago.strftime('%a, %Y/%m/%d %I:%M%p %Z')}\">2 days ago</span>"
   end
+
+  it "formats a nil as an empty string timestamp" do
+    helper.format_timestamp(nil).should == ''
+  end
 end
