@@ -80,9 +80,8 @@ it should be polled as explained below.
 Every project in goldberg can have its own custom configuration by means
 of adding (either on goldberg instance or by checking it in with the
 codebase) `goldberg_config.rb` at the root of your codebase. As of now
-only frequency can be updated, but going further this configuration will
-be used to configure rubies, pipelines, pre/post build hooks etc.
-
+only the following configurations can be overridden, but going further this configuration will
+be used to configure even more.
      
       #Goldberg configuration
       Project.configure do |config|
