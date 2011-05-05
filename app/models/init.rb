@@ -63,6 +63,7 @@ class Init
   end
 
   def start_poller
+    Environment.trap('CHLD', 'IGNORE')
     while true
       poll
       Rails.logger.info "Sleeping for #{GlobalConfig.frequency} seconds."

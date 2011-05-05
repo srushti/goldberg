@@ -26,7 +26,7 @@ module Environment
       end
     end
 
-    [:sleep, :exec,].each do |method_name|
+    [:sleep, :exec, :trap].each do |method_name|
       define_method method_name do |*args|
         super(*args)
       end
