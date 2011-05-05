@@ -8,7 +8,7 @@ class Command
   end
 
   def execute_async
-    @pid = IO.popen(%{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"}).pid
+    @pid = Process.spawn(%{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"}).tap{|pid| Rails.logger.info("The pid of the build process is #{pid}")}
   end
 
   def running?
