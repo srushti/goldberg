@@ -46,7 +46,7 @@ By default it assumes the master branch. If you need anything else you can speci
 
 ### Tracking build status
 
-Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `XmlStatusReport.aspx`. eg: [goldberg.c42.in/XmlStatusReport.aspx][]
+Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml` (for finicky monitors we also have cctray.xml & XmlStatusReport.aspx). eg: [goldberg.c42.in/cc.xml][]
 
 ### Configuration
 
