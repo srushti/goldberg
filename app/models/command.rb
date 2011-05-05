@@ -7,8 +7,8 @@ class Command
     Environment.system(cmd)
   end
 
-  def execute_async(total_time)
-    @pid = IO.popen(%{/usr/bin/env bash -c "#{command.gsub(/"/, '\"')}"}).pid
+  def execute_async
+    @pid = IO.popen(%{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"}).pid
   end
 
   def running?
