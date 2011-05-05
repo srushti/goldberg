@@ -1,4 +1,4 @@
-class HookRunner
+class BuildPostProcessor
   def initialize(hooks)
     @hooks = hooks
   end
