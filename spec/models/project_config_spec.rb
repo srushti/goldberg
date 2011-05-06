@@ -63,5 +63,16 @@ describe ProjectConfig do
       configuration.red_to_green_callbacks.each(&:call)
       some_variable.should == 'assigned'
     end
+
+    it "should be able to register success callbacks" do
+      some_variable = nil
+      configuration = Project.configure do |config|
+        config.on_build_success do
+          some_variable = 'assigned'
+        end
+      end
+      configuration.build_success_callbacks.each(&:call)
+      some_variable.should == 'assigned'
+    end
   end
 end
