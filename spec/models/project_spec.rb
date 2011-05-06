@@ -216,7 +216,7 @@ describe Project do
       end
 
       it "should execute the post_build hooks from the config" do
-        callbacks = Object.new.tap { |h| h.should_receive(:call).with(build, project) }
+        callbacks = Object.new.tap { |h| h.should_receive(:call).with(build) }
         config = ProjectConfig.new.tap{ |c| c.stub(:build_completion_callbacks).and_return([callbacks]) }
 
         project.stub(:config).and_return(config)
