@@ -59,19 +59,20 @@ class Project < ActiveRecord::Base
   def run_build
     clean_up_older_builds
     if self.repository.update || build_required?
+      previous_build_status = last_complete_build_status
       prepare_for_build
       new_build = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby,
-                                              :environment_string => environment_string).tap(&:run)
+                                      :environment_string => environment_string).tap(&:run)
       self.build_requested = false
       Rails.logger.info "Build #{ new_build.status }"
-      after_build_runner.execute(latest_build, self)
+      after_build_runner.execute(latest_build, self, previous_build_status)
     end
     self.next_build_at = Time.now + frequency.seconds
     self.save
   end
 
   def clean_up_older_builds
-    builds.where(:status => 'building').each{|b| b.update_attributes(:status => 'cancelled')}
+    builds.where(:status => 'building').each { |b| b.update_attributes(:status => 'cancelled') }
   end
 
   def after_build_runner
@@ -94,7 +95,7 @@ class Project < ActiveRecord::Base
   end
 
   def last_complete_build
-    builds.detect{|build| !['building', 'cancelled'].include?(build.status)} || Build.nil
+    builds.detect { |build| !['building', 'cancelled'].include?(build.status) } || Build.nil
   end
 
   def repository
@@ -106,8 +107,8 @@ class Project < ActiveRecord::Base
   end
 
   def config
-    if File.exists?(File.expand_path('goldberg_config.rb',self.code_path))
-      config_code = File.read(File.expand_path('goldberg_config.rb',self.code_path))
+    if File.exists?(File.expand_path('goldberg_config.rb', self.code_path))
+      config_code = File.read(File.expand_path('goldberg_config.rb', self.code_path))
       eval(config_code)
     else
       ProjectConfig.new
