@@ -24,7 +24,7 @@ class BuildsController < ApplicationController
       elsif Environment.exist?(@path)
         extension = File.extname(@path)
         mime_type = Mime::Type.lookup_by_extension(extension[1, extension.size])
-        send_file @path, :disposition => 'inline', :content_type => mime_type
+        send_file @path, :disposition => 'inline', :content_type => mime_type || 'application/octet-stream'
       else
         render :text => 'Unknown file', :status => :not_found
       end
