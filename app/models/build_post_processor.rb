@@ -1,6 +1,6 @@
 class BuildPostProcessor
-  def initialize(callbacks)
-    @callbacks = callbacks
+  def initialize(configuration)
+    @callbacks = configuration.build_completion_callbacks
   end
 
   def execute(build, project)
@@ -9,8 +9,6 @@ class BuildPostProcessor
 
   private
   def execute_hook(callbacks, build, project)
-    callbacks.execute(build, project) if callbacks.respond_to? :execute
-    callbacks.call(build, project) if callbacks.is_a? Proc
-    callbacks.each { |h| execute_hook(h, build, project) } if callbacks.is_a? Enumerable
+    callbacks.each { |h| h.call(build, project) }
   end
 end

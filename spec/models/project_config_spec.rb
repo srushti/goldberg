@@ -13,8 +13,10 @@ describe ProjectConfig do
       config.environment_string.should == ""
     end
 
-    it "should have no after_build hook set" do
-      config.after_build.should == []
+    it "should have no callbacks set" do
+      config.build_completion_callbacks.should == []
+      config.build_failure_callbacks.should == []
+      config.red_to_green_callbacks.should == []
     end
   end
 
@@ -26,13 +28,40 @@ describe ProjectConfig do
       c.environment_variables.should == { "FOO" => "bar" }
       c.environment_string.should == "FOO=bar"
     end
+  end
 
-    it "should be able to store after_build commands" do
-      foo = mock
-      c = Project.configure do |config|
-        config.after_build foo
+  context "callbacks" do
+    it "should be able to register build completion callbacks" do
+      some_variable = nil
+      configuration = Project.configure do |config|
+        config.on_build_completion do
+          some_variable = 'assigned'
+        end
       end
-      c.after_build.should == [foo]
+      configuration.build_completion_callbacks.each(&:call)
+      some_variable.should == 'assigned'
+    end
+
+    it "should be able to register build failure callbacks" do
+      some_variable = nil
+      configuration = Project.configure do |config|
+        config.on_build_failure do
+          some_variable = 'assigned'
+        end
+      end
+      configuration.build_failure_callbacks.each(&:call)
+      some_variable.should == 'assigned'
+    end
+
+    it "should be able to register red build passed callbacks" do
+      some_variable = nil
+      configuration = Project.configure do |config|
+        config.on_red_to_green do
+          some_variable = 'assigned'
+        end
+      end
+      configuration.red_to_green_callbacks.each(&:call)
+      some_variable.should == 'assigned'
     end
   end
 end

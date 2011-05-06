@@ -75,7 +75,7 @@ class Project < ActiveRecord::Base
   end
 
   def after_build_runner
-    BuildPostProcessor.new config.after_build
+    BuildPostProcessor.new(config)
   end
 
   def force_build
