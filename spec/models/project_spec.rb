@@ -216,10 +216,19 @@ describe Project do
       end
 
       it "should execute the post_build hooks from the config" do
-        callbacks = Object.new.tap { |h| h.should_receive(:call).with(build) }
-        config = ProjectConfig.new.tap{ |c| c.stub(:build_completion_callbacks).and_return([callbacks]) }
+        callback_tester = mock
+        mail_notification = mock
 
-        project.stub(:config).and_return(config)
+        BuildMailNotification.stub!(:new).and_return(mail_notification)
+        configuration = Project.configure do |config|
+          config.on_build_completion do |build,notification|
+            callback_tester.test_call(build,notification)
+          end
+        end
+
+        callback_tester.should_receive(:test_call).with(build,mail_notification)
+
+        project.stub(:config).and_return(configuration)
         project.builds.stub(:create!).and_return(build)
 
         project.run_build
