@@ -1,9 +1,9 @@
 %html
   %head
     %title Goldberg
-    = javascript_include_tag '/js/jquery-1.5.min.js'
-    = stylesheet_link_tag '/stylesheets/reset.css'
-    = stylesheet_link_tag '/stylesheets/layout.css'
+    = javascript_include_tag 'jquery-1.5.min'
+    = stylesheet_link_tag 'reset'
+    = stylesheet_link_tag 'layout'
     - keep_refreshing = false if Rails.env == 'development'
     - if defined?(keep_refreshing) && keep_refreshing
       :javascript

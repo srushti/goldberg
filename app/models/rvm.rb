@@ -5,7 +5,9 @@ module RVM
     end
 
     def ci_rvmrc_contents
-      "rvm_install_on_use_flag=1\nrvm_project_rvmrc=0\nrvm_gemset_create_on_use_flag=1\n"
+      "rvm_install_on_use_flag=1\n" +  #so that new rubies are added as and when they are needed
+      "rvm_project_rvmrc=0\n" +       #we need to ignore the checked in .rvmrc, since they give a warning which we can't respond to in an automated way
+      "rvm_gemset_create_on_use_flag=1\n"  #similar to the first setting, but it helps us create gemsets easily
     end
 
     def write_ci_rvmrc_contents
