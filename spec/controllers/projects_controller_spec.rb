@@ -33,7 +33,6 @@ describe ProjectsController do
     builds_hash[0]['project']['name'].should == 'project1'
     builds_hash[0]['project']['activity'].should == 'Sleeping'
     builds_hash[0]['project']['last_complete_build_status'].should == 'passed'
-    puts builds_hash[0]
   end
 end
 

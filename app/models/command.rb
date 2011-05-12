@@ -12,14 +12,11 @@ class Command
   end
 
   def running?
-    Process.getpriority(Process::PRIO_PROCESS, @pid)
-    true
-  rescue
-    false
+    Process.waitpid(@pid, Process::WNOHANG).nil?
   end
 
   def kill
-    Process.kill(0, @pid)
+    Process.kill('KILL', @pid)
   end
 
   def self.success?
