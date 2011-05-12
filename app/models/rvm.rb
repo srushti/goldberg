@@ -26,5 +26,10 @@ module RVM
       return unless installed?
       Environment.system("#{use_script(ruby, 'global')} && (gem list | grep bundler) || gem install bundler")
     end
+
+    def trust_rvmrc(project_root)
+      return unless installed?
+      Environment.system("rvm rvmrc trust #{project_root}")
+    end
   end
 end

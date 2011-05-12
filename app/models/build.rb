@@ -51,6 +51,7 @@ class Build < ActiveRecord::Base
       Env['RAILS_ENV'] = nil
       Env['BUILD_ARTIFACTS'] = Env['BUILD_ARTEFACTS'] = artefacts_path
       RVM.prepare_ruby(ruby)
+      RVM.trust_rvmrc(project.code_path)
       go_to_project_path = "cd #{project.code_path}"
       build_command = "#{environment_string} #{project.build_command}"
       output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"

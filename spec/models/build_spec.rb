@@ -108,14 +108,14 @@ describe Build do
       Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('RAILS_ENV', nil)
-      Environment.should_receive(:system)
+      Environment.stub!(:system)
       Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
       Command.stub!(:success?)
       build.run
     end
 
     it "runs the build command and update the build status" do
-      Environment.should_receive(:system)
+      Environment.stub!(:system)
       Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
       Command.stub!(:success?).and_return(true)
       build.run
@@ -123,7 +123,7 @@ describe Build do
     end
 
     it "sets build status to failed if the build command fails" do
-      Environment.should_receive(:system)
+      Environment.stub!(:system)
       Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
       Command.stub!(:success?).and_return(false)
       build.run
