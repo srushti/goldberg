@@ -31,7 +31,7 @@ Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on W
 
 ### Setting up a new repository
      
-       ./bin/goldberg add <url> <name> [command] [--branch <branch_name>]
+       ./bin/goldberg add <url> <name> [--branch <branch_name>]
 
 By default it assumes the <code>master</code> branch. If you want to build on any other branch, use the -b --branch flag to specify it. The default command is <code>rake</code>, but you can also use "rake db:migrate && rake spec" if you have a rails project to build.
 
@@ -72,6 +72,7 @@ Every project in goldberg can have its own custom configuration by means of addi
         config.environment_variables = {"FOO" => "bar"}
         config.after_build Proc.new { |build, project| `touch ~/Desktop/actually_built`}
         config.timeout = 10.minutes
+        config.command = 'make' #to be used if you're using anything other than rake
       end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using `goldberg.yml` as mentioned above.
