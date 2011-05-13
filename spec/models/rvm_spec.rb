@@ -1,9 +1,12 @@
 require "spec_helper"
 
 describe RVM do
+  before(:each) do
+    Env.stub!(:[]).with('HOME').and_return('home')
+  end
+
   context "installed?" do
     before(:each) do
-      Env.stub!(:[]).with('HOME').and_return('home')
       File.stub!(:exist?).with(File.join('home', '.rvm', 'scripts', 'rvm')).and_return(true)
     end
 
@@ -13,13 +16,23 @@ describe RVM do
     end
 
     it "prepares a gemset with bundler" do
-      Environment.should_receive(:system).with('source $HOME/.rvm/scripts/rvm $HOME/.rvm/scripts/rvm && rvm use project@global && (gem list | grep bundler) || gem install bundler')
+      Environment.should_receive(:system).with('source home/.rvm/scripts/rvm && rvm use project@global && (gem list | grep bundler) || gem install bundler')
       RVM.prepare_ruby('project')
     end
 
     it "marks the .rvmrc as trusted" do
       Environment.should_receive(:system).with('rvm rvmrc trust code_path')
       RVM.trust_rvmrc('code_path')
+    end
+
+    it "generates an 'rvm use' script" do
+      RVM.use_script('ruby', 'a_gemset').should == 'source home/.rvm/scripts/rvm && rvm use ruby@a_gemset'
+    end
+  end
+
+  context "not installed?" do
+    it "generates a nil 'rvm use' script" do
+      RVM.use_script('ruby', 'a_gemset').should be_nil
     end
   end
 end

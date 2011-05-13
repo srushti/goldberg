@@ -1,7 +1,11 @@
 module RVM
   class << self
+    def rvm_script_path
+      File.join(Env['HOME'], '.rvm', 'scripts', 'rvm')
+    end
+
     def installed?
-      File.exist?(File.join(Env['HOME'], '.rvm', 'scripts', 'rvm'))
+      File.exist?(rvm_script_path)
     end
 
     def ci_rvmrc_contents
@@ -15,11 +19,11 @@ module RVM
     end
 
     def use_script(ruby, gemset)
-      installed? ? "#{source_script} $HOME/.rvm/scripts/rvm && rvm use #{ruby}@#{gemset}" : ''
+      installed? ? "#{source_script} && rvm use #{ruby}@#{gemset}" : nil
     end
 
     def source_script
-      "source $HOME/.rvm/scripts/rvm"
+      "source #{rvm_script_path}"
     end
 
     def prepare_ruby(ruby)
