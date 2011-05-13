@@ -16,7 +16,6 @@ group :development, :test do
   gem 'ruby-debug', :platforms => [:ruby_18, :jruby]
   gem 'ruby-debug19', :platforms => :ruby_19
   gem 'ffi-ncurses', :platforms => :jruby
-  gem 'ruby-debug-ide', '=0.4.17.beta5'
   gem 'rspec-rails', '~> 2.5.0'
   gem 'spork', '~> 0.9.0.rc'
 end
