@@ -26,6 +26,6 @@ class Repository
   end
 
   def versioned?(file_path)
-    not Environment.system_call_output("cd #{@code_path} && git co #{file_path} 2>>/dev/null || echo 'not versioned'").include?('not versioned')
+    not Environment.system_call_output("cd #{@code_path} && git checkout #{file_path} 2>>/dev/null || echo 'not versioned'").include?('not versioned')
   end
 end
