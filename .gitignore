@@ -19,3 +19,4 @@ goldberg.ids
 .rvmrc
 coverage/*
 *.css
+config/goldberg.yml
