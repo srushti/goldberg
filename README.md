@@ -1,4 +1,4 @@
-# Goldberg 0.0.1
+# Goldberg 0.9.0
 
 © Copyright 2010–2011 [C42 Engineering][]. All Rights Reserved.
 [![Build Status](http://goldberg.c42.in/projects/goldberg.png)](http://goldberg.c42.in/projects/goldberg)
