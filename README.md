@@ -3,7 +3,9 @@
 © Copyright 2010–2011 [C42 Engineering][]. All Rights Reserved.
 [![Build Status](http://goldberg.c42.in/projects/goldberg.png)](http://goldberg.c42.in/projects/goldberg)
 
-A CI server. With pipelines!
+Goldberg is an alternative to {CruiseControl.rb}[https://github.com/thoughtworks/cruisecontrol.rb] that adheres to the same principles of being simple to use and easy to contribute to. It currently meets all common use cases of a lightweight CI server, and we plan to add more over time. A large majority of projects should be able to switch from CC.rb to Goldberg with little or no effort.
+
+Goldberg can be used to continuously integrate codebases built using any language, not just Ruby.
 
 Visit [goldberg.c42.in][] to see a live Goldberg server.
 
@@ -16,7 +18,7 @@ RVM if you want to be able to run projects on different rubies.
 
 Your project should have a Gemfile for [Bundler][].
 
-Goldberg currently runs only on Linux/Mac OS X.
+Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on Windows.
 
 ### Installation
      
