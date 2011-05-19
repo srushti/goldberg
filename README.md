@@ -3,7 +3,7 @@
 © Copyright 2010–2011 [C42 Engineering][]. All Rights Reserved.
 [![Build Status](http://goldberg.c42.in/projects/goldberg.png)](http://goldberg.c42.in/projects/goldberg)
 
-Goldberg is an alternative to {CruiseControl.rb}[https://github.com/thoughtworks/cruisecontrol.rb] that adheres to the same principles of being simple to use and easy to contribute to. It currently meets all common use cases of a lightweight CI server, and we plan to add more over time. A large majority of projects should be able to switch from CC.rb to Goldberg with little or no effort.
+Goldberg is an alternative to [CruiseControl.rb][] that adheres to the same principles of being simple to use and easy to contribute to. It currently meets all common use cases of a lightweight CI server, and we plan to add more over time. A large majority of projects should be able to switch from CC.rb to Goldberg with little or no effort.
 
 Goldberg can be used to continuously integrate codebases built using any language, not just Ruby.
 
@@ -94,6 +94,7 @@ If you want the project to be checked for updates every 5 seconds, you will need
 -   Aakash Dharmadhikari ([aakashd][])
 
   [C42 Engineering]: http://c42.in
+  [CruiseControl.rb]: https://github.com/thoughtworks/cruisecontrol.rb
   [goldberg.c42.in]: http://goldberg.c42.in
   [Bundler]: http://gembundler.com/
   [CCMenu (mac)]: http://ccmenu.sourceforge.net/
