@@ -14,10 +14,10 @@ describe BuildPostProcessor do
     let(:build) { OpenStruct.new(:status => 'passed') }
 
     it "executes build completion callbacks" do
-      configuration.on_build_completion do |build_param,notification|
-        callback_tester.test_call(build_param,notification)
+      configuration.on_build_completion do |build_param,notification,prev_build_status_param|
+        callback_tester.test_call(build_param,notification,prev_build_status_param)
       end
-      callback_tester.should_receive(:test_call).with(build,mail_notification)
+      callback_tester.should_receive(:test_call).with(build,mail_notification,previous_build_status)
       BuildPostProcessor.new(configuration).execute(build, previous_build_status)
     end
 
@@ -59,11 +59,11 @@ describe BuildPostProcessor do
   context "on failed build" do
     let(:failed_build) { OpenStruct.new(:status => 'failed') }
     it "executes build completion callbacks" do
-      configuration.on_build_completion do |build_param,notification|
-        callback_tester.test_call(build_param,notification)
+      configuration.on_build_completion do |build_param,notification,prev_build_status_param|
+        callback_tester.test_call(build_param,notification,prev_build_status_param)
       end
 
-      callback_tester.should_receive(:test_call).with(failed_build,mail_notification)
+      callback_tester.should_receive(:test_call).with(failed_build,mail_notification,previous_build_status)
       
       BuildPostProcessor.new(configuration).execute(failed_build, previous_build_status)
     end
