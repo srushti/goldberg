@@ -81,7 +81,7 @@ If you want the project to be checked for updates every 5 seconds, you will need
 
 Goldberg provides on_build_completion, on_build_failure, on_build_success & on_red_to_green callbacks, which can be used to extend Goldberg and add functionality that is not provided out of the box. All the callbacks have access to the build that was completed & an object of email notification, which can be used to configure the mails to be sent on these events. The on_build_completion callback has an extra parameter previous_build_status.
 
-The callbacks are part of goldberg_config.rb_
+The callbacks are part of goldberg_config.rb
 
 		#Goldberg callbacks
 		Project.configure do |config|
