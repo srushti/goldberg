@@ -16,7 +16,7 @@ describe ProjectConfig do
     it "should have no callbacks set" do
       config.build_completion_callbacks.should == []
       config.build_failure_callbacks.should == []
-      config.red_to_green_callbacks.should == []
+      config.build_fixed_callbacks.should == []
     end
   end
 
@@ -56,11 +56,11 @@ describe ProjectConfig do
     it "should be able to register red build passed callbacks" do
       some_variable = nil
       configuration = Project.configure do |config|
-        config.on_red_to_green do
+        config.on_build_fixed do
           some_variable = 'assigned'
         end
       end
-      configuration.red_to_green_callbacks.each(&:call)
+      configuration.build_fixed_callbacks.each(&:call)
       some_variable.should == 'assigned'
     end
 

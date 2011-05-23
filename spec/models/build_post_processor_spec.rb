@@ -39,7 +39,7 @@ describe BuildPostProcessor do
 
     it "executes red to green callback if previous build status was failed" do
       previous_build_status = 'failed'
-      configuration.on_red_to_green do |build_param,notification|
+      configuration.on_build_fixed do |build_param,notification|
         callback_tester.test_call(build_param,notification)
       end
       callback_tester.should_receive(:test_call).with(build,mail_notification)
@@ -48,7 +48,7 @@ describe BuildPostProcessor do
 
     it "does not executes red to green callback if previous build status was not failed" do
       previous_build_status = 'anything but failed'
-      configuration.on_red_to_green do |build_param,notification|
+      configuration.on_build_fixed do |build_param,notification|
         callback_tester.test_call(build_param,notification)
       end
       callback_tester.should_not_receive(:test_call).with(build,mail_notification)
@@ -64,7 +64,7 @@ describe BuildPostProcessor do
       end
 
       callback_tester.should_receive(:test_call).with(failed_build,mail_notification,previous_build_status)
-      
+
       BuildPostProcessor.new(configuration).execute(failed_build, previous_build_status)
     end
 

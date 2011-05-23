@@ -1,6 +1,6 @@
 class ProjectConfig
   attr_accessor :frequency, :ruby, :rake_task, :environment_variables, :timeout
-  attr_reader :build_completion_callbacks, :build_failure_callbacks, :red_to_green_callbacks, :build_success_callbacks
+  attr_reader :build_completion_callbacks, :build_failure_callbacks, :build_fixed_callbacks, :build_success_callbacks
 
   def initialize
     @frequency = 20
@@ -10,7 +10,7 @@ class ProjectConfig
     @build_completion_callbacks = []
     @build_failure_callbacks = []
     @build_success_callbacks = []
-    @red_to_green_callbacks = []
+    @build_fixed_callbacks = []
     @timeout = 10.minutes
   end
 
@@ -26,8 +26,8 @@ class ProjectConfig
     build_failure_callbacks << callback_block
   end
 
-  def on_red_to_green(&callback_block)
-    red_to_green_callbacks << callback_block
+  def on_build_fixed(&callback_block)
+    build_fixed_callbacks << callback_block
   end
 
   def on_build_success(&callback_block)
