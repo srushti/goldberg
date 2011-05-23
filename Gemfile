@@ -6,6 +6,7 @@ gem 'sqlite3', '~> 1.3.3', :platforms => :ruby
 gem 'haml', '~> 3.0.25'
 gem 'sass', '~> 3.1.1'
 gem 'commander', '~> 4.0.4'
+gem 'childprocess', '~> 0.1.9'
 
 platform :jruby do
   gem 'jdbc-sqlite3', '~> 3.6.0'

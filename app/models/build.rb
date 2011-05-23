@@ -71,7 +71,7 @@ class Build < ActiveRecord::Base
       command.kill
       self.status = 'timeout'
     else
-      self.status = Command.success? ? 'passed' : 'failed'
+      self.status = command.success? ? 'passed' : 'failed'
     end
     save
   end

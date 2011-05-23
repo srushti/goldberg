@@ -8,18 +8,20 @@ class Command
   end
 
   def execute_async
-    @pid = Process.spawn(%{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"}).tap{|pid| Rails.logger.info("The pid of the build process is #{pid}")}
+    @process = ChildProcess.build(%{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"})
+    Rails.logger.info("The pid of the build process is #{@process.pid}")
+    @process.start
   end
 
   def running?
-    Process.waitpid(@pid, Process::WNOHANG).nil?
+    @process.alive?
   end
 
   def kill
-    Process.kill('KILL', @pid)
+    @process.send_kill
   end
 
-  def self.success?
-    ($?).success?
+  def success?
+    @process.exit_code == 0
   end
 end

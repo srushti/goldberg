@@ -109,23 +109,20 @@ describe Build do
       Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('RAILS_ENV', nil)
       Environment.stub!(:system)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
-      Command.stub!(:success?)
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => nil))
       build.run
     end
 
     it "runs the build command and update the build status" do
       Environment.stub!(:system)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
-      Command.stub!(:success?).and_return(true)
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
       build.run
       build.status.should == "passed"
     end
 
     it "sets build status to failed if the build command fails" do
       Environment.stub!(:system)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
-      Command.stub!(:success?).and_return(false)
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => false))
       build.run
       build.status.should == "failed"
     end
@@ -138,8 +135,7 @@ describe Build do
     it "should pass the environment variables to the system command" do
       build.stub(:before_build)
       RVM.stub(:prepare_ruby)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil))
-      Command.stub!(:success?).and_return(true)
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
       build.run.should be_true
     end
   end
