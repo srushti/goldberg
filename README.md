@@ -28,7 +28,6 @@ Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on W
        git clone git://github.com/c42/goldberg.git
        bundle install
        rake db:migrate
-       ./bin/goldberg bootstrap
 
 ### Setting up a new repository
      
