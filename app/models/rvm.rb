@@ -10,7 +10,6 @@ module RVM
 
     def ci_rvmrc_contents
       "rvm_install_on_use_flag=1\n" +  #so that new rubies are added as and when they are needed
-      "rvm_project_rvmrc=0\n" +       #we need to ignore the checked in .rvmrc, since they give a warning which we can't respond to in an automated way
       "rvm_gemset_create_on_use_flag=1\n"  #similar to the first setting, but it helps us create gemsets easily
     end
 
@@ -19,7 +18,7 @@ module RVM
     end
 
     def use_script(ruby, gemset)
-      installed? ? "#{source_script} && rvm use #{ruby}@#{gemset}" : nil
+      installed? ? "#{source_script} && rvm use --create #{ruby}@#{gemset}" : nil
     end
 
     def source_script
