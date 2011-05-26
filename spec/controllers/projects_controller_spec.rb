@@ -34,5 +34,13 @@ describe ProjectsController do
     builds_hash[0]['project']['activity'].should == 'Sleeping'
     builds_hash[0]['project']['last_complete_build_status'].should == 'passed'
   end
-end
 
+  {'passed' => 'passed', 'failed' => 'failed', 'timeout' => 'failed', 'not available' => 'unknown'}.each do |status, filename|
+    it "loads the #{filename} badge when the status is #{status}" do
+      project = Factory(:project)
+      build = Factory(:build, :project => project, :status => status)
+      @controller.should_receive(:send_file).with(File.join(Rails.public_path, "images/badge/#{filename}.png"), anything)
+      get :show, :project_name => project.name, :format => 'png'
+    end
+  end
+end

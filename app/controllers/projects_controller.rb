@@ -4,8 +4,17 @@ class ProjectsController < ApplicationController
     render :text => 'Unknown project', :status => :not_found if @project.nil?
     respond_to do |format|
       format.html {}
-      format.png { send_file File.join(Rails.public_path, "images/#{@project.last_complete_build_status}.png"), :disposition => 'inline', :content_type => Mime::Type.lookup_by_extension('png') }
+      format.png do
+        filename = status_to_filename(@project.last_complete_build_status)
+        send_file File.join(Rails.public_path, "images/badge/#{filename}.png"), :disposition => 'inline', :content_type => Mime::Type.lookup_by_extension('png')
+      end
     end
+  end
+
+  def status_to_filename(status)
+    return 'failed' if status == 'timeout'
+    return status if ['passed', 'failed'].include?(status)
+    return 'unknown'
   end
 
   def force
