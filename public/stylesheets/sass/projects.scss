@@ -27,13 +27,13 @@ h2.project {
   .force_build {
     position: absolute;
     padding-right: 10px;
-    top: 8px;
+    top: 0;
     right: 0;
   }
 }
 
 li.build {
-  .name { width: 75px; }
+  .name { width: 85px; }
   .revision { width: 50px; }
   .timestamp { width: 139px; }
   .build-pointer { width: 5px; }
@@ -86,7 +86,7 @@ li.build {
   ul {
     display: table;
 
-    li.build { 
+    li.build {
       display: table-row;
 
       a, span { display: table-cell; }
