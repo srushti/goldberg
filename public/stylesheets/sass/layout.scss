@@ -68,10 +68,13 @@ div.page{
 
 /* Footer */
 div.footer {
-  width: inherit;
-  border-top: 1px #ddd solid;
-  text-align: right;
-  height: 60px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  padding: 10px;
+  background-color: #fff;
 
   div.logo {
     float: left;
@@ -84,10 +87,21 @@ div.footer {
 
   div.author {
     font-size: 1.3em;
+    background: transparent url('/images/c42-engineering-logo.png') no-repeat;
+    line-height: 40px;
+    height: 40px;
+    padding: 0 0 0 60px;
+    float: left;
   }
 
   div.message {
     padding-right: 2em;
+  }
+  
+  div.message .version{
+    float: right;
+    line-height: 40px;
+    height: 40px;
   }
 }
 
