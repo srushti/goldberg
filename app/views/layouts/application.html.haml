@@ -17,21 +17,18 @@
     .wrapper
       .container
         .header
-          .title
-            %h1
-              %a{:href => '/'} Goldberg
-            %h4 Lightweight Continuous Integration in Ruby
+          %h1
+            %a{:href => '/'} Goldberg
+          %h4 Lightweight Continuous Integration in Ruby
             
         .page
           = yield
       .push
     .footer
       .logo
-        %a{:href => 'http://c42.in'}
-          = image_tag '/images/c42-engineering-logo.png'
       .message
         .author
           %a{:href => 'http://c42.in'} C42 Engineering 
           Open Source
         .version
-        = "Version #{Version::STRING}"
+          = "Version #{Version::STRING}"

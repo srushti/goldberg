@@ -11,7 +11,7 @@
     - status = project_status(project)
     .project-row{:class => status}
       %span.status-icon
-        = project_status_image(status)
+        &nbsp;
       %span.project-name{:class => status}
         %a{:href => project_path(:project_name => project.name)}
           %strong= project.name
@@ -19,6 +19,5 @@
       %span.last-built-at
         - if project.latest_build_timestamp
           = format_timestamp(project.last_complete_build_timestamp)
-      %span.force
-        %form.force_build{:method => 'post', :action => "/projects/#{project.name}/force"}
-          %input{:type => 'submit', :value => 'force build'}
+      %form.force_build{:method => 'post', :action => "/projects/#{project.name}/force"}
+        %input{:type => 'submit', :value => 'force build'}
