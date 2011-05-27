@@ -3,7 +3,6 @@ html {
   min-height: 100%;
   width: 100%;
   background-color: #444;
-  background-image: url('/images/background.png');
   font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
@@ -36,7 +35,7 @@ div.header {
   padding-top: 2em;
   width: 1000px;
   margin: 0 auto;
-  
+
   h1, h4{
       margin-bottom: 0;
       font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
@@ -49,7 +48,7 @@ div.header {
     text-decoration: none;
     color: #fff;
   }
-  
+
   h4{
    font-weight: 300;
    color: #fff;
@@ -97,7 +96,7 @@ div.footer {
   div.message {
     padding-right: 2em;
   }
-  
+
   div.message .version{
     float: right;
     line-height: 40px;
