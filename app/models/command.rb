@@ -9,7 +9,6 @@ class Command
 
   def execute_async
     @process = ChildProcess.build(%{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"})
-    Rails.logger.info("The pid of the build process is #{@process.pid}")
     @process.start
   end
 
