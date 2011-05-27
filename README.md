@@ -33,7 +33,7 @@ Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on W
      
        ./bin/goldberg add <url> <name> [command] [--branch <branch_name>]
 
-By default it assumes the master branch. If you need anything else you can specify it while adding.
+By default it assumes the <code>master</code> branch. If you want to build on any other branch, use the -b --branch flag to specify it. The default command is <code>rake</code>, but you can also use "rake db:migrate && rake spec" if you have a rails project to build.
 
 ### Starting Goldberg
      
@@ -106,6 +106,12 @@ The callbacks are part of goldberg_config.rb
 		end
 		
 Assume you want to post a message on IRC channel & there is a gem that can be used to do so, you can simply require the gem at the start of the project_config.rb file & write the code to post message in any of the callbacks.
+
+### Setting up production instance
+
+We suggest that Goldberg should be used behind apache, ngin-x or any such web server with passenger, unicorn or mongrel. If you don't want such setup, you should use a process monitoring tool like God or Monit to manage the server processes & restart them if they happen to die.
+
+A sample god script file <code>config/god-script.rb</code> is available with Goldberg. Details for setting up God can be found at [http://god.rubyforge.org/]
 
 ### Help
      
