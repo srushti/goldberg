@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   delegate :frequency, :ruby, :environment_string, :timeout, :to => :config
 
   def self.add(options)
-    Project.new(:name => options[:name], :custom_command => options[:command], :url => options[:url], :branch => options[:branch]).tap do |project|
+    Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch]).tap do |project|
       project.checkout
       project.save!
     end
@@ -87,7 +87,7 @@ class Project < ActiveRecord::Base
 
   def build_command
     bundler_command = File.exists?(File.join(self.code_path, 'Gemfile')) ? "(#{Bundle.check_and_install}) && " : ""
-    bundler_command << (custom_command || "rake #{config.rake_task}")
+    bundler_command << (config.command || "rake #{config.rake_task}")
   end
 
   def map_to_cctray_project_status
@@ -108,7 +108,7 @@ class Project < ActiveRecord::Base
 
   def config
     if File.exists?(File.expand_path('goldberg_config.rb', self.code_path))
-      config_code = File.read(File.expand_path('goldberg_config.rb', self.code_path))
+      config_code = Environment.read_file(File.expand_path('goldberg_config.rb', self.code_path))
       eval(config_code)
     else
       ProjectConfig.new

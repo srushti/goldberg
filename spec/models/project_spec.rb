@@ -81,19 +81,22 @@ describe Project do
     it "does not prefix bundler related command if Gemfile is missing" do
       project = Factory(:project)
       File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(false)
-      File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
       project.build_command.should_not include(Bundle.check_and_install)
     end
 
     it "prefixes bundler related command if Gemfile is present" do
       project = Factory(:project)
       File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(true)
-      File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
       project.build_command.should include(Bundle.check_and_install)
     end
 
     it "is able to retrieve the custom command" do
       project = Factory(:project, :custom_command => 'cmake')
+      File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile'))
+      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+      Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.command = 'cmake' }")
       project.build_command.should == 'cmake'
     end
 
@@ -281,13 +284,13 @@ describe Project do
 
     it "loads a new configuration object with default values if goldberg_config.rb is not found" do
       File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
-      File.should_not_receive(:read).with(File.expand_path('goldberg_config.rb', project.code_path))
+      Environment.should_not_receive(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path))
       project.config.should_not be_nil
     end
 
     it "evals the goldberg_config.rb and returns the modified config as project config when file exists" do
       File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
-      File.should_receive(:read).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure{|c| c.frequency = 30 }")
+      Environment.should_receive(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure{|c| c.frequency = 30 }")
       project.config.frequency.should == 30
     end
   end
