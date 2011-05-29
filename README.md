@@ -129,6 +129,8 @@ A sample god script file <code>config/god-script.rb</code> is available with Gol
 -   Todd Sedano ([professor][])
 -   Drew Olson ([drewolson][])
 -   Aakash Dharmadhikari ([aakashd][])
+-   Rohit Arondekar ([rohit][])
+-   Arpan Chinta ([arpancj][])
 
   [C42 Engineering]: http://c42.in
   [CruiseControl.rb]: https://github.com/thoughtworks/cruisecontrol.rb
@@ -145,3 +147,5 @@ A sample god script file <code>config/god-script.rb</code> is available with Gol
   [professor]: http://github.com/professor
   [drewolson]: http://github.com/drewolson
   [aakashd]: http://github.com/aakashd
+  [rohit]: http://github.com/rohit
+  [arpancj]: http://github.com/arpancj
