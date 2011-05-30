@@ -1,5 +1,8 @@
+$dark-gray: #444;
 $light-red: #f0cccc;
 $light-green: #ccf0cc;
+$dark-green: #00b700;
+
 $light-yellow: #f0f096;
 $light-grey: #cccccc;
 
@@ -16,9 +19,15 @@ h2.project {
 
 .project_heading {
   position: relative;
-  border-radius: 15px;
-  box-shadow: 5px 5px 5px #ccc;
-  min-width: 480px;
+  border-top-right-radius: 8px;
+  line-height: 30px;
+  height: 30px;
+  padding: 0;
+  
+  h2 {
+   margin: 0; 
+   padding: 0;
+  }
 
   .project {
     padding-left: 10px;
@@ -26,10 +35,19 @@ h2.project {
 
   .force_build {
     position: absolute;
-    padding-right: 10px;
     top: 0;
     right: 0;
   }
+
+  form input{
+    display: block;
+    float: right;
+    height: 30px;
+    background-color: $dark-green;
+    color: #fff;
+    border: 0;
+    border-top-right-radius: 8px;}
+  
 }
 
 li.build {
@@ -61,7 +79,10 @@ li.build {
 }
 
 .latest-build {
-  margin-left: 314px;
+  float: right;
+  width: 690px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+
 
   &.passed {
     .project_heading { background-color: $light-green; }
@@ -78,18 +99,66 @@ li.build {
   &.cancelled {
     .project_heading { background-color: $light-grey; }
   }
+  
+  pre{
+    line-height: 12px;
+    float: right;
+  }
 }
 
 .past-builds {
   float: left;
+  width: 300px;
+  // box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  
+  h3{
+    margin: 0;
+    padding: 0 10px;
+    line-height: 30px;
+  }
 
   ul {
     display: table;
+    margin: 0;
+    width: 300px;
+    position: relative;
 
     li.build {
-      display: table-row;
+      text-align: right;
+      line-height: 30px;
+      height: 30px;
+      padding: 0 10px;
+      list-style-type: none;
+/*      a, span { display: table-cell}*/
+    }
 
-      a, span { display: table-cell; }
+    li.build.latest{
+      border-top-left-radius: 8px;
+      background: $dark-green;
+    }
+
+    li.build a{
+      color: $dark-gray;
+      font-weight: bold;
+      text-decoration: none;
+      float: left;
+    }
+    
+    li.build.latest a{
+      color: #fff;
+    }
+    
+    li.build.latest span.build-pointer{
+      width: 0;
+      height: 0;
+      border: solid 10px $dark-green;
+      border-right: none;
+      border-top: solid 10px transparent;
+      border-bottom: solid 10px  transparent;
+      display: block;
+      position: absolute;
+      right: -10px;
+      margin-top: -25px;
     }
   }
 }

@@ -2,23 +2,21 @@
   = stylesheet_link_tag 'projects'
 
 .past-builds
-  %h3 Older Builds
   %ul
-    - @project.builds.each do |build|
-      %li.build{:class => build_status(build)}
+    - @project.builds.limit(20).each do |build|
+      %li.build{:class => "#{build_status(build)}#{build == @project.latest_build ? ' latest' : ''}"}
         %a.name{:href => project_build_path(:project_name => @project.name, :build_number => build.number)}= "#{build.number} #{build_status(build)}"
         - if build.revision
           %span.revision= build.revision.slice(0, 6)
         - if build.timestamp
           = format_timestamp(build.timestamp)
-        %span.build-pointer= build == @project.latest_build ? '=>' : ''
-.latest-build{:class => project_status(@project)}
-  %p
-    %div.project_heading
-      %h2.project
-        = @project.name
-        %em.project_ruby (#{@project.ruby})
-        %strong.project_status= "#{project_status(@project)}"
-      %form.force_build{:method => 'post', :action => project_force_path(:project_name => @project.name)}
-        %input{:type => 'submit', :value => 'force build'}
+        %span.build-pointer
+.latest-build{:class => "#{project_status(@project)} clearfix"}
+  %div.project_heading
+    %form.force_build{:method => 'post', :action => project_force_path(:project_name => @project.name)}
+      %input{:type => 'submit', :value => 'force build'}
+    %h2.project
+      = @project.name
+      %em.project_ruby (#{@project.ruby})
+      %strong.project_status= "#{project_status(@project)}"
     %pre= @project.latest_build_build_log

@@ -2,10 +2,6 @@
   = stylesheet_link_tag 'home'
 
 #all-projects
-  .headings
-    %span.status-icon
-    %span.project-name Project Name
-    %span.last-built-at Last Built at
 
   - @projects.each do |project|
     - status = project_status(project)

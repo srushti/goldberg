@@ -1,13 +1,14 @@
 #all-projects {
-  width: 1000px;
   line-height: 30px;
 
   .headings span { font-weight: bold; }
   
   .project-row{
     display: block;
-    margin: 10px;
-    border-radius: 10px;
+    margin: 10px 10px 0 10px;
+    border-radius: 4px;
+    float: left;
+    width: 1000px;
   }
 
   .project-row.passed {
@@ -34,12 +35,8 @@
     background-color: #444;
     color: #fff;
     border: 0;
-    -webkit-border-top-right-radius: 10px;
-    -webkit-border-bottom-right-radius: 10px;
-    -moz-border-radius-topright: 10px;
-    -moz-border-radius-bottomright: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;  }
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;  }
 
   /* Table Columns */
   .project-row {
@@ -51,8 +48,8 @@
       width: 40px;
       margin-right: 10px;
       background: #00b700 no-repeat 12px center;
-      border-top-left-radius: 10px;
-      border-bottom-left-radius: 10px;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
     }
     
     &.passed span.status-icon{
