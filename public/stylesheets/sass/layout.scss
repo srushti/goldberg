@@ -64,11 +64,18 @@ div.page{
     width: 1020px;
     margin: 20px auto;
     padding: 0 0 10px 0;
-    color: $dark-gray;
-    background: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    // color: $dark-gray;
+    // background: #fff;
+    // box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+div#all-projects{
+  color: $dark-gray;
+  background: #fff;
+  border: solid 2px #000;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
 
 /* Footer */

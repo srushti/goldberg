@@ -20,6 +20,7 @@ h2.project {
 .project_heading {
   position: relative;
   border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
   line-height: 30px;
   height: 30px;
   padding: 0;
@@ -80,9 +81,10 @@ li.build {
 
 .latest-build {
   float: right;
-  width: 690px;
+  width: 700px;
+  background: #fff;
   box-shadow: 0 0 5px rgba(0,0,0,0.5);
-
+  border-radius: 8px;
 
   &.passed {
     .project_heading { background-color: $light-green; }
@@ -109,6 +111,9 @@ li.build {
 .past-builds {
   float: left;
   width: 300px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 0 0 20px 0;
   // box-shadow: 0 0 5px rgba(0,0,0,0.5);
   
   h3{
@@ -129,11 +134,11 @@ li.build {
       height: 30px;
       padding: 0 10px;
       list-style-type: none;
+      position: relative;
 /*      a, span { display: table-cell}*/
     }
 
-    li.build.latest{
-      border-top-left-radius: 8px;
+    li.build.selected{
       background: $dark-green;
     }
 
@@ -144,20 +149,20 @@ li.build {
       float: left;
     }
     
-    li.build.latest a{
+    li.build.selected a{
       color: #fff;
     }
     
-    li.build.latest span.build-pointer{
+    li.build.selected span.build-pointer{
       width: 0;
       height: 0;
-      border: solid 10px $dark-green;
-      border-right: none;
+      border: solid 10px #fff;
+      border-left: none;
       border-top: solid 10px transparent;
       border-bottom: solid 10px  transparent;
       display: block;
       position: absolute;
-      right: -10px;
+      right: -20px;
       margin-top: -25px;
     }
   }
