@@ -4,7 +4,7 @@
 .past-builds
   %h3 Latest Builds
   %ul
-    - @project.builds.limit(20).each do |build|
+    - @project.builds.each do |build|
       %li.build{:class => "#{build_status(build)}#{build == @project.latest_build ? ' selected' : ''}"}
         %a.name{:href => project_build_path(:project_name => @project.name, :build_number => build.number)}= "#{build.number} #{build_status(build)}"
         - if build.revision
