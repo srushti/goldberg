@@ -28,9 +28,9 @@ h2.project {
   line-height: 30px;
   height: 30px;
   padding: 0;
-  
+
   h2 {
-   margin: 0; 
+   margin: 0;
    padding: 0;
   }
 
@@ -52,7 +52,7 @@ h2.project {
     color: #fff;
     border: 0;
     border-top-right-radius: 8px;}
-  
+
 }
 
 li.build {
@@ -105,10 +105,11 @@ li.build {
   &.cancelled {
     .project_heading { background-color: $light-grey; }
   }
-  
+
   pre{
     line-height: 12px;
     float: right;
+    white-space: pre-wrap;
   }
 }
 
@@ -119,7 +120,7 @@ li.build {
   border-radius: 8px;
   padding: 0 0 20px 0;
   box-shadow: 0 0 5px rgba(0,0,0,0.5);
-  
+
   h3{
     margin: 0;
     padding: 0 10px;
@@ -157,11 +158,11 @@ li.build {
       text-decoration: none;
       float: left;
     }
-    
+
     li.build.selected a, li.build.selected{
       color: #fff;
     }
-    
+
     li.build.selected span.build-pointer{
       width: 0;
       height: 0;
