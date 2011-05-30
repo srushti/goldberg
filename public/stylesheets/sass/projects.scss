@@ -1,10 +1,14 @@
-$dark-gray: #444;
 $light-red: #f0cccc;
+$dark-red: #a90000;
+
 $light-green: #ccf0cc;
 $dark-green: #00b700;
 
 $light-yellow: #f0f096;
-$light-grey: #cccccc;
+$dark-yellow: #f0f086;
+
+$light-grey: #ccc;
+$dark-grey: #444;
 
 h2.project {
   em.project_ruby {
@@ -114,7 +118,7 @@ li.build {
   background: #fff;
   border-radius: 8px;
   padding: 0 0 20px 0;
-  // box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
   
   h3{
     margin: 0;
@@ -132,24 +136,29 @@ li.build {
       text-align: right;
       line-height: 30px;
       height: 30px;
-      padding: 0 10px;
+      padding: 0 10px 0 20px;
       list-style-type: none;
       position: relative;
-/*      a, span { display: table-cell}*/
+      font-style: italic;
+
+      span{font-style: normal;}
     }
 
-    li.build.selected{
-      background: $dark-green;
-    }
+    li.build.selected.passed{background: $dark-green;}
+    li.build.selected.failed{background: $dark-red;}
+    li.build.selected.timeout{background: $dark-red;}
+    li.build.selected.building{background: $dark-yellow;}
+    li.build.selected.cancelled{background: $dark-grey;}
 
     li.build a{
-      color: $dark-gray;
+      color: $dark-grey;
       font-weight: bold;
+      font-style: normal;
       text-decoration: none;
       float: left;
     }
     
-    li.build.selected a{
+    li.build.selected a, li.build.selected{
       color: #fff;
     }
     

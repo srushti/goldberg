@@ -1,3 +1,15 @@
+$light-red: #f0cccc;
+$dark-red: #a90000;
+
+$light-green: #ccf0cc;
+$dark-green: #00b700;
+
+$light-yellow: #f0f096;
+$dark-yellow: #f0f086;
+
+$light-grey: #ccc;
+$dark-grey: #444;
+
 #all-projects {
   line-height: 30px;
 
@@ -59,17 +71,17 @@
 
     &.failed span.status-icon,
     &.timeout span.status-icon{
-    	background-color: #a90000;
+    	background-color: $dark-red;
     	background-image: url(/images/cross.png);
     }
 
     &.building span.status-icon{
-    	background-color: #f0f086;
+    	background-color: $dark-yellow;
     	background-image: url(/images/building.gif);
     }
 
     &.cancelled span.status-icon{
-    	background-color: #cccccc;
+    	background-color: $dark-grey;
     	background-image: url(/images/cross.png);
     }
 
