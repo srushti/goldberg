@@ -7,7 +7,7 @@ Goldberg is an alternative to [CruiseControl.rb][] that adheres to the same prin
 
 Goldberg can be used to continuously integrate codebases built using any language, not just Ruby.
 
-Visit [goldberg.c42.in][] to see a live Goldberg server.
+##Our hosted demo server is currently down due to a sudden surge in traffic. We'll let you know on twitter once it comes back up.
 
 ## Setting up your own Goldberg server
 
@@ -121,7 +121,7 @@ A sample god script file <code>config/god-script.rb</code> is available with Gol
 
 ## Contributors
 
--   Srushtivratha Ambekallu ([srushti][])
+-   Srushtivratha Ambekallu ([srushti][]) ([@srshti][]
 -   Jasim A Basheer ([jasim][])
 -   Saager Mhatre ([dexterous][])
 -   Tejas Dinkar ([gja][])
@@ -140,6 +140,7 @@ A sample god script file <code>config/god-script.rb</code> is available with Gol
   [BuildNotify (linux)]: https://bitbucket.org/Anay/buildnotify/wiki/Home
   [goldberg.c42.in/XmlStatusReport.aspx]: http://goldberg.c42.in/XmlStatusReport.aspx
   [srushti]: http://github.com/srushti
+  [srushtitwitter]: http://github.com/srshti
   [jasim]: http://github.com/jasim
   [dexterous]: http://github.com/dexterous
   [gja]: http://github.com/gja
