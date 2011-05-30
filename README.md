@@ -121,7 +121,7 @@ A sample god script file <code>config/god-script.rb</code> is available with Gol
 
 ## Contributors
 
--   Srushtivratha Ambekallu ([srushti][]) ([@srshti][]
+-   Srushtivratha Ambekallu ([srushti][]) [@srshti](http://twitter.com/srshti 'srshti')
 -   Jasim A Basheer ([jasim][])
 -   Saager Mhatre ([dexterous][])
 -   Tejas Dinkar ([gja][])
