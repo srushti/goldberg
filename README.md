@@ -47,11 +47,11 @@ By default it assumes the <code>master</code> branch. If you want to build on an
 
 ### Tracking build status
 
-Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml` (for finicky monitors we also have cctray.xml & XmlStatusReport.aspx). eg: [goldberg.c42.in/cc.xml][]
+Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml` (for finicky monitors we also have cctray.xml & XmlStatusReport.aspx). eg: [cc.xml](http://goldberg.c42.in/cc.xml)
 
 ### Configuration
 
-Goldberg will be checking out your code in \~/.goldberg. If you want to override this create an environment variable called GOLDBERG\_PATH.
+Goldberg will be checking out your code in ~/.goldberg. If you want to override this create an environment variable called GOLDBERG\_PATH.
 
 You can configure the poller by copying the `config/goldberg.yml.sample` to `config/goldberg.yml`.
 
@@ -88,10 +88,8 @@ The callbacks are part of goldberg_config.rb
 		Project.configure do |config|
 		
 			config.on_build_completion do |build,notification,previous_build_status| 
-		
 				# sending mail
 				notification.from('from@example.com').to('to@example.com').with_subject("build for #{build.project.name} #{build.status}").send
-				
 			end
 			
 			config.on_build_success do |build,notification| 
