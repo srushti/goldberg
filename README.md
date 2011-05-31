@@ -58,6 +58,7 @@ You can configure the poller by copying the `config/goldberg.yml.sample` to `con
 #### Force build
 
 By default, the poller is configured to poll every 10 seconds. Even if you click on “force build,” it actually just sets a flag in DB for poller to build the project irrespective of the updates. If you want to it to do a build immediately after clicking on “force build”, then change the frequency to 1 second.
+You can also directly make an http POST to '/projects/:project_name/builds' to force a new build.
 
 PS: Changing the frequency of poller to 1 second will not cause git calls every one second, as the project controls the frequency at which it should be polled as explained below.
 
@@ -121,8 +122,8 @@ A sample god script file <code>config/god-script.rb</code> is available with Gol
 
 ### Talking to us
 
-Twitter: [@GoldbergCI](http://twitter.com/GoldbergCI 'GoldbergCI')
-IRC: #goldberg
+-   Twitter: [@GoldbergCI](http://twitter.com/GoldbergCI 'GoldbergCI')
+-   IRC: #goldberg
 
 ## Contributors
 
