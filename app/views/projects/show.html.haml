@@ -5,24 +5,24 @@
   %h3 Latest Builds
   %ul
     - @project.builds.each do |build|
-      %li.build{:class => "#{build_status(build)}#{build == @project.latest_build ? ' selected' : ''}"}
+      %li.build{:class => "#{build_status(build)}#{build == @build ? ' selected' : ''}"}
         %a.name{:href => project_build_path(:project_name => @project.name, :build_number => build.number)}= "#{build.number} #{build_status(build)}"
         - if build.revision
           %span.revision= build.revision.slice(0, 6)
         - if build.timestamp
           = format_timestamp(build.timestamp)
         %span.build-pointer
-.latest-build{:class => "#{project_status(@project)} clearfix"}
+.latest-build{:class => "#{build_status(@build)} clearfix"}
   %div.project_heading
     %form.force_build{:method => 'post', :action => project_force_path(:project_name => @project.name)}
       %input{:type => 'submit', :value => 'force build'}
     %h2.project
       = @project.name
       %em.project_ruby (#{@project.ruby})
-      %strong.project_status= "#{project_status(@project)}"
-    - unless @project.latest_build.artefacts.empty?
+      %strong.project_status= "#{build_status(@build)}"
+    - unless @build.artefacts.empty?
       %ul
         Build artefacts
-        - @project.latest_build.artefacts.each do |artefact|
-          %li= link_to artefact, "/projects/#{@project.name}/builds/#{@project.latest_build.number}/artefacts/#{artefact}"
-    %pre= @project.latest_build_build_log
+        - @build.artefacts.each do |artefact|
+          %li= link_to artefact, "/projects/#{@project.name}/builds/#{@build.number}/artefacts/#{artefact}"
+    %pre= @build.build_log

@@ -32,4 +32,8 @@ class BuildsController < ApplicationController
       render :text => 'Naughty, naughty', :status => 403
     end
   end
+
+  def show
+    render 'projects/show'
+  end
 end
