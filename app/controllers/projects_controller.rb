@@ -1,13 +1,16 @@
 class ProjectsController < ApplicationController
   def show
     @project = Project.find_by_name(params[:project_name])
-    @build = @project.latest_build
-    render :text => 'Unknown project', :status => :not_found if @project.nil?
-    respond_to do |format|
-      format.html {}
-      format.png do
-        filename = status_to_filename(@project.last_complete_build_status)
-        send_file File.join(Rails.public_path, "images/badge/#{filename}.png"), :disposition => 'inline', :content_type => Mime::Type.lookup_by_extension('png')
+    if @project.nil?
+      render :text => 'Unknown project', :status => :not_found
+    else
+      @build = @project.latest_build
+      respond_to do |format|
+        format.html {}
+        format.png do
+          filename = status_to_filename(@project.last_complete_build_status)
+          send_file File.join(Rails.public_path, "images/badge/#{filename}.png"), :disposition => 'inline', :content_type => Mime::Type.lookup_by_extension('png')
+        end
       end
     end
   end
