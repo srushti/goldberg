@@ -13,7 +13,7 @@ Visit [goldberg.c42.in][] to see a live Goldberg server.
 
 ### Prerequisites
 
-Git and Ruby (we usually use MRI 1.9.2, but any flavour should work).
+Git and Ruby (we usually use CRuby 1.9.2, but any flavour should work).
 RVM if you want to be able to run projects on different rubies.
 
 Your project should have a Gemfile for [Bundler][].
