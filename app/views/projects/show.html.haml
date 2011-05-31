@@ -20,4 +20,9 @@
       = @project.name
       %em.project_ruby (#{@project.ruby})
       %strong.project_status= "#{project_status(@project)}"
+    - unless @project.latest_build.artefacts.empty?
+      %ul
+        Build artefacts
+        - @project.latest_build.artefacts.each do |artefact|
+          %li= link_to artefact, "/projects/#{@project.name}/builds/#{@project.latest_build.number}/artefacts/#{artefact}"
     %pre= @project.latest_build_build_log
