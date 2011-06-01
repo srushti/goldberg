@@ -1,6 +1,6 @@
 %html
   %head
-    %title Goldberg
+    %title= @title || 'Goldberg'
     = javascript_include_tag 'jquery-1.5.min'
     = stylesheet_link_tag 'reset'
     = stylesheet_link_tag 'layout'
@@ -20,7 +20,7 @@
           %h1
             %a{:href => '/'} Goldberg
           %h4 Lightweight Continuous Integration in Ruby
-            
+
         .page
           = yield
       .push
@@ -28,7 +28,7 @@
       .logo
       .message
         .author
-          %a{:href => 'http://c42.in'} C42 Engineering 
+          %a{:href => 'http://c42.in'} C42 Engineering
           Open Source
         .version
           = "Version #{Version::STRING}"

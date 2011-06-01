@@ -1,6 +1,8 @@
 - content_for(:head) do
   = stylesheet_link_tag 'projects'
 
+- @title = "Goldberg - #{@project.name}"
+
 .past-builds
   %h3 Latest Builds
   %ul
