@@ -1,9 +1,14 @@
 class HomeController < ApplicationController
-  def index
+  before_filter :load_projects, :only => [:index, :projects_partial]
+
+  def load_projects
     @projects = Project.all.sort do |x, y|
       y.latest_build.updated_at <=> x.latest_build.updated_at
     end
-    @keep_refreshing = true
+  end
+
+  def projects_partial
+    render :partial => 'projects'
   end
 
   def ccfeed

@@ -1,5 +1,8 @@
 Goldberg::Application.routes.draw do
   root :to => "home#index"
+
+  get '/home/projects_partial' => 'home#projects_partial', :as => :projects_partial
+
   ['XmlStatusReport.aspx', 'cctray.xml', 'cc.xml'].each do |route|
     get route, :to => 'home#ccfeed', :defaults => {:format => 'xml'}
   end

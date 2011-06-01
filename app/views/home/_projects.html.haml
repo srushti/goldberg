@@ -1,0 +1,15 @@
+#all-projects
+  - @projects.each do |project|
+    - status = project_status(project)
+    .project-row{:class => status}
+      %form.force_build{:method => 'post', :action => project_force_path(:project_name => project.name)}
+        %input{:type => 'submit', :value => 'force build'}
+      %span.status-icon
+        &nbsp;
+      %span.project-name{:class => status}
+        %a{:href => project_path(:project_name => project.name)}
+          %strong= project.name
+          %em.project_ruby (#{project.ruby})
+      %span.last-built-at
+        - if project.latest_build_timestamp
+          = format_timestamp(project.last_complete_build_timestamp)
