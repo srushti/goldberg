@@ -93,7 +93,7 @@ describe Project do
     end
 
     it "is able to retrieve the custom command" do
-      project = Factory(:project, :custom_command => 'cmake')
+      project = Factory(:project)
       File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile'))
       File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
       Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.command = 'cmake' }")
@@ -101,7 +101,7 @@ describe Project do
     end
 
     it "defaults the custom command to rake" do
-      project = Factory(:project, :custom_command => nil)
+      project = Factory(:project)
       project.build_command.should == 'rake default'
     end
   end
