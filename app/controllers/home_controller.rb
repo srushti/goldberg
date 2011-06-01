@@ -1,6 +1,8 @@
 class HomeController < ApplicationController
   def index
-    @projects = Project.all
+    @projects = Project.all.sort do |x, y|
+      y.latest_build.updated_at <=> x.latest_build.updated_at
+    end
     @keep_refreshing = true
   end
 

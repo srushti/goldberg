@@ -9,6 +9,18 @@ describe HomeController do
     assigns[:projects].should == projects
   end
 
+  it "sorts the projects by most recent activity" do
+    old_project = Factory(:project)
+    new_project = Factory(:project)
+    old_build = Factory(:build, :project => old_project)
+    new_build = Factory(:build, :project => new_project)
+    old_build.update_attributes(:updated_at => 2.days.ago)
+    new_build.update_attributes(:updated_at => 1.day.ago)
+    get :index
+    response.should be_ok
+    assigns[:projects].should == [new_project, old_project]
+  end
+
   it "generates the cc feed" do
     projects = [mock('project')]
     Project.should_receive(:all).and_return(projects)
