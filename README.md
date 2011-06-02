@@ -31,9 +31,13 @@ Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on W
 
 ### Setting up a new repository
      
-       ./bin/goldberg add <url> <name> [--branch <branch_name>]
+       bin/goldberg add <url> <name> [--branch <branch_name>]
 
 By default it assumes the <code>master</code> branch. If you want to build on any other branch, use the -b --branch flag to specify it. The default command is <code>rake</code>, but you can also use "rake db:migrate && rake spec" if you have a rails project to build.
+
+### Removing the repository
+
+       bin/goldberg remove <name>
 
 ### Starting Goldberg
      
