@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   def load_projects
     @projects = Project.all.sort do |x, y|
-      y.latest_build.updated_at <=> x.latest_build.updated_at
+      (y.latest_build.updated_at || DateTime.now) <=> (x.latest_build.updated_at || DateTime.now)
     end
   end
 

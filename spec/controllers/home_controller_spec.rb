@@ -32,6 +32,7 @@ describe HomeController do
         project_with_no_build.should_receive(:latest_build).and_return(Build.nil)
         Project.should_receive(:all).and_return([previously_built_project, project_with_no_build])
         controller.load_projects
+        assigns[:projects].should == [project_with_no_build, previously_built_project]
       end
     end
   end
