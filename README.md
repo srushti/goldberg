@@ -12,10 +12,10 @@ Visit [goldberg.c42.in][] to see a live Goldberg server.
 
 ### Prerequisites
 
-Git and Ruby (we usually use CRuby 1.9.2, but any flavour should work).
-RVM if you want to be able to run projects on different rubies.
-
-Your project should have a Gemfile for [Bundler][].
+* Ruby - CRuby 1.8.7/1.9.2 and JRuby 1.6.1 up are supported
+* Git
+* RVM if you want to be able to run projects on different rubies.
+* Your project should have a Gemfile for [Bundler][].
 
 Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on Windows.
 
