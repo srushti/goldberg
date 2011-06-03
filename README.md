@@ -1,7 +1,6 @@
 # Goldberg 1.0.0
 
-© Copyright 2010–2011 [C42 Engineering][]. All Rights Reserved.
-[![Build Status](http://goldberg.c42.in/projects/goldberg.png)](http://goldberg.c42.in/projects/goldberg)
+© Copyright 2010–2011 [C42 Engineering][]. All Rights Reserved. <a href='http://goldberg.c42.in/projects/goldberg'><img src='http://goldberg.c42.in/projects/goldberg.png' alt='Goldberg Build Status'></a>
 
 Goldberg is an alternative to [CruiseControl.rb][] that adheres to the same principles of being simple to use and easy to contribute to. It currently meets all common use cases of a lightweight CI server, and we plan to add more over time. A large majority of projects should be able to switch from CC.rb to Goldberg with little or no effort.
 
