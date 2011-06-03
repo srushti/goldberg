@@ -78,26 +78,36 @@ describe Project do
   end
 
   describe "command" do
-    it "does not prefix bundler related command if Gemfile is missing" do
-      project = Factory(:project)
-      File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(false)
-      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
-      project.build_command.should_not include(Bundle.check_and_install)
+    let(:project) { Factory(:project) }
+
+    context "the Gemfile doesn't exist" do
+      before(:each) do
+        File.stub!(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(false)
+      end
+
+      it "does not prefix bundler related command if Gemfile is missing" do
+        File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+        project.build_command.should_not include(Bundle.check_and_install)
+        project.build_command.should_not include('bundle exec rake')
+      end
+
+      it "is able to retrieve the custom command" do
+        File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+        Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.command = 'cmake' }")
+        project.build_command.should == 'cmake'
+      end
     end
 
-    it "prefixes bundler related command if Gemfile is present" do
-      project = Factory(:project)
-      File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(true)
-      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
-      project.build_command.should include(Bundle.check_and_install)
-    end
+    context "message" do
+      before(:each) do
+        File.stub!(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(true)
+      end
 
-    it "is able to retrieve the custom command" do
-      project = Factory(:project)
-      File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile'))
-      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
-      Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.command = 'cmake' }")
-      project.build_command.should == 'cmake'
+      it "prefixes bundler related command if Gemfile is present" do
+        File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+        project.build_command.should include(Bundle.check_and_install)
+        project.build_command.should include('bundle exec rake')
+      end
     end
 
     it "defaults the custom command to rake" do
