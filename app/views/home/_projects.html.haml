@@ -13,6 +13,6 @@
       %span.last-built-at
         - if project.latest_build_timestamp
           = format_timestamp(project.last_complete_build_timestamp)
-      %span.github-url
-        - if project.github_url
-          = link_to "#{project.name} on Github", project.github_url
+      - if project.github_url
+        %span.github-url
+          = link_to "on Github", project.github_url
