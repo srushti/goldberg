@@ -21,16 +21,16 @@ Your project should have a Gemfile for [Bundler][].
 Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on Windows.
 
 ### Installation
-     
+
        # If you're on Ubuntu, you might need:
        sudo apt-get install sqlite3 libsqlite3-dev
-     
+
        git clone git://github.com/c42/goldberg.git
        bundle install
        rake db:migrate
 
 ### Setting up a new repository
-     
+
        bin/goldberg add <url> <name> [--branch <branch_name>]
 
 By default it assumes the <code>master</code> branch. If you want to build on any other branch, use the -b --branch flag to specify it. The default command is <code>rake</code>, but you can also use "rake db:migrate && rake spec" if you have a rails project to build.
@@ -40,12 +40,23 @@ By default it assumes the <code>master</code> branch. If you want to build on an
        bin/goldberg remove <name>
 
 ### Starting Goldberg
-     
+
+In development mode:
+
        # Start the CI server and web front-end at port 4242.
        bin/goldberg start [4242]
 
+or even just
+
+       rails server
+
+In production mode, the web server & the build poller runs in different processes. The web server will have to be set up like any other Rails/Rack application. The poller will have to be run using:
+
+       # Start just the polling/building without a front-end
+       bin/goldberg start_poller
+
 ### Stopping Goldberg
-     
+
        # Stop a running CI server
        bin/goldberg stop
 
@@ -69,7 +80,7 @@ PS: Changing the frequency of poller to 1 second will not cause git calls every 
 #### Project based configuration
 
 Every project in goldberg can have its own custom configuration by means of adding (either on goldberg instance or by checking it in with the codebase) `goldberg_config.rb` at the root of your codebase. As of now only the following configurations can be overridden, but going further this configuration will be used to configure even more.
-     
+
       #Goldberg configuration
       Project.configure do |config|
         config.frequency = 20
@@ -90,16 +101,16 @@ The callbacks are part of goldberg_config.rb
 
 		#Goldberg callbacks
 		Project.configure do |config|
-		
-			config.on_build_completion do |build,notification,previous_build_status| 
+
+			config.on_build_completion do |build,notification,previous_build_status|
 				# sending mail
 				notification.from('from@example.com').to('to@example.com').with_subject("build for #{build.project.name} #{build.status}").send
 			end
-			
-			config.on_build_success do |build,notification| 
+
+			config.on_build_success do |build,notification|
 				# code to deploy on staging
 			end
-			
+
 			config.on_build_failure do |build,notification|
 				# post to IRC channel & send mail
 			end
@@ -108,7 +119,7 @@ The callbacks are part of goldberg_config.rb
 				# post to IRC channel & deploy on staging
 			end
 		end
-		
+
 Assume you want to post a message on IRC channel & there is a gem that can be used to do so, you can simply require the gem at the start of the project_config.rb file & write the code to post message in any of the callbacks.
 
 ### Setting up production instance
@@ -118,7 +129,7 @@ We suggest that Goldberg should be used behind apache, ngin-x or any such web se
 A sample god script file <code>config/god-script.rb</code> is available with Goldberg. Details for setting up God can be found at [http://god.rubyforge.org/]
 
 ### Help
-     
+
       # To get man page style help
       ./bin/goldberg help [command]
 
