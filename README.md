@@ -28,6 +28,12 @@ Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on W
        bundle install
        rake db:migrate
 
+### Setting up a production instance
+
+We suggest that Goldberg should be used behind apache, nginx or any such web server with passenger, unicorn or mongrel. If you don't have a setup that monitors and restarts processes, you should use a process monitoring tool like God or Monit to manage the server processes & restart them if they happen to die.
+
+A sample god script file <code>config/god-script.rb</code> is available with Goldberg. Details for setting up God can be found at [http://god.rubyforge.org/]
+
 ### Setting up a new repository
 
        bin/goldberg add <url> <name> [--branch <branch_name>]
@@ -120,12 +126,6 @@ The callbacks are part of goldberg_config.rb
     end
 
 Assume you want to post a message on IRC channel & there is a gem that can be used to do so, you can simply require the gem at the start of the project_config.rb file & write the code to post message in any of the callbacks.
-
-### Setting up production instance
-
-We suggest that Goldberg should be used behind apache, ngin-x or any such web server with passenger, unicorn or mongrel. If you don't want such setup, you should use a process monitoring tool like God or Monit to manage the server processes & restart them if they happen to die.
-
-A sample god script file <code>config/god-script.rb</code> is available with Goldberg. Details for setting up God can be found at [http://god.rubyforge.org/]
 
 ### Help
 
