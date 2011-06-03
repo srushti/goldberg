@@ -99,26 +99,26 @@ Goldberg provides on_build_completion, on_build_failure, on_build_success & on_b
 
 The callbacks are part of goldberg_config.rb
 
-  #Goldberg callbacks
-  Project.configure do |config|
+     #Goldberg callbacks
+    Project.configure do |config|
 
-    config.on_build_completion do |build,notification,previous_build_status|
-      # sending mail
-      notification.from('from@example.com').to('to@example.com').with_subject("build for #{build.project.name} #{build.status}").send
-    end
+      config.on_build_completion do |build,notification,previous_build_status|
+        # sending mail
+        notification.from('from@example.com').to('to@example.com').with_subject("build for #{build.project.name} #{build.status}").send
+      end
 
-    config.on_build_success do |build,notification|
-      # code to deploy on staging
-    end
+      config.on_build_success do |build,notification|
+        # code to deploy on staging
+      end
 
-    config.on_build_failure do |build,notification|
-      # post to IRC channel & send mail
-    end
+      config.on_build_failure do |build,notification|
+        # post to IRC channel & send mail
+      end
 
-    config.on_build_fixed do |build,notification|
-      # post to IRC channel & deploy on staging
+      config.on_build_fixed do |build,notification|
+        # post to IRC channel & deploy on staging
+      end
     end
-  end
 
 Assume you want to post a message on IRC channel & there is a gem that can be used to do so, you can simply require the gem at the start of the project_config.rb file & write the code to post message in any of the callbacks.
 
