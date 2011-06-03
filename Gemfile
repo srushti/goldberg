@@ -38,6 +38,5 @@ end
 group :test do
   gem 'factory_girl_rails', '~> 1.0.1'
   gem 'rspec-http', '~> 0.0.2'
-  gem 'stirlitz', '~> 0.0.1.1'
   gem 'simplecov'
 end
