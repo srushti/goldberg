@@ -1,8 +1,8 @@
 require "fileutils"
 
 class Init
-  def add(url, name, branch, command = nil)
-    Project.add(:url => url, :name => name, :command => command, :branch => branch)
+  def add(url, name, branch)
+    Project.add(:url => url, :name => name, :branch => branch)
     Rails.logger.info "#{name} successfully added."
   end
 

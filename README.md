@@ -25,6 +25,7 @@ Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on W
        sudo apt-get install sqlite3 libsqlite3-dev libncursesw5-dev
 
        git clone git://github.com/c42/goldberg.git
+       cd goldberg
        bundle install
        rake db:migrate
 
