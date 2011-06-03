@@ -128,4 +128,8 @@ class Project < ActiveRecord::Base
   def activity
     {'passed' => 'Sleeping', 'timeout' => 'Sleeping', 'failed' => 'Sleeping', 'building' => 'Building'}[latest_build_status] || 'Unknown'
   end
+
+  def github_url
+    url.gsub(/^git:\/\//, 'http://').gsub(/\.git$/, '') if url.include?('//github.com')
+  end
 end

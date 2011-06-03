@@ -363,4 +363,18 @@ describe Project do
       }.should raise_error
     end
   end
+
+  context "github" do
+    it "doesn't think random urls are on git" do
+      Factory(:project, :url => 'git://somewhereelse.com/repo.git').github_url.should be_nil
+    end
+
+    it "detects a git protocol url" do
+      Factory(:project, :url => 'git://github.com/some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
+    end
+
+    it "detects an http url" do
+      Factory(:project, :url => 'http://github.com/some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
+    end
+  end
 end
