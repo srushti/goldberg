@@ -20,23 +20,6 @@ class Init
     Project.all.map(&:name).each { |name| Rails.logger.info name }
   end
 
-  def start(port = 4242)
-    if !File.exist?(Paths.pid)
-      Environment.exec "rackup -p #{port} -D -P #{Paths.pid} #{File.join(File.dirname(__FILE__), '..', '..', 'config.ru')}"
-    else
-      Rails.logger.info "Goldberg already appears to be running. Please run 'bin/goldberg stop' or delete the existing pid file."
-    end
-  end
-
-  def stop
-    if File.exist?(Paths.pid)
-      Environment.exec "kill `cat #{Paths.pid}`"
-      FileUtils.rm(Paths.pid)
-    else
-      Rails.logger.info "Goldberg does not appear to be running."
-    end
-  end
-
   def poll
     Project.projects_to_build.each do |p|
       begin

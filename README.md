@@ -47,24 +47,18 @@ By default it assumes the <code>master</code> branch. If you want to build on an
 
 ### Starting Goldberg
 
-In development mode:
-
-       # Start the CI server and web front-end at port 4242.
-       bin/goldberg start [4242]
-
-or even just
+In development mode simply run:
 
        rails server
+
+This will also start a daemon for building projects.
 
 In production mode, the web server & the build poller runs in different processes. The web server will have to be set up like any other Rails/Rack application. The poller will have to be run using:
 
        # Start just the polling/building without a front-end
        bin/goldberg start_poller
-
-### Stopping Goldberg
-
-       # Stop a running CI server
-       bin/goldberg stop
+       
+There's a god-script under config directory which can be used to start a poller as a daemon process monitored by [God](https://github.com/mojombo/god)
 
 ### Tracking build status
 

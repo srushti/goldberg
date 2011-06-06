@@ -23,26 +23,6 @@ command :add do |c|
   end
 end
 
-command :start do |c|
-  c.syntax = 'goldberg start [port]'
-  c.description = 'Start goldberg server with specified port. If no port is specified, server listens on port 3000. On development environment only, the start command starts a poller along with the server.'
-  c.summary = 'Start goldberg server'
-  c.action do |args, options|
-    port = args[0]
-    Init.new.start if port.nil?
-    Init.new.start(port) unless port.nil?
-  end
-end
-
-command :stop do |c|
-  c.syntax = 'goldberg stop'
-  c.description = 'Stop a currently running goldberg server.'
-  c.summary = 'Stop goldberg server'
-  c.action do |args, options|
-    Init.new.stop
-  end
-end
-
 command :list do |c|
   c.syntax = 'goldberg list'
   c.description = 'List all the projects being tracked & built by this goldberg instance.'
