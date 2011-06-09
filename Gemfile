@@ -7,7 +7,6 @@ gem 'haml', '~> 3.0.25'
 gem 'sass', '~> 3.1.1'
 gem 'commander', '~> 4.0.4'
 gem 'childprocess', '~> 0.1.9'
-gem 'rake', '~> 0.8.7'
 gem 'json', :platforms => [:ruby_18, :jruby]
 
 platform :jruby do
