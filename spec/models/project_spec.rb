@@ -50,6 +50,13 @@ describe Project do
       Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master').and_return(true)
       project.checkout
     end
+
+    it "doesn't create the project if the checkout fails" do
+      lambda {
+        Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master').and_return(false)
+        Project.add(:url => 'git://some.url.git', :name => 'some_project', :branch => 'master')
+      }.should_not change(Project, :count)
+    end
   end
 
   describe "delegation to latest build" do

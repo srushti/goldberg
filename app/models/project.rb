@@ -11,9 +11,10 @@ class Project < ActiveRecord::Base
   delegate :frequency, :ruby, :environment_string, :timeout, :to => :config
 
   def self.add(options)
-    Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch]).tap do |project|
-      project.checkout
+    project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch])
+    if project.checkout
       project.save!
+      project
     end
   end
 
@@ -22,9 +23,7 @@ class Project < ActiveRecord::Base
   end
 
   def checkout
-    if !self.repository.checkout
-      remove
-    end
+    self.repository.checkout.tap{|result| remove unless result}
   rescue
     remove
     raise
