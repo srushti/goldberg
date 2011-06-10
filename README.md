@@ -13,7 +13,7 @@ Visit [goldberg.c42.in][] to see a live Goldberg server.
 ### Prerequisites
 
 * Ruby - CRuby 1.8.7/1.9.2 and JRuby 1.6.2 and upward are supported
-* Git (svn, hg and bzr are currently unsupported, but are in the roadmap)
+* Git > v1.6.5 (svn, hg and bzr are currently unsupported, but are on the roadmap)
 * RVM if you want to be able to run projects on different rubies.
 * Your project should have a Gemfile for [Bundler][].
 
@@ -57,7 +57,7 @@ In production mode, the web server & the build poller runs in different processe
 
        # Start just the polling/building without a front-end
        bin/goldberg start_poller
-       
+
 There's a god-script under config directory which can be used to start a poller as a daemon process monitored by [God](https://github.com/mojombo/god)
 
 ### Tracking build status
