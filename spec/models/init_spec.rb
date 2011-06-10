@@ -2,14 +2,20 @@ require "spec_helper"
 
 describe Init do
   it "adds a new project" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master')
+    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master').and_return(true)
     Rails.logger.should_receive(:info).with('name successfully added.')
     Init.new.add('url', 'name', 'master')
   end
 
   it "adds a new project with a custom command" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master')
+    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master').and_return(true)
     Rails.logger.should_receive(:info).with('name successfully added.')
+    Init.new.add('url', 'name', 'master')
+  end
+
+  it "reports failure in adding a project" do
+    Project.should_receive(:add).and_return(false)
+    Rails.logger.should_receive(:info).with("There was problem adding the project.")
     Init.new.add('url', 'name', 'master')
   end
 
