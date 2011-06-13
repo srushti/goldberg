@@ -1,10 +1,10 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.7'
+gem 'rails', '3.0.8'
 
 gem 'sqlite3', '~> 1.3.3', :platforms => :ruby
-gem 'haml', '~> 3.0.25'
-gem 'sass', '~> 3.1.1'
+gem 'haml', '~> 3.1.2'
+gem 'sass', '~> 3.1.2'
 gem 'commander', '~> 4.0.4'
 gem 'childprocess', '~> 0.1.9'
 gem 'json', :platforms => [:ruby_18, :jruby]
