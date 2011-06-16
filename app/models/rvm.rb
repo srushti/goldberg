@@ -1,11 +1,32 @@
 module RVM
   class << self
+
     def rvm_script_path
+      if rvm_user_installed?
+        rvm_user_script_path
+      elsif rvm_system_installed? 
+        rvm_system_script_path
+      end
+    end
+
+    def rvm_user_script_path
       File.join(Env['HOME'], '.rvm', 'scripts', 'rvm')
     end
 
+    def rvm_system_script_path
+      File.join('usr', 'local', 'rvm', 'scripts', 'rvm')
+    end
+
+    def rvm_user_installed?
+      File.exist?(rvm_user_script_path)  
+    end
+
+    def rvm_system_installed?
+      File.exist?(rvm_system_script_path)
+    end
+
     def installed?
-      File.exist?(rvm_script_path)
+      !rvm_script_path.nil?
     end
 
     def ci_rvmrc_contents
