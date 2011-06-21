@@ -1,3 +1,4 @@
 Project : <%= @project.name %><br/>
 Build Status : <%= @build.status %><br/>
-Build Page URL : <%= project_build_url(@project.name,@build) %>
+Build Page URL : <%= project_build_url(@project.name,@build.number) %>
+
