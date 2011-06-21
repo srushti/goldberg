@@ -24,9 +24,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'wirble'
-  gem 'hirb'
-  gem 'interactive_editor'
   if RUBY_PLATFORM == 'java'
     # See https://github.com/carlhuda/bundler/issues/1100
     gem 'mongrel', '~> 1.0'
