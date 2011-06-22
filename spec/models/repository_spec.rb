@@ -16,14 +16,14 @@ describe Repository do
     it "updates the code at given location and return true if there are updates" do
       Environment.should_receive(:system_call_output).with("cd code_path && git rev-parse --verify HEAD").and_return("old_sha")
       Environment.should_receive(:system_call_output).with("cd code_path && git rev-parse --verify HEAD").and_return("new_sha")
-      Environment.should_receive(:system).with("cd code_path && git pull").and_return(true)
+      Environment.should_receive(:system).with("cd code_path && git pull && git submodule init && git submodule update").and_return(true)
       repo.update.should be_true
     end
 
     it "returns false if code there were no updates" do
       Environment.should_receive(:system_call_output).with("cd code_path && git rev-parse --verify HEAD").and_return("old_sha")
       Environment.should_receive(:system_call_output).with("cd code_path && git rev-parse --verify HEAD").and_return("old_sha")
-      Environment.should_receive(:system).with("cd code_path && git pull").and_return(true)
+      Environment.should_receive(:system).with("cd code_path && git pull && git submodule init && git submodule update").and_return(true)
       repo.update.should be_false
     end
   end

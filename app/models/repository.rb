@@ -15,7 +15,7 @@ class Repository
 
   def update
     rev_before_update = revision
-    Environment.system("cd #{@code_path} && git pull")
+    Environment.system("cd #{@code_path} && git pull && git submodule init && git submodule update")
     rev_after_update = revision
     rev_before_update != rev_after_update
   end
