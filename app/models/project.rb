@@ -42,7 +42,7 @@ class Project < ActiveRecord::Base
   end
 
   def latest_build
-    builds.first || Build.nil
+    builds.first || Build.null
   end
 
   def prepare_for_build
@@ -94,7 +94,7 @@ class Project < ActiveRecord::Base
   end
 
   def last_complete_build
-    builds.detect { |build| !['building', 'cancelled'].include?(build.status) } || Build.nil
+    builds.detect { |build| !['building', 'cancelled'].include?(build.status) } || Build.null
   end
 
   def repository
