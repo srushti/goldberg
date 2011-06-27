@@ -19,7 +19,15 @@ class Command
   def kill
     @process.send_kill
   end
-
+  
+  def pid
+    @process.pid
+  end
+  
+  def renice!(relative_priority)
+    Environment.system("renice #{relative_priority} #{@process.pid}")
+  end
+  
   def success?
     @process.exit_code == 0
   end

@@ -13,6 +13,10 @@ describe ProjectConfig do
       config.environment_string.should == ""
     end
 
+    it "for niceness of the build process should be +0" do
+      config.nice.should eq('+0')
+    end
+    
     it "should have no callbacks set" do
       config.build_completion_callbacks.should == []
       config.build_failure_callbacks.should == []

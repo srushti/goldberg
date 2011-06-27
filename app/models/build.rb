@@ -64,6 +64,7 @@ class Build < ActiveRecord::Base
     start_time = DateTime.now
     command = Command.new(command)
     command.execute_async
+    command.renice!(project.nice)
     while(DateTime.now < start_time + project.timeout && command.running?)
       sleep(10)
     end
