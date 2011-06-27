@@ -79,16 +79,19 @@ PS: Changing the frequency of poller to 1 second will not cause git calls every 
 
 #### Project based configuration
 
-Every project in goldberg can have its own custom configuration by means of adding (either on goldberg instance or by checking it in with the codebase) `goldberg_config.rb` at the root of your codebase. As of now only the following configurations can be overridden, but going further this configuration will be used to configure even more.
+Every project in Goldberg can have its own custom configuration by checking in a `goldberg_config.rb` file at the root of the codebase or by adding it on the server under `.goldberg/projects/project_name/code`.
 
       #Goldberg configuration
       Project.configure do |config|
         config.frequency = 20
-        config.ruby = '1.9.2' # Your server needs to have rvm installed for this setting to be considered
+        config.ruby = '1.9.2'     # Your server needs to have rvm installed for this setting to be considered
         config.environment_variables = {"FOO" => "bar"}
-        config.after_build Proc.new { |build, project| `touch ~/Desktop/actually_built`}
+        config.after_build lambda { |build, project| `touch ~/Desktop/actually_built` }
         config.timeout = 10.minutes
-        config.command = 'make' #to be used if you're using anything other than rake
+        config.nice = '+5'        # Use this to reduce the scheduling priority (increase niceness) of CPU
+                                  # intensive builds that may otherwise leave the Goldberg web application
+                                  # unresponsive. Uses the UNIX `renice` command. Defaults to '+0'.
+        config.command = 'make'   # To be used if you're using anything other than rake
       end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using `goldberg.yml` as mentioned above.

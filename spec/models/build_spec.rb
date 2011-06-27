@@ -89,6 +89,7 @@ describe Build do
 
     before(:each) do
       build.stub(:before_build)
+      Environment.stub(:system)
     end
 
     it "executes in a clean environment" do
@@ -108,38 +109,56 @@ describe Build do
       Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('RAILS_ENV', nil)
-      Environment.stub!(:system)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => nil))
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => nil))
       build.run
     end
 
-    it "runs the build command and update the build status" do
-      Environment.stub!(:system)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
+    it "runs the build command" do
+      Command.stub(:new).and_return(command = mock(Command))
+      command.should_receive(:running?).and_return(false)
+      command.should_receive(:execute_async).and_return(nil)
+      command.should_receive(:renice!).with('+0')
+      command.should_receive(:success?).and_return(true)
+      build.run
+    end
+
+    it "sets build status to failed if the build command succeeds" do
+      Command.stub(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => true))
       build.run
       build.status.should == "passed"
     end
-
+    
     it "sets build status to failed if the build command fails" do
-      Environment.stub!(:system)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => false))
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => false))
       build.run
       build.status.should == "failed"
     end
   end
 
-  context "run with environment variables" do
+  context "runs with" do
     let(:project) { Factory.build(:project) }
     let(:build) { Factory.create(:build, :number => 1, :project => project, :environment_string => "FOO=bar") }
-
-    it "should pass the environment variables to the system command" do
-      build.stub(:before_build)
+    
+    before :all do 
+      build.stub(:before_build) 
+    end
+    
+    it "environment variables passed to the system command" do
       RVM.stub(:prepare_ruby)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => true))
       build.run.should be_true
     end
+    
+    it "correct niceness" do
+      project.stub(:config => ProjectConfig.new)
+      project.config.nice = '+5'
+      command = mock(Command, :running? => false, :execute_async => nil, :success? => true)
+      Command.stub(:new).and_return(command)
+      command.should_receive(:renice!).with('+5')
+      build.run
+    end
   end
-
+    
   context "before build" do
     it "sets build status to 'building' and persist the change list" do
       build = Factory.build(:build)
