@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Build do
   it "is able to fake a build" do
-    nil_build = Build.nil
+    nil_build = Build.null
     nil_build.should be_nil_build
     nil_build.revision.should == ""
     nil_build.number.should == 0

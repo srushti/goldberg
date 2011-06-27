@@ -12,7 +12,7 @@ class Build < ActiveRecord::Base
 
   default_scope order('number DESC')
 
-  def self.nil
+  def self.null
     OpenStruct.new(:number => 0, :status => 'not available', :revision => '', :nil_build? => true, :timestamp => nil, :build_log => '', :artefacts => [])
   end
 
