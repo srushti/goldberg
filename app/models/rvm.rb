@@ -48,12 +48,12 @@ module RVM
 
     def prepare_ruby(ruby)
       return unless installed?
-      Environment.system("#{use_script(ruby, 'global')} && (gem list | grep bundler) || gem install bundler")
+      Command.new("#{use_script(ruby, 'global')} && (gem list | grep bundler) || gem install bundler").execute
     end
 
     def trust_rvmrc(project_root)
       return unless installed?
-      Environment.system("rvm rvmrc trust #{project_root}")
+      Command.new("rvm rvmrc trust #{project_root}").execute
     end
   end
 end

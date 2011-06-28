@@ -33,7 +33,7 @@ Spork.prefork do
     # examples within a transaction, remove the following line or assign false
     # instead of true.
     config.use_transactional_fixtures = true
-
+    config.include(Goldberg::ExpectationHelpers)
     config.before(:each) do
       # sleep(0.2)
       FileUtils.stub!(:mkdir_p)

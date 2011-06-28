@@ -50,7 +50,7 @@ class Project < ActiveRecord::Base
     gemfilelock = File.expand_path('Gemfile.lock', self.code_path)
 
     if File.exists?(gemfilelock) && !repository.versioned?('Gemfile.lock') && (File.mtime(gemfile) > File.mtime(gemfilelock) || ruby != latest_build.ruby)
-      Rails.logger.info("removing Gemfile.lock as it's not versioned")
+      Goldberg.logger.info("removing Gemfile.lock as it's not versioned")
       File.delete(gemfilelock)
     end
   end
@@ -63,7 +63,7 @@ class Project < ActiveRecord::Base
       new_build = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby,
                                       :environment_string => environment_string).tap(&:run)
       self.build_requested = false
-      Rails.logger.info "Build #{ new_build.status }"
+      Goldberg.logger.info "Build #{ new_build.status }"
       after_build_runner.execute(latest_build, previous_build_status)
     end
     self.next_build_at = Time.now + frequency.seconds
@@ -79,7 +79,7 @@ class Project < ActiveRecord::Base
   end
 
   def force_build
-    Rails.logger.info "forcing build for #{self.name}"
+    Goldberg.logger.info "forcing build for #{self.name}"
     self.build_requested = true
     save
   end
