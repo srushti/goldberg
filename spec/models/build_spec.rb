@@ -127,7 +127,7 @@ describe Build do
       build.run
       build.status.should == "passed"
     end
-    
+
     it "sets build status to failed if the build command fails" do
       Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => false))
       build.run
@@ -136,19 +136,19 @@ describe Build do
   end
 
   context "runs with" do
-    let(:project) { Factory.build(:project) }
-    let(:build) { Factory.create(:build, :number => 1, :project => project, :environment_string => "FOO=bar") }
-    
-    before :all do 
-      build.stub(:before_build) 
+    let(:project) { Factory(:project) }
+    let(:build) { Factory(:build, :number => 1, :project => project, :environment_string => "FOO=bar") }
+
+    before :each do
+      build.stub(:before_build)
     end
-    
+
     it "environment variables passed to the system command" do
       RVM.stub(:prepare_ruby)
       Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => true))
       build.run.should be_true
     end
-    
+
     it "correct niceness" do
       project.stub(:config => ProjectConfig.new)
       project.config.nice = '+5'
@@ -158,7 +158,7 @@ describe Build do
       build.run
     end
   end
-    
+
   context "before build" do
     it "sets build status to 'building' and persist the change list" do
       build = Factory.build(:build)
