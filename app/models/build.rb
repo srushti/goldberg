@@ -63,7 +63,7 @@ class Build < ActiveRecord::Base
   def execute_async(command)
     start_time = DateTime.now
     command = Command.new(command)
-    command.execute_async
+    command.fork
     while (DateTime.now < start_time + project.timeout && command.running?)
       sleep(10)
     end

@@ -10,22 +10,6 @@ module Environment
       ARGV
     end
 
-    def system_call_output(command)
-      Rails.logger.info("System call output: #{command}")
-      `#{command}`
-    end
-
-    def system(command)
-      command_to_exec = %{/usr/bin/env bash -c "#{command.gsub(/"/, '\"')}"}
-      Rails.logger.info "executing #{command_to_exec}"
-      if block_given?
-        yield system_call_output(command_to_exec), $?.success?
-        $?.success?
-      else
-        super(command_to_exec)
-      end
-    end
-
     [:sleep, :exec, :trap].each do |method_name|
       define_method method_name do |*args|
         super(*args)

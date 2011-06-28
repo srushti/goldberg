@@ -20,12 +20,14 @@ describe RVM do
         end
 
         it "prepares a gemset with bundler" do
-          Environment.should_receive(:system).with("source #{path} && rvm use --create project@global && (gem list | grep bundler) || gem install bundler")
+          expect_command(
+            "source #{path} && rvm use --create project@global && (gem list | grep bundler) || gem install bundler",
+            :execute => true)
           RVM.prepare_ruby('project')
         end
 
         it "marks the .rvmrc as trusted" do
-          Environment.should_receive(:system).with('rvm rvmrc trust code_path')
+          expect_command('rvm rvmrc trust code_path', :execute => true)
           RVM.trust_rvmrc('code_path')
         end
 
