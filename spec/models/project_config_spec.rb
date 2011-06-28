@@ -14,7 +14,7 @@ describe ProjectConfig do
     end
 
     it "for niceness of the build process should be +0" do
-      config.nice.should eq('+0')
+      config.nice.should eq(0)
     end
     
     it "should have no callbacks set" do
