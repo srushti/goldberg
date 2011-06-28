@@ -92,6 +92,7 @@ Every project in Goldberg can have its own custom configuration by checking in a
                                   # intensive builds that may otherwise leave the Goldberg web application
                                   # unresponsive. Uses the UNIX `renice` command. Defaults to '+0'.
         config.command = 'make'   # To be used if you're using anything other than rake
+        config.rake_task = 'ci'   # To be used if your CI build runs something other than the default task
       end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using `goldberg.yml` as mentioned above.
