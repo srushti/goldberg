@@ -109,27 +109,30 @@ describe Build do
       Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('RAILS_ENV', nil)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => nil))
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => nil))
       build.run
     end
 
     it "runs the build command" do
-      Command.stub(:new).and_return(command = mock(Command))
+      config = ProjectConfig.new
+      project.stub(:config).and_return(config)
+      config.nice = 5
+      full_command = "(source /Users/sidu/.rvm/scripts/rvm && rvm use --create @goldberg-#{project.name} ; cd /Users/sidu/.goldberg/projects/#{project.name}/code ;  nice -n 5 rake default) 1>>/Users/sidu/.goldberg/projects/#{project.name}/builds/1/build_log 2>>/Users/sidu/.goldberg/projects/#{project.name}/builds/1/build_log"
+      Command.should_receive(:new).with(full_command).and_return(command = mock(Command))
       command.should_receive(:running?).and_return(false)
       command.should_receive(:execute_async).and_return(nil)
-      command.should_receive(:renice!).with('+0')
       command.should_receive(:success?).and_return(true)
       build.run
     end
 
     it "sets build status to failed if the build command succeeds" do
-      Command.stub(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => true))
+      Command.stub(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
       build.run
       build.status.should == "passed"
     end
 
     it "sets build status to failed if the build command fails" do
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => false))
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => false))
       build.run
       build.status.should == "failed"
     end
@@ -139,23 +142,11 @@ describe Build do
     let(:project) { Factory(:project) }
     let(:build) { Factory(:build, :number => 1, :project => project, :environment_string => "FOO=bar") }
 
-    before :each do
-      build.stub(:before_build)
-    end
-
     it "environment variables passed to the system command" do
+      build.stub(:before_build)
       RVM.stub(:prepare_ruby)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :renice! => nil, :success? => true))
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
       build.run.should be_true
-    end
-
-    it "correct niceness" do
-      project.stub(:config => ProjectConfig.new)
-      project.config.nice = '+5'
-      command = mock(Command, :running? => false, :execute_async => nil, :success? => true)
-      Command.stub(:new).and_return(command)
-      command.should_receive(:renice!).with('+5')
-      build.run
     end
   end
 

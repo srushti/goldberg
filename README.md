@@ -88,9 +88,11 @@ Every project in Goldberg can have its own custom configuration by checking in a
         config.environment_variables = {"FOO" => "bar"}
         config.after_build lambda { |build, project| `touch ~/Desktop/actually_built` }
         config.timeout = 10.minutes
-        config.nice = '+5'        # Use this to reduce the scheduling priority (increase niceness) of CPU
+        config.nice = 5           # Use this to reduce the scheduling priority (increase niceness) of CPU
                                   # intensive builds that may otherwise leave the Goldberg web application
-                                  # unresponsive. Uses the UNIX `renice` command. Defaults to '+0'.
+                                  # unresponsive. Uses the UNIX `nice` command. Defaults to '0'.
+                                  # Positive values have lower priority with a max of 19 on OSX and 20 on
+                                  # Linux. You can set negative values, but we don't see the point.
         config.command = 'make'   # To be used if you're using anything other than rake
         config.rake_task = 'ci'   # To be used if your CI build runs something other than the default task
       end
