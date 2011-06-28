@@ -13,7 +13,7 @@ class ProjectConfig
     @build_fixed_callbacks = []
     @timeout = 10.minutes
     @command = nil
-    @nice = '+0'
+    @nice = 0
   end
 
   def environment_string

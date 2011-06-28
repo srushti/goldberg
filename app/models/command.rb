@@ -8,7 +8,8 @@ class Command
   end
 
   def execute_async
-    @process = ChildProcess.build(%{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"})
+    command = %{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"}
+    @process = ChildProcess.build(command)
     @process.start
   end
 
