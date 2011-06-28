@@ -109,7 +109,7 @@ describe Build do
       Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('RAILS_ENV', nil)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => nil))
+      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute => true, :fork => nil, :success? => nil))
       build.run
     end
 
@@ -117,22 +117,22 @@ describe Build do
       config = ProjectConfig.new
       project.stub(:config).and_return(config)
       config.nice = 5
-      full_command = "(source /Users/sidu/.rvm/scripts/rvm && rvm use --create @goldberg-#{project.name} ; cd /Users/sidu/.goldberg/projects/#{project.name}/code ;  nice -n 5 rake default) 1>>/Users/sidu/.goldberg/projects/#{project.name}/builds/1/build_log 2>>/Users/sidu/.goldberg/projects/#{project.name}/builds/1/build_log"
-      Command.should_receive(:new).with(full_command).and_return(command = mock(Command))
-      command.should_receive(:running?).and_return(false)
-      command.should_receive(:execute_async).and_return(nil)
-      command.should_receive(:success?).and_return(true)
+      expect_command("source /Users/sidu/.rvm/scripts/rvm && rvm use --create @global && (gem list | grep bundler) || gem install bundler", :execute => true)
+      expect_command("rvm rvmrc trust /Users/sidu/.goldberg/projects/#{project.name}/code", :execute => true)
+      expect_command("(source /Users/sidu/.rvm/scripts/rvm && rvm use --create @goldberg-#{project.name} ; cd /Users/sidu/.goldberg/projects/#{project.name}/code ;  nice -n 5 rake default) 1>>/Users/sidu/.goldberg/projects/#{project.name}/builds/1/build_log 2>>/Users/sidu/.goldberg/projects/#{project.name}/builds/1/build_log", 
+        :running? => false, :fork => nil, :success? => true
+      )
       build.run
     end
 
     it "sets build status to failed if the build command succeeds" do
-      Command.stub(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
+      Command.stub(:new).and_return(mock(Command, :execute => true, :running? => false, :fork => nil, :success? => true))
       build.run
       build.status.should == "passed"
     end
 
     it "sets build status to failed if the build command fails" do
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => false))
+      Command.stub!(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => false))
       build.run
       build.status.should == "failed"
     end
@@ -145,7 +145,7 @@ describe Build do
     it "environment variables passed to the system command" do
       build.stub(:before_build)
       RVM.stub(:prepare_ruby)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
+      Command.stub!(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => true))
       build.run.should be_true
     end
   end
