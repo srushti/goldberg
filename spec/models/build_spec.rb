@@ -114,11 +114,7 @@ describe Build do
     end
 
     it "runs the build command" do
-      config = ProjectConfig.new
-      project.stub(:config).and_return(config)
-      config.nice = 5
-      full_command = "(source /Users/sidu/.rvm/scripts/rvm && rvm use --create @goldberg-#{project.name} ; cd /Users/sidu/.goldberg/projects/#{project.name}/code ;  nice -n 5 rake default) 1>>/Users/sidu/.goldberg/projects/#{project.name}/builds/1/build_log 2>>/Users/sidu/.goldberg/projects/#{project.name}/builds/1/build_log"
-      Command.should_receive(:new).with(full_command).and_return(command = mock(Command))
+      Command.should_receive(:new).and_return(command = mock(Command))
       command.should_receive(:running?).and_return(false)
       command.should_receive(:execute_async).and_return(nil)
       command.should_receive(:success?).and_return(true)
