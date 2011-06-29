@@ -9,6 +9,7 @@ end
 Factory.define :project do |p|
   p.name { Factory.next(:project_name) }
   p.url  { |project| "git://domain/#{project.name}.git" }
+  p.scm 'git'
   p.branch 'master'
 end
 

@@ -41,7 +41,7 @@ class ScmProvider
   end
 
 
-  def self.provider(url)
-    url.starts_with?("git")? ScmProvider::Git : ScmProvider::Svn
+  def self.provider(scm)
+    self.const_get(scm.titlecase)
   end
 end

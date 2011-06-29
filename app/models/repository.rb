@@ -1,9 +1,9 @@
 class Repository
-  def initialize(code_path, url, branch)
+  def initialize(code_path, url, branch,scm)
     @code_path = code_path
     @url = url
     @branch = branch
-    @provider = ScmProvider.provider(url)
+    @provider = ScmProvider.provider(scm)
   end
 
   def revision
