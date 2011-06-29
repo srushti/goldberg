@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
 
   validates_presence_of :branch, :name, :url
 
-  delegate :frequency, :ruby, :environment_string, :timeout, :to => :config
+  delegate :frequency, :ruby, :environment_string, :timeout, :nice, :to => :config
 
   def self.add(options)
     project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch], :scm => options[:scm])
@@ -42,7 +42,7 @@ class Project < ActiveRecord::Base
   end
 
   def latest_build
-    builds.first || Build.nil
+    builds.first || Build.null
   end
 
   def prepare_for_build
@@ -85,8 +85,10 @@ class Project < ActiveRecord::Base
   end
 
   def build_command
+    build_command = config.command || "rake #{config.rake_task}"
+    niced_command = "nice -n #{config.nice} #{build_command}"
     bundler_command = File.exists?(File.join(self.code_path, 'Gemfile')) ? "(#{Bundle.check_and_install}) && " : ""
-    bundler_command << (config.command || "rake #{config.rake_task}")
+    bundler_command << niced_command
   end
 
   def map_to_cctray_project_status
@@ -94,7 +96,7 @@ class Project < ActiveRecord::Base
   end
 
   def last_complete_build
-    builds.detect { |build| !['building', 'cancelled'].include?(build.status) } || Build.nil
+    builds.detect { |build| !['building', 'cancelled'].include?(build.status) } || Build.null
   end
 
   def repository

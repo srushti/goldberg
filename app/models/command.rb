@@ -1,4 +1,5 @@
 class Command
+  attr_reader :cmd
   def initialize(cmd)
     @cmd = cmd
   end
@@ -8,7 +9,8 @@ class Command
   end
 
   def execute_async
-    @process = ChildProcess.build(%{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"})
+    command = %{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"}
+    @process = ChildProcess.build(command)
     @process.start
   end
 
@@ -19,7 +21,15 @@ class Command
   def kill
     @process.send_kill
   end
-
+  
+  def pid
+    @process.pid
+  end
+  
+  def renice!(relative_priority)
+    Environment.system("renice #{relative_priority} #{@process.pid}")
+  end
+  
   def success?
     @process.exit_code == 0
   end

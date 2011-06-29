@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Build do
   it "is able to fake a build" do
-    nil_build = Build.nil
+    nil_build = Build.null
     nil_build.should be_nil_build
     nil_build.revision.should == ""
     nil_build.number.should == 0
@@ -89,6 +89,7 @@ describe Build do
 
     before(:each) do
       build.stub(:before_build)
+      Environment.stub(:system)
     end
 
     it "executes in a clean environment" do
@@ -108,31 +109,36 @@ describe Build do
       Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
       Env.should_receive(:[]=).with('RAILS_ENV', nil)
-      Environment.stub!(:system)
       Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => nil))
       build.run
     end
 
-    it "runs the build command and update the build status" do
-      Environment.stub!(:system)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
+    it "runs the build command" do
+      Command.should_receive(:new).and_return(command = mock(Command))
+      command.should_receive(:running?).and_return(false)
+      command.should_receive(:execute_async).and_return(nil)
+      command.should_receive(:success?).and_return(true)
+      build.run
+    end
+
+    it "sets build status to failed if the build command succeeds" do
+      Command.stub(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))
       build.run
       build.status.should == "passed"
     end
 
     it "sets build status to failed if the build command fails" do
-      Environment.stub!(:system)
       Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => false))
       build.run
       build.status.should == "failed"
     end
   end
 
-  context "run with environment variables" do
-    let(:project) { Factory.build(:project) }
-    let(:build) { Factory.create(:build, :number => 1, :project => project, :environment_string => "FOO=bar") }
+  context "runs with" do
+    let(:project) { Factory(:project) }
+    let(:build) { Factory(:build, :number => 1, :project => project, :environment_string => "FOO=bar") }
 
-    it "should pass the environment variables to the system command" do
+    it "environment variables passed to the system command" do
       build.stub(:before_build)
       RVM.stub(:prepare_ruby)
       Command.stub!(:new).and_return(mock(:command, :running? => false, :execute_async => nil, :success? => true))

@@ -29,7 +29,7 @@ describe HomeController do
         real_build.should_receive('updated_at').and_return(DateTime.now)
         previously_built_project.should_receive(:latest_build).and_return(real_build)
         project_with_no_build = mock('project')
-        project_with_no_build.should_receive(:latest_build).and_return(Build.nil)
+        project_with_no_build.should_receive(:latest_build).and_return(Build.null)
         Project.should_receive(:all).and_return([previously_built_project, project_with_no_build])
         controller.load_projects
         assigns[:projects].should == [project_with_no_build, previously_built_project]
