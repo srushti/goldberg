@@ -26,7 +26,7 @@ class ScmProvider
         "svnversion ."
       end
       def checkout(url,code_path,branch)
-        "svn co #{url} #{@ode_path}"
+        "svn co #{url} #{code_path}"
       end
       def update
         "svn update"
