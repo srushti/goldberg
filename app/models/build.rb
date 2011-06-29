@@ -69,6 +69,7 @@ class Build < ActiveRecord::Base
     end
     if !(DateTime.now < start_time + project.timeout)
       command.kill
+      Goldberg.logger.error "Timeout (#{project.timeout})- killing #{command.pid}:#{command.cmd}"
       self.status = 'timeout'
     else
       self.status = command.success? ? 'passed' : 'failed'
