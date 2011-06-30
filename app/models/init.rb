@@ -1,8 +1,8 @@
 require "fileutils"
 
 class Init
-  def add(url, name, branch)
-    if Project.add(:url => url, :name => name, :branch => branch)
+  def add(url, name, branch,scm)
+    if Project.add(:url => url, :name => name, :branch => branch, :scm => scm)
       Rails.logger.info "#{name} successfully added."
     else
       Rails.logger.info "There was problem adding the project."
