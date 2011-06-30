@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   delegate :frequency, :ruby, :environment_string, :timeout, :nice, :to => :config
 
   def self.add(options)
-    project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch])
+    project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch], :scm => options[:scm])
     if project.checkout
       project.save!
       project
@@ -100,7 +100,7 @@ class Project < ActiveRecord::Base
   end
 
   def repository
-    @repository ||= Repository.new(code_path, url, branch)
+    @repository ||= Repository.new(code_path, url, branch, scm)
   end
 
   def self.find_by_name(name)

@@ -19,7 +19,7 @@ describe Project do
     context "adding a project" do
       it "creates a new projects and checks out the code for it" do
         Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master').and_return(true)
-        lambda { Project.add({:url => "git://some.url.git", :name => 'some_project', :branch => 'master'}) }.should change(Project, :count).by(1)
+        lambda { Project.add({:url => "git://some.url.git", :name => 'some_project', :branch => 'master', :scm => 'git'}) }.should change(Project, :count).by(1)
       end
     end
 
@@ -46,7 +46,7 @@ describe Project do
 
   describe "checkout" do
     it "checks out the code for the project" do
-      project = Project.new(:url => "git://some.url.git", :name => 'some_project', :branch => 'master')
+      project = Project.new(:url => "git://some.url.git", :name => 'some_project', :branch => 'master', :scm => 'git')
       Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master').and_return(true)
       project.checkout
     end
@@ -54,7 +54,7 @@ describe Project do
     it "doesn't create the project if the checkout fails" do
       lambda {
         Environment.should_receive(:system).with('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master').and_return(false)
-        Project.add(:url => 'git://some.url.git', :name => 'some_project', :branch => 'master')
+        Project.add(:url => 'git://some.url.git', :name => 'some_project', :branch => 'master',:scm => 'git')
       }.should_not change(Project, :count)
     end
   end
