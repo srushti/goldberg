@@ -65,7 +65,7 @@ class Project < ActiveRecord::Base
                                       :environment_string => environment_string).tap(&:run)
       self.build_requested = false
       Goldberg.logger.info "Build #{ new_build.status }"
-      after_build_runner.execute(latest_build, previous_build_status)
+      after_build_runner.execute(new_build, previous_build_status)
     end
     self.next_build_at = Time.now + frequency.seconds
     self.save
