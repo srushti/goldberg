@@ -230,12 +230,15 @@ describe Project do
 
         BuildMailNotification.stub!(:new).and_return(mail_notification)
         configuration = Project.configure do |config|
-          config.on_build_completion do |build,notification|
-            callback_tester.test_call(build,notification)
+          config.on_build_completion do |build,notification, prev_build_status|
+            callback_tester.test_call(build,notification,prev_build_status)
           end
         end
 
-        callback_tester.should_receive(:test_call).with(build,mail_notification)
+        latest_build = Build.new :number => 8, :status => 'prev_status'
+        project.builds << latest_build
+
+        callback_tester.should_receive(:test_call).with(build,mail_notification,'prev_status')
 
         project.stub(:config).and_return(configuration)
         project.builds.stub(:create!).and_return(build)
