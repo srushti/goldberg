@@ -4,13 +4,13 @@ describe Init do
   it "adds a new project" do
     Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master',:scm => 'git').and_return(true)
     Rails.logger.should_receive(:info).with('name successfully added.')
-    Init.new.add('url', 'name', 'master','git')
+    Init.new.add('url', 'name', 'master', 'git')
   end
 
   it "adds a new project with a custom command" do
     Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master',:scm => 'svn').and_return(true)
     Rails.logger.should_receive(:info).with('name successfully added.')
-    Init.new.add('url', 'name', 'master','svn')
+    Init.new.add('url', 'name', 'master', 'svn')
   end
 
   it "reports failure in adding a project" do

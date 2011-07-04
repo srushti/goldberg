@@ -1,7 +1,7 @@
 require "fileutils"
 
 class Init
-  def add(url, name, branch,scm)
+  def add(url, name, branch, scm)
     if Project.add(:url => url, :name => name, :branch => branch, :scm => scm)
       Rails.logger.info "#{name} successfully added."
     else
