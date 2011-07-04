@@ -1,31 +1,32 @@
 class Repository
-  def initialize(code_path, url, branch)
+  def initialize(code_path, url, branch,scm)
     @code_path = code_path
     @url = url
     @branch = branch
+    @provider = Scm.provider(scm)
   end
 
   def revision
-    Command.new("cd #{@code_path} && git rev-parse --verify HEAD").execute_with_output.strip
+    Command.new("cd #{@code_path} && #{@provider.revision}").execute_with_output.strip
   end
 
   def checkout
-    Command.new("git clone --depth 1 #{@url} #{@code_path} --branch #{@branch}").execute
+    Command.new(@provider.checkout(@url, @code_path, @branch)).execute
   end
 
   def update
     rev_before_update = revision
-    Command.new("cd #{@code_path} && git pull && git submodule init && git submodule update").execute
+    Command.new("cd #{@code_path} && #{@provider.update}").execute
     rev_after_update = revision
     rev_before_update != rev_after_update
   end
 
   def change_list(old_sha, new_sha)
     return "" if old_sha.blank?
-    Command.new("cd #{@code_path} && git whatchanged #{old_sha}..#{new_sha} --pretty=oneline --name-status").execute_with_output
+    Command.new("cd #{@code_path} && #{@provider.change_list(old_sha, new_sha)}").execute_with_output
   end
 
   def versioned?(file_path)
-    not Command.new("cd #{@code_path} && git checkout #{file_path} 2>>/dev/null || echo 'not versioned'").execute_with_output.include?('not versioned')
+    not Command.new("cd #{@code_path} && #{@provider.version(file_path)} 2>>/dev/null || echo 'not versioned'").execute_with_output.include?('not versioned')
   end
 end
