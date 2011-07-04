@@ -3,7 +3,7 @@ class Repository
     @code_path = code_path
     @url = url
     @branch = branch
-    @provider = ScmProvider.provider(scm)
+    @provider = Scm.provider(scm)
   end
 
   def revision
@@ -11,7 +11,7 @@ class Repository
   end
 
   def checkout
-    Environment.system(@provider.checkout(@url,@code_path,@branch))
+    Environment.system(@provider.checkout(@url, @code_path, @branch))
   end
 
   def update
@@ -23,7 +23,7 @@ class Repository
 
   def change_list(old_sha, new_sha)
     return "" if old_sha.blank?
-    Environment.system_call_output("cd #{@code_path} && #{@provider.change_list(old_sha,new_sha)}")
+    Environment.system_call_output("cd #{@code_path} && #{@provider.change_list(old_sha, new_sha)}")
   end
 
   def versioned?(file_path)
