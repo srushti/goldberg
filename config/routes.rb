@@ -1,6 +1,8 @@
 Goldberg::Application.routes.draw do
   root :to => "home#index"
 
+  get '/groups/:group_name' => 'home#index', :as => :group
+
   get '/home/projects_partial' => 'home#projects_partial', :as => :projects_partial
 
   ['XmlStatusReport.aspx', 'cctray.xml', 'cc.xml'].each do |route|

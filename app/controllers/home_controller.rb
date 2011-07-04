@@ -2,7 +2,8 @@ class HomeController < ApplicationController
   before_filter :load_projects, :only => [:index, :projects_partial]
 
   def load_projects
-    @grouped_projects = Project.all.sort_by {|x| x.latest_build.updated_at || DateTime.now }.reverse.group_by(&:group)
+    all_projects = params[:group_name] ? Project.all.select{|p| p.group == params[:group_name]} : Project.all
+    @grouped_projects = all_projects.sort_by {|x| x.latest_build.updated_at || DateTime.now }.reverse.group_by(&:group)
   end
 
   def projects_partial

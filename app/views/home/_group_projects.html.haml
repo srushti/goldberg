@@ -3,5 +3,5 @@
     = render :partial => 'projects', :locals => { :projects => grouped_projects['default'] }
   - else
     - grouped_projects.keys.each do |group_name|
-      %h3.group= group_name
+      %h3.group= link_to group_name, group_path(group_name)
       = render :partial => 'projects', :locals => { :projects => grouped_projects[group_name] }

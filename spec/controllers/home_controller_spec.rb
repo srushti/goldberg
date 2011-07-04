@@ -41,6 +41,13 @@ describe HomeController do
         assigns[:grouped_projects].should == {'something' => [first_project], 'default' => [second_project]}
       end
 
+      it "returns just one group" do
+        first_project = mock(:one, :group => 'something', :latest_build => mock(:build_one, :updated_at => nil))
+        second_project = mock(:two, :group => 'default', :latest_build => mock(:build_one, :updated_at => nil))
+        Project.should_receive(:all).and_return([first_project, second_project])
+        get action, :group_name => 'something'
+        assigns[:grouped_projects].should == {'something' => [first_project]}
+      end
     end
   end
 
