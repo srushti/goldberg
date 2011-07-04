@@ -4,7 +4,7 @@
 :javascript
   $(document).ready(function(){
     setInterval(function(){
-      $.get('#{projects_partial_path}', function(response){
+      $.get('#{params[:group_name] ? projects_partial_for_group_path(params[:group_name]) : projects_partial_path}', function(response){
         $('#all-projects').replaceWith(response);
       });
     }, 15 * 1000)
