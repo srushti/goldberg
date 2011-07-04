@@ -7,7 +7,6 @@ describe HomeController do
         projects = []
         Project.should_receive(:all).and_return(projects)
         get action
-        response.should be_ok
         assigns[:grouped_projects].should == {}
       end
 
@@ -19,7 +18,6 @@ describe HomeController do
         old_build.update_attributes(:updated_at => 2.days.ago)
         new_build.update_attributes(:updated_at => 1.day.ago)
         get action
-        response.should be_ok
         assigns[:grouped_projects].should == { 'default' => [new_project, old_project]}
       end
 
@@ -32,7 +30,6 @@ describe HomeController do
         project_with_no_build.should_receive(:latest_build).and_return(Build.null)
         Project.should_receive(:all).and_return([previously_built_project, project_with_no_build])
         get action
-        response.should be_ok
         assigns[:grouped_projects].should == { 'default' => [project_with_no_build, previously_built_project] }
       end
 
@@ -43,6 +40,7 @@ describe HomeController do
         get action
         assigns[:grouped_projects].should == {'something' => [first_project], 'default' => [second_project]}
       end
+
     end
   end
 
@@ -53,5 +51,9 @@ describe HomeController do
     response.should be_ok
     response.body.should be_empty
     assigns[:projects].should == projects
+  end
+
+  after(:each) do
+    response.should be_ok
   end
 end

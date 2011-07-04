@@ -6,7 +6,7 @@ class HomeController < ApplicationController
   end
 
   def projects_partial
-    render :partial => 'group_projects', :locals => { :projects => @projects }
+    render :partial => 'group_projects', :locals => { :grouped_projects => @grouped_projects }
   end
 
   def ccfeed

@@ -383,8 +383,4 @@ describe Project do
       Factory(:project, :url => 'http://github.com/some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
     end
   end
-
-  describe 'loads the correct build_command' do
-
-  end
 end
