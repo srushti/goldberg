@@ -2,11 +2,11 @@ class HomeController < ApplicationController
   before_filter :load_projects, :only => [:index, :projects_partial]
 
   def load_projects
-    @projects = Project.all.sort_by {|x| x.latest_build.updated_at || DateTime.now }.reverse
+    @grouped_projects = Project.all.sort_by {|x| x.latest_build.updated_at || DateTime.now }.reverse.group_by(&:group)
   end
 
   def projects_partial
-    render :partial => 'projects'
+    render :partial => 'group_projects', :locals => { :projects => @projects }
   end
 
   def ccfeed

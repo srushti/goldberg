@@ -8,7 +8,7 @@ describe HomeController do
         Project.should_receive(:all).and_return(projects)
         get action
         response.should be_ok
-        assigns[:projects].should == projects
+        assigns[:grouped_projects].should == {}
       end
 
       it "sorts the projects by most recent activity" do
@@ -20,19 +20,28 @@ describe HomeController do
         new_build.update_attributes(:updated_at => 1.day.ago)
         get action
         response.should be_ok
-        assigns[:projects].should == [new_project, old_project]
+        assigns[:grouped_projects].should == { 'default' => [new_project, old_project]}
       end
 
       it "can sort projects with no latest build" do
-        previously_built_project = mock('project')
+        previously_built_project = mock('project', :group => 'default')
         real_build = mock('build')
         real_build.should_receive('updated_at').and_return(DateTime.now)
         previously_built_project.should_receive(:latest_build).and_return(real_build)
-        project_with_no_build = mock('project')
+        project_with_no_build = mock('project', :group => 'default')
         project_with_no_build.should_receive(:latest_build).and_return(Build.null)
         Project.should_receive(:all).and_return([previously_built_project, project_with_no_build])
-        controller.load_projects
-        assigns[:projects].should == [project_with_no_build, previously_built_project]
+        get action
+        response.should be_ok
+        assigns[:grouped_projects].should == { 'default' => [project_with_no_build, previously_built_project] }
+      end
+
+      it "groups projects" do
+        first_project = mock(:one, :group => 'something', :latest_build => mock(:build_one, :updated_at => nil))
+        second_project = mock(:two, :group => 'default', :latest_build => mock(:build_one, :updated_at => nil))
+        Project.should_receive(:all).and_return([first_project, second_project])
+        get action
+        assigns[:grouped_projects].should == {'something' => [first_project], 'default' => [second_project]}
       end
     end
   end

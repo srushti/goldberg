@@ -10,4 +10,4 @@
     }, 15 * 1000)
   });
 
-= render :partial => 'projects'
+= render :partial => 'group_projects', :locals => { :grouped_projects => @grouped_projects }

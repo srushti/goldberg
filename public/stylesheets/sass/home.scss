@@ -14,7 +14,13 @@ $dark-grey: #444;
   line-height: 30px;
 
   .headings span { font-weight: bold; }
-  
+
+  h3.group {
+    line-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+  }
+
   .project-row{
     display: block;
     margin: 10px 10px 0 10px;
@@ -38,7 +44,7 @@ $dark-grey: #444;
   .project-row.cancelled {
     background-color: #cccccc;
   }
-  
+
   .project-row form{float: right;}
   .project-row form input{
     display: block;
@@ -63,7 +69,7 @@ $dark-grey: #444;
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
     }
-    
+
     &.passed span.status-icon{
     	background-color: #00b700;
     	background-image: url(/images/tick.png);

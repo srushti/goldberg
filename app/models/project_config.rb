@@ -1,5 +1,5 @@
 class ProjectConfig
-  attr_accessor :frequency, :ruby, :rake_task, :environment_variables, :timeout, :command, :nice
+  attr_accessor :frequency, :ruby, :rake_task, :environment_variables, :timeout, :command, :nice, :group
   attr_reader :build_completion_callbacks, :build_failure_callbacks, :build_fixed_callbacks, :build_success_callbacks
 
   def initialize
@@ -14,6 +14,7 @@ class ProjectConfig
     @timeout = 10.minutes
     @command = nil
     @nice = 0
+    @group = 'default'
   end
 
   def environment_string

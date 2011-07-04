@@ -1,0 +1,7 @@
+#all-projects
+  - if grouped_projects.keys.size == 1 && grouped_projects.keys.first == 'default'
+    = render :partial => 'projects', :locals => { :projects => grouped_projects['default'] }
+  - else
+    - grouped_projects.keys.each do |group_name|
+      %h3.group= group_name
+      = render :partial => 'projects', :locals => { :projects => grouped_projects[group_name] }
