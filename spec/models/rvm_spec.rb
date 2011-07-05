@@ -5,8 +5,8 @@ describe RVM do
     Env.stub!(:[]).with('HOME').and_return('home')
   end
 
+  paths = {'user' => 'home/.rvm/scripts/rvm', 'server' => '/usr/local/rvm/scripts/rvm',}
   context "installed?" do
-    paths = {'user' => 'home/.rvm/scripts/rvm', 'server' => '/usr/local/rvm/scripts/rvm',}
     paths.each do |installation_type, path|
       context "for #{installation_type}" do
         before(:each) do
@@ -40,6 +40,8 @@ describe RVM do
 
   context "not installed?" do
     it "generates a nil 'rvm use' script" do
+      File.stub!(:exist?).with(paths['user']).and_return(false)
+      File.stub!(:exist?).with(paths['server']).and_return(false)
       RVM.use_script('ruby', 'a_gemset').should be_nil
     end
   end
