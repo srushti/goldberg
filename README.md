@@ -15,7 +15,7 @@ Visit [goldberg.c42.in][] to see a live Goldberg server.
 ### Prerequisites
 
 * Ruby - CRuby 1.8.7/1.9.2 and JRuby 1.6.2 and upward are supported
-* Git > v1.6.5 (svn, hg and bzr are currently unsupported, but are on the roadmap)
+* Git > v1.6.5 and SVN > v1.6.0 (hg and bzr are currently unsupported, but are on the roadmap)
 * RVM if you want to be able to run projects on different rubies.
 * Your project should have a Gemfile for [Bundler][].
 
