@@ -64,10 +64,10 @@ class Build < ActiveRecord::Base
     start_time = DateTime.now
     command = Command.new(command)
     command.fork
-    while (DateTime.now < start_time + project.timeout && command.running?)
+    while (!exceeded_timeout?(start_time) && command.running?)
       sleep(10)
     end
-    if !(DateTime.now < start_time + project.timeout)
+    if exceeded_timeout?(start_time)
       command.kill
       Goldberg.logger.error "Timeout (#{project.timeout})- killing #{command.pid}:#{command.cmd}"
       self.status = 'timeout'
@@ -75,6 +75,10 @@ class Build < ActiveRecord::Base
       self.status = command.success? ? 'passed' : 'failed'
     end
     save
+  end
+
+  def exceeded_timeout?(start_time)
+    DateTime.now > start_time + project.timeout
   end
 
   def before_build

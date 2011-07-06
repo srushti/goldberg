@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe ProjectConfig do
+describe Project::Configuration do
   context "default value" do
-    let(:config) { ProjectConfig.new }
+    let(:config) { Project::Configuration.new }
 
     it "for build frequency should be 20 seconds" do
       config.frequency.should == 20

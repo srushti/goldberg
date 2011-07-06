@@ -114,7 +114,7 @@ describe Build do
     end
 
     it "runs the build command" do
-      config = ProjectConfig.new
+      config = Project::Configuration.new
       project.stub(:config).and_return(config)
       config.nice = 5
       expect_command("source #{Env['HOME']}/.rvm/scripts/rvm && rvm use --create @global && (gem list | grep bundler) || gem install bundler", :execute => true)

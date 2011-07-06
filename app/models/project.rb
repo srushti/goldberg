@@ -109,7 +109,7 @@ class Project < ActiveRecord::Base
   end
 
   def config
-    self.class.temp_config = ProjectConfig.new
+    self.class.temp_config = Project::Configuration.new
     if File.exists?(File.expand_path('goldberg_config.rb', self.code_path))
       config_code = Environment.read_file(File.expand_path('goldberg_config.rb', self.code_path))
       eval(config_code)
@@ -122,7 +122,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.configure
-    (Project.temp_config ||= ProjectConfig.new).tap{|config| yield config}
+    (Project.temp_config ||= Project::Configuration.new).tap{|config| yield config}
   end
 
   def self.projects_to_build

@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe BuildPostProcessor do
   let(:callback_tester) { mock }
-  let(:configuration) { ProjectConfig.new }
+  let(:configuration) { Project::Configuration.new }
   let(:previous_build_status){ mock }
   let(:mail_notification){ mock }
 
