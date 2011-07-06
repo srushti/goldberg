@@ -221,7 +221,7 @@ describe Project do
       end
 
       it "should read the environment variables from the config" do
-        config = ProjectConfig.new.tap{ |c| c.stub(:environment_string).and_return("FOO=bar") }
+        config = Project::Configuration.new.tap{ |c| c.stub(:environment_string).and_return("FOO=bar") }
         project.stub(:config).and_return(config)
         project.builds.should_receive(:create!).with(hash_including(:environment_string => "FOO=bar")).and_return(build)
         project.run_build
