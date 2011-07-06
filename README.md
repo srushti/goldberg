@@ -39,9 +39,11 @@ A sample god script file <code>config/god-script.rb</code> is available with Gol
 
 ### Setting up a new repository
 
-       RAILS_ENV=production bin/goldberg add <url> <name> [--branch <branch_name>]
+       RAILS_ENV=production bin/goldberg add <url> <name> [--branch <branch_name>] [--scm <git|svn>]
 
 By default it assumes the <code>master</code> branch. If you want to build on any other branch, use the -b --branch flag to specify it. The default command is <code>rake</code>, but you can also use "rake db:migrate && rake spec" if you have a rails project to build.
+
+Please note that by default, Goldberg times-out builds after 10 minutes. If you have a build that takes longer than this, you can increase the timeout period appropriately. Please see the section on Project Configuration for more details.
 
 ### Removing the repository
 
