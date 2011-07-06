@@ -98,7 +98,9 @@ Every project in Goldberg can have its own custom configuration by checking in a
                                   # Positive values have lower priority with a max of 19 on OSX and 20 on
                                   # Linux. You can set negative values, but we don't see the point.
         config.command = 'make'   # To be used if you're using anything other than rake
-        config.rake_task = 'ci'   # To be used if your CI build runs something other than the default task
+        config.rake_task = 'ci'   # To be used if your CI build runs something other than the default rake. 
+                                  # Not relevant if you're using config.command.
+        config.group = 'c42'      # Running a lot of projects on one server? Use this to logically group them.
       end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using `goldberg.yml` as mentioned above.
