@@ -8,7 +8,7 @@
   %ul
     - @project.builds.each do |build|
       %li.build{:class => "#{build_status(build)}#{build == @build ? ' selected' : ''}"}
-        %a.name{:href => project_build_path(@project.name, build.number)}= "#{build.number} #{build_status(build)}"
+        = link_to "#{build.number} #{build_status(build)}", project_build_path(@project.name, build.number)
         - if build.revision
           %span.revision= build.revision.slice(0, 6)
         - if build.timestamp
