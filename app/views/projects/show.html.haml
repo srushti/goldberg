@@ -8,7 +8,7 @@
   %ul
     - @project.builds.each do |build|
       %li.build{:class => "#{build_status(build)}#{build == @build ? ' selected' : ''}"}
-        %a.name{:href => project_build_path(:project_name => @project.name, :build_number => build.number)}= "#{build.number} #{build_status(build)}"
+        %a.name{:href => project_build_path(@project.name, build.number)}= "#{build.number} #{build_status(build)}"
         - if build.revision
           %span.revision= build.revision.slice(0, 6)
         - if build.timestamp
@@ -16,8 +16,8 @@
         %span.build-pointer
 .latest-build{:class => "#{build_status(@build)} clearfix"}
   %div.project_heading
-    %form.force_build{:method => 'post', :action => project_force_path(:project_name => @project.name)}
-      %input{:type => 'submit', :value => 'force build'}
+    %form.force_build{:method => 'post', :action => project_force_path(@project.name)}
+      %input{:type => 'submit', :value => "force build#{build_queued?(@project) ? ' (build queued)' : ''}"}
     %h2.project
       = @project.name
       %em.project_ruby (#{@project.ruby})

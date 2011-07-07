@@ -6,5 +6,9 @@ module HomeHelper
       image_tag "#{status}.png", :alt => status, :title => status
     end
   end
+
+  def build_queued?(project)
+    project.build_requested? && project.latest_build_status != 'building'
+  end
 end
 

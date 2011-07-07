@@ -1,12 +1,12 @@
 - projects.each do |project|
   - status = project_status(project)
   .project-row{:class => status}
-    %form.force_build{:method => 'post', :action => project_force_path(:project_name => project.name)}
-      %input{:type => 'submit', :value => 'force build'}
+    %form.force_build{:method => 'post', :action => project_force_path(project.name)}
+      %input{:type => 'submit', :value => "force build#{build_queued?(project) ? ' (build queued)' : ''}"}
     %span.status-icon
       &nbsp;
     %span.project-name{:class => status}
-      %a{:href => project_path(:project_name => project.name)}
+      %a{:href => project_path(project.name)}
         %strong= project.name
         %em.project_ruby (#{project.ruby})
     %span.last-built-at
