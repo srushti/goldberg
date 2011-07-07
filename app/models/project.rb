@@ -5,6 +5,7 @@ class Project < ActiveRecord::Base
   after_destroy :remove
   delegate :number, :status, :build_log, :timestamp, :to => :latest_build, :prefix => true
   delegate :timestamp, :status, :to => :last_complete_build, :prefix => true
+  cattr_accessor :temp_config
 
   validates_presence_of :branch, :name, :url
 
@@ -108,22 +109,24 @@ class Project < ActiveRecord::Base
   end
 
   def config
+    self.class.temp_config = ProjectConfig.new
     if File.exists?(File.expand_path('goldberg_config.rb', self.code_path))
       config_code = Environment.read_file(File.expand_path('goldberg_config.rb', self.code_path))
       eval(config_code)
-    else
-      ProjectConfig.new
     end
+    if File.exists?(File.expand_path('goldberg_config.rb', self.path))
+      config_code = Environment.read_file(File.expand_path('goldberg_config.rb', self.path))
+      eval(config_code)
+    end
+    self.class.temp_config
   end
 
   def self.configure
-    config = ProjectConfig.new
-    yield config
-    config
+    (Project.temp_config ||= ProjectConfig.new).tap{|config| yield config}
   end
 
   def self.projects_to_build
-    Project.where("build_requested = 't' or next_build_at is null or next_build_at <= :next_build_at", :next_build_at => Time.now)
+    where("build_requested = 't' or next_build_at is null or next_build_at <= :next_build_at", :next_build_at => Time.now)
   end
 
   def activity

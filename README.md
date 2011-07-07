@@ -15,7 +15,7 @@ Visit [goldberg.c42.in][] to see a live Goldberg server.
 ### Prerequisites
 
 * Ruby - CRuby 1.8.7/1.9.2 and JRuby 1.6.2 and upward are supported
-* Git > v1.6.5 (svn, hg and bzr are currently unsupported, but are on the roadmap)
+* Git > v1.6.5 and SVN > v1.6.0 (hg and bzr are currently unsupported, but are on the roadmap)
 * RVM if you want to be able to run projects on different rubies.
 * Your project should have a Gemfile for [Bundler][].
 
@@ -39,9 +39,11 @@ A sample god script file <code>config/god-script.rb</code> is available with Gol
 
 ### Setting up a new repository
 
-       RAILS_ENV=production bin/goldberg add <url> <name> [--branch <branch_name>]
+       RAILS_ENV=production bin/goldberg add <url> <name> [--branch <branch_name>] [--scm <git|svn>]
 
 By default it assumes the <code>master</code> branch. If you want to build on any other branch, use the -b --branch flag to specify it. The default command is <code>rake</code>, but you can also use "rake db:migrate && rake spec" if you have a rails project to build.
+
+Please note that by default, Goldberg times-out builds after 10 minutes. If you have a build that takes longer than this, you can increase the timeout period appropriately. Please see the section on Project Configuration for more details.
 
 ### Removing the repository
 
@@ -96,7 +98,9 @@ Every project in Goldberg can have its own custom configuration by checking in a
                                   # Positive values have lower priority with a max of 19 on OSX and 20 on
                                   # Linux. You can set negative values, but we don't see the point.
         config.command = 'make'   # To be used if you're using anything other than rake
-        config.rake_task = 'ci'   # To be used if your CI build runs something other than the default task
+        config.rake_task = 'ci'   # To be used if your CI build runs something other than the default rake. 
+                                  # Not relevant if you're using config.command.
+        config.group = 'c42'      # Running a lot of projects on one server? Use this to logically group them.
       end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds using `goldberg.yml` as mentioned above.

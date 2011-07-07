@@ -89,6 +89,7 @@ describe Project do
       project = Factory(:project)
       File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(false)
       File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
       project.build_command.should_not include(Bundle.check_and_install)
     end
 
@@ -96,6 +97,7 @@ describe Project do
       project = Factory(:project)
       File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile')).and_return(true)
       File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
       project.build_command.should include(Bundle.check_and_install)
     end
 
@@ -103,6 +105,7 @@ describe Project do
       project = Factory(:project)
       File.should_receive(:exists?).with(File.join(project.code_path, 'Gemfile'))
       File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
       Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.command = 'cmake' }")
       project.build_command.should eq('nice -n 0 cmake')
     end
@@ -235,7 +238,7 @@ describe Project do
           end
         end
 
-        callback_tester.should_receive(:test_call).with(build,mail_notification)
+        callback_tester.should_receive(:test_call).with(build, mail_notification)
 
         project.stub(:config).and_return(configuration)
         project.builds.stub(:create!).and_return(build)
@@ -289,15 +292,28 @@ describe Project do
     let(:project) { Factory(:project, :name => 'goldberg') }
 
     it "loads a new configuration object with default values if goldberg_config.rb is not found" do
-      File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
       Environment.should_not_receive(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path))
+      Environment.should_not_receive(:read_file).with(File.expand_path('goldberg_config.rb', project.path))
       project.config.should_not be_nil
     end
 
     it "evals the goldberg_config.rb and returns the modified config as project config when file exists" do
-      File.should_receive(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
-      Environment.should_receive(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure{|c| c.frequency = 30 }")
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
+      Environment.stub(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure{|c| c.frequency = 30 }")
       project.config.frequency.should == 30
+    end
+
+    it "loads the server-side config which overrides the checked in version" do
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(true)
+      Environment.stub(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure{|c| c.frequency = 30; c.ruby = 'rbx' }")
+      Environment.stub(:read_file).with(File.expand_path('goldberg_config.rb', project.path)).and_return("Project.configure{|c| c.frequency = 45; c.nice = '+1' }")
+      project.config.frequency.should == 45
+      project.config.ruby.should == 'rbx'
+      project.config.nice.should == '+1'
     end
   end
 
