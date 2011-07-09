@@ -20,6 +20,10 @@ module Scm
       def version(file_path)
         "svn info #{file_path}"
       end
+
+      def author(version)
+        "svn info -r#{version} | awk '/Author/{print $4}'"
+      end
     end
   end
 end

@@ -25,6 +25,9 @@ class Repository
     return "" if old_sha.blank?
     Command.new("cd #{@code_path} && #{@provider.change_list(old_sha, new_sha)}").execute_with_output
   end
+  def author(version)
+    Command.new("cd #{@code_path} && #{@provider.author(version)}").execute_with_output.strip
+  end
 
   def versioned?(file_path)
     not Command.new("cd #{@code_path} && #{@provider.version(file_path)} 2>>/dev/null || echo 'not versioned'").execute_with_output.include?('not versioned')

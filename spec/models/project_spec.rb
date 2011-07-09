@@ -266,6 +266,44 @@ describe Project do
     failed_build.reload.status.should == 'failed'
   end
 
+  describe "culprit_build" do
+    it"returns build which orignially failed " do
+      project = Factory(:project)
+      passed_build = Factory(:build, :project => project, :status => 'passed')
+      culprit_build = Factory(:build, :project => project, :status => 'failed')
+      innocent_build = Factory(:build, :project => project, :status => 'failed')
+      project.culprit_build.should == culprit_build
+    end
+    it"returns last failed build if there are no passing builds" do
+      project = Factory(:project)
+      culprit_build = Factory(:build, :project => project, :status => 'failed')
+      innocent_build2 = Factory(:build, :project => project, :status => 'failed')
+      innocent_build = Factory(:build, :project => project, :status => 'failed')
+      project.culprit_build.should == culprit_build
+    end
+    it"returns nil if the latest build passed" do
+      project = Factory(:project)
+      failed_build = Factory(:build, :project => project, :status => 'failed')
+      passed_build = Factory(:build, :project => project, :status => 'passed')
+      project.culprit_build.should be_nil
+    end
+  end
+
+  describe "culprit_for_failure" do
+    it "returns author of the culprit build" do
+      project = Factory(:project)
+      passed_build = Factory(:build, :project => project, :status => 'failed', :revision => 'failed_revision')
+
+      project.repository.should_receive(:author).with('failed_revision')
+      project.culprit_for_failure
+    end
+    it "returns empty string if there is no culprit build" do
+      project = Factory(:project)
+      passed_build = Factory(:build, :project => project, :status => 'passed')
+      project.culprit_for_failure.should  == ''
+    end
+  end
+
   describe "build preprocessing" do
     let(:project) { Factory(:project, :name => "goldberg") }
 
