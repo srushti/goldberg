@@ -99,6 +99,15 @@ class Project < ActiveRecord::Base
     builds.detect { |build| !['building', 'cancelled'].include?(build.status) } || Build.null
   end
 
+  def culprit_for_failure
+    culprit_build.nil?? '':repository.author(culprit_build.revision)
+  end
+
+  def culprit_build
+    culprit_build = nil
+    builds.each{|build| culprit_build = build if build.status =='failed' ; return culprit_build if build.status == 'passed'}
+    culprit_build
+  end
   def repository
     @repository ||= Repository.new(code_path, url, branch, scm)
   end
