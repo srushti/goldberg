@@ -20,8 +20,8 @@ module Scm
       def version(file_path)
         "git checkout #{file_path}"
       end
-      def author(version)
-        "git show  -s  --pretty=\"format:%an\"  #{version}"
+      def author(versions)
+        "git show  -s  --pretty=\"format:%an\"  #{versions.join('..')}"
       end
     end
   end

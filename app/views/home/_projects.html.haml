@@ -15,6 +15,6 @@
     - if project.github_url
       %span.github-url
         = link_to "on Github", project.github_url
-    - if !project.culprit_for_failure.empty?
+    - if !project.culprits_for_failure.empty?
       %span.culprit
-        = " (Possible culprit: #{project.culprit_for_failure})"
+        = "(Possible culprit(s): #{project.culprit_for_failure})"

@@ -21,8 +21,8 @@ module Scm
         "svn info #{file_path}"
       end
 
-      def author(version)
-        "svn info -r#{version} | awk '/Author/{print $4}'"
+      def author(versions)
+        "svn log -r#{versions.join(':')} | grep \"^[r\d]\" | awk '{print $3}'| uniq"
       end
     end
   end

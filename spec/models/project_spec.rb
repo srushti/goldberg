@@ -266,41 +266,42 @@ describe Project do
     failed_build.reload.status.should == 'failed'
   end
 
-  describe "culprit_build" do
+  describe "culprit_build_range" do
     it"returns build which orignially failed " do
       project = Factory(:project)
-      passed_build = Factory(:build, :project => project, :status => 'passed')
-      culprit_build = Factory(:build, :project => project, :status => 'failed')
-      innocent_build = Factory(:build, :project => project, :status => 'failed')
-      project.culprit_build.should == culprit_build
+      passed_build = Factory(:build, :project => project, :status => 'passed',:revision => 'passed1')
+      culprit_build = Factory(:build, :project => project, :status => 'failed',:revision => 'failed1')
+      innocent_build = Factory(:build, :project => project, :status => 'failed',:revision => 'failed2')
+      project.culprit_build_range.should == [passed_build,culprit_build]
     end
     it"returns last failed build if there are no passing builds" do
       project = Factory(:project)
       culprit_build = Factory(:build, :project => project, :status => 'failed')
       innocent_build2 = Factory(:build, :project => project, :status => 'failed')
       innocent_build = Factory(:build, :project => project, :status => 'failed')
-      project.culprit_build.should == culprit_build
+      project.culprit_build_range.should == [culprit_build]
     end
     it"returns nil if the latest build passed" do
       project = Factory(:project)
       failed_build = Factory(:build, :project => project, :status => 'failed')
       passed_build = Factory(:build, :project => project, :status => 'passed')
-      project.culprit_build.should be_nil
+      project.culprit_build_range.should be_nil
     end
   end
 
-  describe "culprit_for_failure" do
-    it "returns author of the culprit build" do
+  describe "culprits_for_failure" do
+    it "returns authors of the culprit build" do
       project = Factory(:project)
-      passed_build = Factory(:build, :project => project, :status => 'failed', :revision => 'failed_revision')
+      passed_build = Factory(:build, :project => project, :status => 'passed', :revision => 'passed_revision')
+      failed_build = Factory(:build, :project => project, :status => 'failed', :revision => 'failed_revision')
 
-      project.repository.should_receive(:author).with('failed_revision')
-      project.culprit_for_failure
+      project.repository.should_receive(:author).with(['passed_revision','failed_revision'])
+      project.culprits_for_failure
     end
     it "returns empty string if there is no culprit build" do
       project = Factory(:project)
       passed_build = Factory(:build, :project => project, :status => 'passed')
-      project.culprit_for_failure.should  == ''
+      project.culprits_for_failure.should  == ''
     end
   end
 
