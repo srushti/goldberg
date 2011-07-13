@@ -17,4 +17,4 @@
         = link_to "on Github", project.github_url
     - if !project.culprits_for_failure.empty?
       %span.culprit
-        = "(Possible culprit(s): #{project.culprit_for_failure})"
+        = "(Possible culprit(s): #{project.culprits_for_failure})"
