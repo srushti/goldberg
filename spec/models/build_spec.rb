@@ -85,7 +85,7 @@ describe Build do
 
   context "run" do
     let(:project) { Factory.build(:project) }
-    let(:build) { Factory.create(:build, :number => 1, :project => project) }
+    let(:build) { Factory.create(:build, :number => 1, :project => project, :ruby => '1.9.2') }
 
     before(:each) do
       build.stub(:before_build)
@@ -102,24 +102,12 @@ describe Build do
       build.run
     end
 
-    it "resets the appropriate environment variables before executing the command to build the project" do
-      Env.should_receive(:[]=).with('BUNDLE_GEMFILE', nil)
-      Env.should_receive(:[]=).with('RUBYOPT', nil)
-      build.stub!(:artefacts_path).and_return('artefacts path')
-      Env.should_receive(:[]=).with('BUILD_ARTEFACTS', 'artefacts path')
-      Env.should_receive(:[]=).with('BUILD_ARTIFACTS', 'artefacts path')
-      Env.should_receive(:[]=).with('RAILS_ENV', nil)
-      Command.stub!(:new).and_return(mock(:command, :running? => false, :execute => true, :fork => nil, :success? => nil))
-      build.run
-    end
-
     it "runs the build command" do
       config = Project::Configuration.new
       project.stub(:config).and_return(config)
+      build.environment_string = "FOO=bar"
       config.nice = 5
-      expect_command("source #{Env['HOME']}/.rvm/scripts/rvm && rvm use --create @global && (gem list | grep bundler) || gem install bundler", :execute => true)
-      expect_command("rvm rvmrc trust #{Env['HOME']}/.goldberg/projects/#{project.name}/code", :execute => true)
-      expect_command("(source #{Env['HOME']}/.rvm/scripts/rvm && rvm use --create @goldberg-#{project.name} ; cd #{Env['HOME']}/.goldberg/projects/#{project.name}/code ;  nice -n 5 rake default) 1>>#{Env['HOME']}/.goldberg/projects/#{project.name}/builds/1/build_log 2>>#{Env['HOME']}/.goldberg/projects/#{project.name}/builds/1/build_log",
+      expect_command("FOO=bar script/goldberg-build '#{project.name}' '1.9.2' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/code' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/builds/1/build_log' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/builds/1/artefacts' '5' rake default",
         :running? => false, :fork => nil, :success? => true
       )
       build.run
@@ -135,18 +123,6 @@ describe Build do
       Command.stub!(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => false))
       build.run
       build.status.should == "failed"
-    end
-  end
-
-  context "runs with" do
-    let(:project) { Factory(:project) }
-    let(:build) { Factory(:build, :number => 1, :project => project, :environment_string => "FOO=bar") }
-
-    it "environment variables passed to the system command" do
-      build.stub(:before_build)
-      RVM.stub(:prepare_ruby)
-      Command.stub!(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => true))
-      build.run.should be_true
     end
   end
 

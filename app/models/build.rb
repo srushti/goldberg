@@ -46,17 +46,9 @@ class Build < ActiveRecord::Base
   def run
     before_build
     Bundler.with_clean_env do
-      Env['BUNDLE_GEMFILE'] = nil
-      Env["RUBYOPT"] = nil # having RUBYOPT was causing problems while doing bundle install resulting in gems not being installed
-      Env['RAILS_ENV'] = nil
-      Env['BUILD_ARTIFACTS'] = Env['BUILD_ARTEFACTS'] = artefacts_path
-      RVM.prepare_ruby(ruby)
-      RVM.trust_rvmrc(project.code_path)
-      go_to_project_path = "cd #{project.code_path}"
-      build_command = "#{environment_string} #{project.build_command}"
-      full_command = [RVM.use_script(ruby, "goldberg-#{project.name}"), go_to_project_path, build_command].compact.join(' ; ')
-      output_redirects = "1>>#{build_log_path} 2>>#{build_log_path}"
-      execute_async("(#{full_command}) #{output_redirects}")
+      build_command = "script/goldberg-build '#{project.name}' '#{ruby}' '#{project.code_path}' '#{build_log_path}' '#{artefacts_path}' '#{project.nice}' #{project.build_command}"
+      full_command = "#{environment_string} #{build_command}"
+      execute_async(full_command)
     end
   end
 
