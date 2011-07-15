@@ -12,7 +12,9 @@ code_path="$1" && shift
 build_log_path="$1" && shift
 artifacts_path="$1" && shift
 nice_value="$1" && shift
-command="$@"
+build_command="$@"
+
+# echo $project, $ruby, $code_path, $build_log_path, $artifacts_path, $nice_value, $build_command >> $build_log_path
 
 export BUNDLE_GEMFILE=""
 export RUBYOPT=""
@@ -35,6 +37,8 @@ update_bundle()
 {
   if [ -e Gemfile ]; then
     bundle check --no-color || bundle install --no-color || return -1
+  else
+    echo "No Gemfile found"
   fi
 }
 
@@ -46,5 +50,5 @@ if rvm_script_sourced ; then
 fi
 
 cd $code_path
-update_bundle || exit -1
-exec nice -n $nice_value $build_command > $build_log_path 2>&1
+update_bundle >> $build_log_path 2>&1 || exit -1
+exec nice -n $nice_value $build_command >> $build_log_path 2>&1
