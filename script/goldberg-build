@@ -1,0 +1,54 @@
+#! /bin/bash
+
+if [ $# == 0 ]; then
+  echo "This script is meant to be run by goldberg"
+  echo "goldberg-build project ruby code_path build_log_path artefacts_path nice_value build_command"
+  exit 1
+fi
+
+project="$1" && shift
+ruby="$1" && shift
+code_path="$1" && shift
+build_log_path="$1" && shift
+artifacts_path="$1" && shift
+nice_value="$1" && shift
+build_command="$@"
+
+# echo $project, $ruby, $code_path, $build_log_path, $artifacts_path, $nice_value, $build_command >> $build_log_path
+
+export BUNDLE_GEMFILE=""
+export RUBYOPT=""
+export RAILS_ENV=""
+export BUILD_ARTIFACTS="$artifacts_path"
+export BUILD_ARTEFACTS="$artifacts_path"
+
+rvm_script_sourced()
+{
+  if [ -e ~/.rvm/scripts/rvm ]; then
+    source ~/.rvm/scripts/rvm
+  elif [ -e /usr/local/rvm/scripts/rvm]; then
+    source /usr/local/rvm/scripts/rvm
+  else
+    return -1
+  fi
+}
+
+update_bundle()
+{
+  if [ -e Gemfile ]; then
+    bundle check --no-color || bundle install --no-color || return -1
+  else
+    echo "No Gemfile found"
+  fi
+}
+
+if rvm_script_sourced ; then 
+  rvm use --create "$ruby@global"
+  (gem list | grep bundler) || gem install bundler
+  rvm rvmrc trust $code_path
+  rvm use $ruby@goldberg-$project
+fi
+
+cd $code_path
+update_bundle >> $build_log_path 2>&1 || exit -1
+exec nice -n $nice_value $build_command >> $build_log_path 2>&1
