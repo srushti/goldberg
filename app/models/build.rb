@@ -77,7 +77,6 @@ class Build < ActiveRecord::Base
     self.status = "building"
     save
     persist_change_list
-    FileUtils.mkdir_p(artefacts_path)
   end
 
   def persist_change_list

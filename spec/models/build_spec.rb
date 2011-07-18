@@ -130,7 +130,6 @@ describe Build do
     it "sets build status to 'building' and persist the change list" do
       build = Factory.build(:build)
       build.should_receive(:persist_change_list)
-      FileUtils.should_receive(:mkdir_p).with(build.artefacts_path)
       build.before_build
       build.reload.status.should == 'building'
     end

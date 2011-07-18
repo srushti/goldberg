@@ -51,4 +51,5 @@ fi
 
 cd $code_path
 update_bundle >> $build_log_path 2>&1 || exit -1
+mkdir -p "$artifacts_path"
 exec nice -n $nice_value $build_command >> $build_log_path 2>&1
