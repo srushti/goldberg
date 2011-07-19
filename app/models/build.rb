@@ -46,9 +46,8 @@ class Build < ActiveRecord::Base
   def run
     before_build
     Bundler.with_clean_env do
-      build_command = "script/goldberg-build '#{project.name}' '#{ruby}' '#{project.code_path}' '#{build_log_path}' '#{artefacts_path}' '#{project.nice}' #{project.build_command}"
-      full_command = "#{environment_string} #{build_command}"
-      execute_async(full_command)
+      build_command = "script/goldberg-build '#{project.name}' '#{ruby}' '#{project.code_path}' '#{build_log_path}' '#{artefacts_path}' '#{project.nice}' '#{environment_string}' #{project.build_command}"
+      execute_async(build_command)
     end
   end
 
