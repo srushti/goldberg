@@ -25,7 +25,7 @@ rvm_script_sourced()
 {
   if [ -e ~/.rvm/scripts/rvm ]; then
     source ~/.rvm/scripts/rvm
-  elif [ -e /usr/local/rvm/scripts/rvm]; then
+  elif [ -e /usr/local/rvm/scripts/rvm ]; then
     source /usr/local/rvm/scripts/rvm
   else
     return -1
