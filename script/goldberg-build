@@ -1,4 +1,4 @@
-#! /usr/bin/env -i /bin/bash
+#! /bin/bash
 
 if [ $# == 0 ]; then
   echo "This script is meant to be run by goldberg"
