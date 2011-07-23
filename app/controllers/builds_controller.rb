@@ -34,6 +34,6 @@ class BuildsController < ApplicationController
   end
 
   def show
-    render 'projects/show'
+    render :layout => (params[:_pjax] ? false : 'builds')
   end
 end

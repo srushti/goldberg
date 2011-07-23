@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
     else
       @build = @project.latest_build
       respond_to do |format|
-        format.html {}
+        format.html { render 'builds/show', :layout => 'builds' }
         format.png do
           filename = status_to_filename(@project.last_complete_build_status)
           send_file File.join(Rails.public_path, "images/badge/#{filename}.png"), :disposition => 'inline', :content_type => Mime::Type.lookup_by_extension('png')

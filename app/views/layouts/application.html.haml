@@ -22,7 +22,7 @@
           %h4 Lightweight Continuous Integration in Ruby
 
         .page
-          = yield
+          = content_for?(:content) ? yield(:content) : yield
       .push
     .footer
       .logo

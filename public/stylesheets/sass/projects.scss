@@ -90,20 +90,11 @@ li.build {
   box-shadow: 0 0 5px rgba(0,0,0,0.5);
   border-radius: 8px;
 
-  &.passed {
-    .project_heading { background-color: $light-green; }
-  }
-
-  &.failed, &.timeout {
-    .project_heading { background-color: $light-red; }
-  }
-
-  &.building {
-    .project_heading { background-color: $light-yellow; }
-  }
-
-  &.cancelled {
-    .project_heading { background-color: $light-grey; }
+  .project_heading {
+    &.passed { background-color: $light-green; }
+    &.failed, &.timeout { background-color: $light-red; }
+    &.building { background-color: $light-yellow; }
+    &.cancelled { background-color: $light-grey; }
   }
 
   pre{

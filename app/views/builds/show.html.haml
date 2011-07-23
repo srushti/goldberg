@@ -1,0 +1,13 @@
+%div.project_heading{:class => "#{build_status(@build)}"}
+  %form.force_build{:method => 'post', :action => project_force_path(@project.name)}
+    %input{:type => 'submit', :value => "force build#{build_queued?(@project) ? ' (build queued)' : ''}"}
+  %h2.project
+    = @project.name
+    %em.project_ruby (#{@project.ruby})
+    %strong.project_status= "#{build_status(@build)}"
+  - unless @build.artefacts.empty?
+    %ul
+      Build artefacts
+      - @build.artefacts.each do |artefact|
+        %li= link_to artefact, "/projects/#{@project.name}/builds/#{@build.number}/artefacts/#{artefact}"
+  %pre= @build.build_log
