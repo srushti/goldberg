@@ -1,0 +1,22 @@
+- content_for(:head) do
+  = stylesheet_link_tag 'projects'
+  = javascript_include_tag 'jquery.pjax', 'projects'
+
+- @title = "Goldberg - #{@project.name}"
+
+- content_for(:content) do
+  .past-builds
+    %h3 Latest Builds
+    %ul
+      - @project.builds.each do |build|
+        %li.build{:class => "#{build_status(build)}#{build == @build ? ' selected' : ''}"}
+          = link_to "#{build.number} #{build_status(build)}", project_build_path(@project.name, build.number)
+          - if build.revision
+            %span.revision= build.revision.slice(0, 6)
+          - if build.timestamp
+            = format_timestamp(build.timestamp)
+          %span.build-pointer
+
+  .latest-build.clearfix= yield
+
+= render :file => 'layouts/application'
