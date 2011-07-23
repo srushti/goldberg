@@ -59,11 +59,11 @@ class Project < ActiveRecord::Base
   def run_build
     clean_up_older_builds
     if self.repository.update || build_required?
+      update_attribute :build_requested, false
       previous_build_status = last_complete_build_status
       prepare_for_build
       new_build = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby,
                                       :environment_string => environment_string).tap(&:run)
-      self.build_requested = false
       Goldberg.logger.info "Build #{ new_build.status }"
       after_build_runner.execute(new_build, previous_build_status)
     end
