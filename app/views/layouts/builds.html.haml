@@ -1,6 +1,6 @@
 - content_for(:head) do
   = stylesheet_link_tag 'projects'
-  = javascript_include_tag 'jquery.pjax', 'projects'
+  = javascript_include_tag 'jquery.pjax', 'jquery.timeago', 'projects'
 
 - @title = "Goldberg - #{@project.name}"
 
@@ -14,7 +14,7 @@
           - if build.revision
             %span.revision= build.revision.slice(0, 6)
           - if build.timestamp
-            = format_timestamp(build.timestamp)
+            %span.timeago(title="#{build.timestamp.iso8601}")
           %span.build-pointer
 
   .latest-build.clearfix= yield
