@@ -23,4 +23,6 @@ $(document).ready(function() {
   });
 
   $('.build a').click(loadWithPjax);
+  
+  $('.timeago').timeago();
 });
