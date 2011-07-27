@@ -32,7 +32,7 @@ class Command
   end
 
   def kill
-    @process.send_kill
+    @process.stop
   end
   
   def pid
