@@ -17,9 +17,9 @@ build_command="$@"
 
 # echo $project, $ruby, $code_path, $build_log_path, $artifacts_path, $nice_value, $build_command >> $build_log_path
 
-export BUNDLE_GEMFILE=""
-export RUBYOPT=""
-export RAILS_ENV=""
+unset BUNDLE_GEMFILE
+unset RUBYOPT
+unset RAILS_ENV
 export BUILD_ARTIFACTS="$artifacts_path"
 export BUILD_ARTEFACTS="$artifacts_path"
 
