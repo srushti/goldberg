@@ -21,7 +21,7 @@ module Scm
         "git checkout #{file_path}"
       end
       def author(versions)
-        "git show  -s  --pretty=\"format:%an\"  #{versions.join('..')}"
+        "git show  -s  --pretty=\"format:%an\"  #{versions.join('..')}| uniq| tr \"\\n\" \" \""
       end
     end
   end

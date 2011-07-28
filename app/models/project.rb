@@ -100,10 +100,10 @@ class Project < ActiveRecord::Base
   end
 
   def culprits_for_failure
-    culprit_build_range.nil?? '':repository.author(culprit_build_range.collect(&:revision))
+    culprit_revision_range.nil?? '':repository.author(culprit_revision_range.collect(&:revision))
   end
 
-  def culprit_build_range
+  def culprit_revision_range
     return nil if last_complete_build.status == 'passed'
     culprit_build = nil
     builds.each{|build| culprit_build = build if build.status =='failed' ; return [build,culprit_build] if build.status == 'passed'}

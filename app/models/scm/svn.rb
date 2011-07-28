@@ -22,7 +22,7 @@ module Scm
       end
 
       def author(versions)
-        "svn log -r#{versions.join(':')} | grep \"^[r\d]\" | awk '{print $3}'| uniq"
+        "svn log -r#{versions.join(':')} | grep \"^[r\d]\" | awk '{print $3}'| uniq| tr \"\\n\" \" \""
       end
     end
   end
