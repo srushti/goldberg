@@ -8,11 +8,13 @@ class Project < ActiveRecord::Base
   cattr_accessor :temp_config
 
   validates_presence_of :branch, :name, :url
+  validates_uniqueness_of :name
 
   delegate :frequency, :ruby, :environment_string, :timeout, :nice, :group, :to => :config
 
   def self.add(options)
     project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch], :scm => options[:scm])
+    return if !project.valid?
     if project.checkout
       project.save!
       project

@@ -21,6 +21,11 @@ describe Project do
         expect_command('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master', :execute => true)
         lambda { Project.add({:url => "git://some.url.git", :name => 'some_project', :branch => 'master', :scm => 'git'}) }.should change(Project, :count).by(1)
       end
+
+      it "doesn't do anything if a project already exists with the same name" do
+        Factory(:project, :name => 'foo')
+        lambda { Project.add(:name => 'foo').should be_nil }.should_not change(Project, :count)
+      end
     end
 
     context "removing a project" do
