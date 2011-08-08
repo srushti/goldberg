@@ -1,6 +1,6 @@
 # Goldberg 1.0.0
 
-© Copyright 2010–2011 [C42 Engineering][]. All Rights Reserved. <a href='http://goldberg.c42.in/projects/goldberg'><img src='http://goldberg.c42.in/projects/goldberg.png' alt='Goldberg Build Status'></a>
+© Copyright 2010–2011 [C42 Engineering][]. All Rights Reserved. <a href='http://ci.c42.in/projects/goldberg'><img src='http://ci.c42.in/projects/goldberg.png' alt='Goldberg Build Status'></a>
 
 Goldberg is an alternative to [CruiseControl.rb][] that adheres to the same principles of being simple to use and easy to contribute to. It currently meets all common use cases of a lightweight CI server, and we plan to add more over time. A large majority of projects should be able to switch from CC.rb to Goldberg with little or no effort.
 
@@ -8,7 +8,7 @@ The upcoming [1.1 release](https://github.com/c42/goldberg/issues/milestones?_pj
 
 Goldberg can be used to continuously integrate codebases built using any language, not just Ruby.
 
-Visit [goldberg.c42.in][] to see a live Goldberg server.
+Visit [ci.c42.in][] to see a live Goldberg server.
 
 ## Setting up your own Goldberg server
 
@@ -66,7 +66,7 @@ There's a god-script under config directory which can be used to start a poller 
 
 ### Tracking build status
 
-Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml` (for finicky monitors we also have cctray.xml & XmlStatusReport.aspx). eg: [cc.xml](http://goldberg.c42.in/cc.xml)
+Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml` (for finicky monitors we also have cctray.xml & XmlStatusReport.aspx). eg: [cc.xml](http://ci.c42.in/cc.xml)
 
 ### Configuration
 
@@ -98,7 +98,7 @@ Every project in Goldberg can have its own custom configuration by checking in a
                                   # Positive values have lower priority with a max of 19 on OSX and 20 on
                                   # Linux. You can set negative values, but we don't see the point.
         config.command = 'make'   # To be used if you're using anything other than rake
-        config.rake_task = 'ci'   # To be used if your CI build runs something other than the default rake. 
+        config.rake_task = 'ci'   # To be used if your CI build runs something other than the default rake.
                                   # Not relevant if you're using config.command.
         config.group = 'c42'      # Running a lot of projects on one server? Use this to logically group them.
       end
@@ -159,11 +159,11 @@ Assume you want to post a message on IRC channel & there is a gem that can be us
 
   [C42 Engineering]: http://c42.in
   [CruiseControl.rb]: https://github.com/thoughtworks/cruisecontrol.rb
-  [goldberg.c42.in]: http://goldberg.c42.in
+  [ci.c42.in]: http://ci.c42.in
   [Bundler]: http://gembundler.com/
   [CCMenu (mac)]: http://ccmenu.sourceforge.net/
   [BuildNotify (linux)]: https://bitbucket.org/Anay/buildnotify/wiki/Home
-  [goldberg.c42.in/XmlStatusReport.aspx]: http://goldberg.c42.in/XmlStatusReport.aspx
+  [ci.c42.in/XmlStatusReport.aspx]: http://ci.c42.in/XmlStatusReport.aspx
   [srushti]: http://github.com/srushti
   [srushtitwitter]: http://github.com/srshti
   [jasim]: http://github.com/jasim
