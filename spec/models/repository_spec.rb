@@ -12,6 +12,13 @@ describe Repository do
     repo.revision.should == "random_sha"
   end
 
+  context "author" do
+    it "gets the author information from the scm in the code path" do
+    expect_command("cd code_path && git show  -s  --pretty=\"format:%an\"  12345..4567| uniq| tr \"\\n\" \" \"", :execute_with_output => "surya")
+    repo.author(["12345","4567"]).should == "surya"
+    end
+  end
+
   context "update" do
     it "updates the code at given location and return true if there are updates" do
       expect_command("cd code_path && git rev-parse --verify HEAD", :execute_with_output => "old_sha")
