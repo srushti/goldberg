@@ -156,6 +156,7 @@ Assume you want to post a message on IRC channel & there is a gem that can be us
 -   Aakash Dharmadhikari ([aakashd][])
 -   Rohit Arondekar ([rohit][])
 -   Arpan Chinta ([arpancj][])
+-   Surya Gaddipati ([suryagaddipati])
 
   [C42 Engineering]: http://c42.in
   [CruiseControl.rb]: https://github.com/thoughtworks/cruisecontrol.rb
@@ -165,7 +166,6 @@ Assume you want to post a message on IRC channel & there is a gem that can be us
   [BuildNotify (linux)]: https://bitbucket.org/Anay/buildnotify/wiki/Home
   [ci.c42.in/XmlStatusReport.aspx]: http://ci.c42.in/XmlStatusReport.aspx
   [srushti]: http://github.com/srushti
-  [srushtitwitter]: http://github.com/srshti
   [jasim]: http://github.com/jasim
   [dexterous]: http://github.com/dexterous
   [gja]: http://github.com/gja
@@ -175,4 +175,5 @@ Assume you want to post a message on IRC channel & there is a gem that can be us
   [aakashd]: http://github.com/aakashd
   [rohit]: http://github.com/rohit
   [arpancj]: http://github.com/arpancj
+  [suryagaddipati]: http://github.com/suryagaddipati
 
