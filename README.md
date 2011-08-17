@@ -157,6 +157,7 @@ Assume you want to post a message on IRC channel & there is a gem that can be us
 -   Rohit Arondekar ([rohit][])
 -   Arpan Chinta ([arpancj][])
 -   Surya Gaddipati ([suryagaddipati])
+-   Lawrence Wang ([levity])
 
   [C42 Engineering]: http://c42.in
   [CruiseControl.rb]: https://github.com/thoughtworks/cruisecontrol.rb
@@ -176,4 +177,5 @@ Assume you want to post a message on IRC channel & there is a gem that can be us
   [rohit]: http://github.com/rohit
   [arpancj]: http://github.com/arpancj
   [suryagaddipati]: http://github.com/suryagaddipati
+  [levity]: http://github.com/levity
 
