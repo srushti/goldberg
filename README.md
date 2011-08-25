@@ -134,6 +134,10 @@ The callbacks are part of goldberg_config.rb
 
 Assume you want to post a message on IRC channel & there is a gem that can be used to do so, you can simply require the gem at the start of the project_config.rb file & write the code to post message in any of the callbacks.
 
+#### Build Artefact publishing
+
+Goldberg allows you to publish build artefacts so that it's accessible from the web interface. Goldberg passes an environment variable 'BUILD_ARTEFACTS' ('BUILD_ARTIFACTS' is an alias) which contains a path on the server's filesystem. You need to, as part of your build, copy your artefacts (say, 'log/test.log', 'coverage/' or 'foo.gem') to the directory whose path BUILD_ARTEFACTS will provide. Goldberg will then publish these on the build page. You can copy over individual files or whole directories.
+
 ### Help
 
       # To get man page style help
