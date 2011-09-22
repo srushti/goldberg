@@ -88,7 +88,7 @@ class Project < ActiveRecord::Base
   end
 
   def build_command
-    build_command = config.command || "rake #{config.rake_task}"
+    build_command = config.command || "#{config.use_bundle_exec ? 'bundle exec ' : ''}rake #{config.rake_task}"
   end
 
   def map_to_cctray_project_status

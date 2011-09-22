@@ -90,16 +90,24 @@ describe Project do
   end
 
   describe "command" do
+    let(:project) { Factory(:project) }
+
+    it "defaults the custom command to rake" do
+      project.build_command.should eq('rake default')
+    end
+
     it "is able to retrieve the custom command" do
-      project = Factory(:project)
       File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
       File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
       Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.command = 'cmake' }")
       project.build_command.should eq('cmake')
     end
 
-    it "defaults the custom command to rake" do
-      Factory(:project).build_command.should eq('rake default')
+    it "does 'bundle exec' if asked to" do
+      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
+      Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.use_bundle_exec = true }")
+      project.build_command.should == 'bundle exec rake default'
     end
   end
 
