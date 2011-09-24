@@ -31,5 +31,13 @@ module Environment
     def file_exist?(path)
       File.exist?(path)
     end
+
+    ['RUBY_VERSION', 'RUBY_ENGINE', 'RUBY_PATCHLEVEL', 'JRUBY_VERSION'].each do |constant|
+      if const_defined?(constant)
+        define_method constant.downcase do
+          eval constant
+        end
+      end
+    end
   end
 end

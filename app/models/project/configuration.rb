@@ -7,7 +7,7 @@ class Project
 
     def initialize
       @frequency = 20
-      @ruby = RUBY_VERSION
+      @ruby = ruby_version
       @rake_task = :default
       @environment_variables = {}
       @build_completion_callbacks = []
@@ -19,6 +19,16 @@ class Project
       @nice = 0
       @group = 'default'
       @use_bundle_exec = false
+    end
+
+    def ruby_version
+      if Environment.ruby_engine == 'ruby'
+        "#{Environment.ruby_version}-p#{Environment.ruby_patchlevel}"
+      elsif Environment.ruby_engine == 'jruby'
+        "jruby-#{Environment.jruby_version}"
+      else
+        Environment.ruby_version
+      end
     end
 
     def environment_string

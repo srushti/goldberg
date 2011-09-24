@@ -16,7 +16,7 @@ describe Project::Configuration do
     it "for niceness of the build process should be +0" do
       config.nice.should eq(0)
     end
-    
+
     it "should have no callbacks set" do
       config.build_completion_callbacks.should == []
       config.build_failure_callbacks.should == []
@@ -77,6 +77,27 @@ describe Project::Configuration do
       end
       configuration.build_success_callbacks.each(&:call)
       some_variable.should == 'assigned'
+    end
+  end
+
+  describe 'ruby_version' do
+    it "uses the RUBY_PATCHLEVEL when it's MRI" do
+      Environment.stub(:ruby_engine).and_return('ruby')
+      Environment.stub(:ruby_version).and_return('4.2.4')
+      Environment.stub(:ruby_patchlevel).and_return('2')
+      Project::Configuration.new.ruby_version.should == '4.2.4-p2'
+    end
+
+    it "uses the JRUBY_VERSION if it's jruby" do
+      Environment.stub(:ruby_engine).and_return('jruby')
+      Environment.stub(:jruby_version).and_return('4.2')
+      Project::Configuration.new.ruby_version.should == 'jruby-4.2'
+    end
+
+    it "just use the RUBY_VERSION with nothing else otherwise" do
+      Environment.stub(:ruby_engine).and_return('something else')
+      Environment.stub(:ruby_version).and_return('something_else')
+      Project::Configuration.new.ruby_version.should == 'something_else'
     end
   end
 end
