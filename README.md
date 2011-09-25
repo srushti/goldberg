@@ -91,7 +91,7 @@ Every project in Goldberg can have its own custom configuration by checking in a
         config.ruby = '1.9.2'         # Your server needs to have rvm installed for this setting to be considered
         config.environment_variables = {"FOO" => "bar"}
         config.after_build lambda { |build, project| `touch ~/Desktop/actually_built` }
-        config.timeout = 10.minutes
+        config.timeout = 10.minutes   # Defaults to 10.minutes if not configured. Set it to Project::Configuration::NO_TIMEOUT if you don't want it to ever timeout
         config.nice = 5               # Use this to reduce the scheduling priority (increase niceness) of CPU
                                       # intensive builds that may otherwise leave the Goldberg web application
                                       # unresponsive. Uses the UNIX `nice` command. Defaults to '0'.

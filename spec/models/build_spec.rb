@@ -96,6 +96,30 @@ describe Build do
       pending "Need to write spec to make sure all code is getting executed within Bundle.with_clean_env"
     end
 
+    describe 'timeout' do
+      it "reports when the build hasn't exceeded the timeout" do
+        config = Project::Configuration.new.tap{|config| config.timeout = 3.minutes}
+        project.stub(:config).and_return(config)
+        now = DateTime.now
+        DateTime.stub(:now).and_return(now)
+        build.exceeded_timeout?(now - 179.seconds).should == false
+      end
+
+      it "reports when the build has exceeded the timeout" do
+        config = Project::Configuration.new.tap{|config| config.timeout = 3.minutes}
+        project.stub(:config).and_return(config)
+        now = DateTime.now
+        DateTime.stub(:now).and_return(now)
+        build.exceeded_timeout?(now - 181.seconds).should == true
+      end
+
+      it "doesn't timeout if it was configured as such" do
+        config = Project::Configuration.new.tap{|config| config.timeout = Project::Configuration::NO_TIMEOUT}
+        project.stub(:config).and_return(config)
+        build.exceeded_timeout?(DateTime.now - 2.days).should == false
+      end
+    end
+
     it "performs prebuild setup before building the project" do
       Bundler.stub(:with_clean_env)
       build.should_receive(:before_build)

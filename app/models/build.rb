@@ -69,7 +69,7 @@ class Build < ActiveRecord::Base
   end
 
   def exceeded_timeout?(start_time)
-    DateTime.now > start_time + project.timeout
+    project.timeout != Project::Configuration::NO_TIMEOUT && DateTime.now > start_time + project.timeout
   end
 
   def before_build
