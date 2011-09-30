@@ -12,6 +12,8 @@ class Project < ActiveRecord::Base
 
   delegate :frequency, :ruby, :environment_string, :timeout, :nice, :group, :to => :config
 
+  scope :projects_to_build, where("build_requested = 't' or next_build_at is null or next_build_at <= :next_build_at", :next_build_at => Time.now)
+
   def self.add(options)
     project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch], :scm => options[:scm])
     return if !project.valid?
@@ -133,10 +135,6 @@ class Project < ActiveRecord::Base
 
   def self.configure
     (Project.temp_config ||= Configuration.new).tap{|config| yield config}
-  end
-
-  def self.projects_to_build
-    where("build_requested = 't' or next_build_at is null or next_build_at <= :next_build_at", :next_build_at => Time.now)
   end
 
   def activity
