@@ -143,7 +143,7 @@ describe Project do
 
     it "preprocesses the codebase before calling build" do
       build = Build.new
-      project.builds.should_receive(:create!).with(:number => 1, :previous_build_revision => "", :ruby => anything, :environment_string => "").and_return(build)
+      project.should_receive(:new_build).with(:number => 1, :previous_build_revision => "", :ruby => anything, :environment_string => "").and_return(build)
       build.should respond_to(:run)
       build.should_receive(:run)
 
@@ -156,7 +156,7 @@ describe Project do
         build = Build.new
         project.build_requested = true
         project.repository.should_receive(:update).and_return(false)
-        project.builds.should_receive(:create!).and_return(build)
+        project.should_receive(:new_build).and_return(build)
         build.should respond_to(:run)
         build.should_receive(:run)
         project.run_build
@@ -195,13 +195,13 @@ describe Project do
       end
 
       it "creates a new build for a project with build number set to 1 in case of first build  and run it" do
-        project.builds.should_receive(:create!).with(hash_including(:number => 1)).and_return(build)
+        project.should_receive(:new_build).with(hash_including(:number => 1)).and_return(build)
         project.run_build
       end
 
       it "creates a new build for a project with build number one greater than last build and run it" do
         project.builds << Factory(:build, :number => 5, :revision => "old_sha", :project => project)
-        project.builds.should_receive(:create!).with(hash_including(:number => 6, :previous_build_revision => "old_sha")).and_return(build)
+        project.should_receive(:new_build).with(hash_including(:number => 6, :previous_build_revision => "old_sha")).and_return(build)
         project.run_build
       end
 
@@ -210,7 +210,7 @@ describe Project do
         current_time = Time.now
         Time.stub!(:now).and_return(current_time)
 
-        project.builds.should_receive(:create!).and_return(build)
+        project.should_receive(:new_build).and_return(build)
         project.run_build
 
         Time.parse(project.reload.next_build_at.to_s).should == Time.parse((current_time + project.config.frequency.seconds).to_s)
@@ -219,7 +219,7 @@ describe Project do
       it "should read the environment variables from the config" do
         config = Project::Configuration.new.tap{ |c| c.stub(:environment_string).and_return("FOO=bar") }
         project.stub(:config).and_return(config)
-        project.builds.should_receive(:create!).with(hash_including(:environment_string => "FOO=bar")).and_return(build)
+        project.should_receive(:new_build).with(hash_including(:environment_string => "FOO=bar")).and_return(build)
         project.run_build
       end
 
@@ -240,7 +240,7 @@ describe Project do
         callback_tester.should_receive(:test_call).with(build, mail_notification,'prev_status')
 
         project.stub(:config).and_return(configuration)
-        project.builds.stub(:create!).and_return(build)
+        project.stub(:new_build).and_return(build)
 
         project.run_build
       end

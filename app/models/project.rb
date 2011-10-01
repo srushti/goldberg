@@ -66,13 +66,16 @@ class Project < ActiveRecord::Base
       update_attribute :build_requested, false
       previous_build_status = last_complete_build_status
       prepare_for_build
-      new_build = self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby,
-                                      :environment_string => environment_string).tap(&:run)
+      new_build = new_build(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby, :environment_string => environment_string).tap(&:run)
       Goldberg.logger.info "Build #{ new_build.status }"
       after_build_runner.execute(new_build, previous_build_status)
     end
     self.next_build_at = Time.now + frequency.seconds
     self.save
+  end
+
+  def new_build(params)
+    self.builds.create!(params)
   end
 
   def clean_up_older_builds
