@@ -22,7 +22,7 @@ command :add do |c|
     branch = options.branch
     scm = options.scm
     
-    Init.new.add(url,name, branch, scm)
+    Init.new.add(url, name, branch, scm)
   end
 end
 

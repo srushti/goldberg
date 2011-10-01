@@ -55,14 +55,18 @@ class Build < ActiveRecord::Base
     start_time = DateTime.now
     command = Command.new(command)
     command.fork
-    while (!exceeded_timeout?(start_time) && command.running?)
+    while (!exceeded_timeout?(start_time) && command.running? && !reload.cancelled?)
       sleep(10)
     end
+    if cancelled?
+      command.stop_tree
+      Goldberg.logger.info "Cancelled pid #{command.pid}, build no #{number} of #{project.name}, #{command.stopped?}"
+    end
     if exceeded_timeout?(start_time)
-      command.kill
+      command.stop_tree
       Goldberg.logger.error "Timeout (#{project.timeout})- killing #{command.pid}:#{command.cmd}"
       self.status = 'timeout'
-    else
+    elsif !cancelled?
       self.status = command.success? ? 'passed' : 'failed'
     end
     save
@@ -103,5 +107,13 @@ class Build < ActiveRecord::Base
     else
       []
     end
+  end
+
+  def cancel
+    update_attribute(:status, 'cancelled')
+  end
+
+  ['timeout', 'cancelled', 'passed', 'failed', 'building', ].each do |status|
+    define_method("#{status}?") { self.status == status }
   end
 end

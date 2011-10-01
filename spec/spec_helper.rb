@@ -35,7 +35,6 @@ Spork.prefork do
     config.use_transactional_fixtures = true
     config.include(Goldberg::ExpectationHelpers)
     config.before(:each) do
-      # sleep(0.2)
       FileUtils.stub!(:mkdir_p)
     end
   end

@@ -102,7 +102,7 @@ class Project < ActiveRecord::Base
   end
 
   def culprits_for_failure
-    culprit_revision_range.nil?? '' : repository.author(culprit_revision_range.collect(&:revision))
+    culprit_revision_range.nil? ? '' : repository.author(culprit_revision_range.collect(&:revision))
   end
 
   def culprit_revision_range
@@ -143,5 +143,9 @@ class Project < ActiveRecord::Base
 
   def github_url
     url.gsub(/^git:\/\//, 'http://').gsub(/\.git$/, '') if url.include?('//github.com')
+  end
+
+  def building?
+    latest_build && latest_build.building?
   end
 end

@@ -1,8 +1,12 @@
 - projects.each do |project|
   - status = project_status(project)
   .project-row{:class => status}
-    %form.force_build{:method => 'post', :action => project_force_path(project.name)}
-      %input{:type => 'submit', :value => "force build#{build_queued?(project) ? ' (build queued)' : ''}"}
+    - if project.building?
+      = form_tag build_cancel_path(project.name, project.latest_build.number), :method => :put do
+        = submit_tag 'cancel build'
+    - else
+      = form_tag project_force_path(project.name) do
+        = submit_tag "force build#{build_queued?(project) ? ' (build queued)' : ''}"
     %span.status-icon
       &nbsp;
     %span.project-name{:class => status}

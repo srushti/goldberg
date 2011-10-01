@@ -36,4 +36,9 @@ class BuildsController < ApplicationController
   def show
     render :layout => (params[:_pjax] ? false : 'builds')
   end
+
+  def cancel
+    @build.cancel
+    redirect_to :back
+  end
 end

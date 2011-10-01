@@ -12,7 +12,7 @@ describe ProjectsController do
     project = Factory.create(:project, :name => 'some_project')
     @request.env['HTTP_REFERER'] = 'http://referer/'
     post :force, :project_name => project.name
-    response.should redirect_to('http://referer/')
+    response.should redirect_to(:back)
     project.reload.should be_build_requested
   end
 

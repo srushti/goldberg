@@ -61,5 +61,13 @@ describe BuildsController do
       response.should be_not_found
     end
   end
+
+  it "cancels the build" do
+    build = Factory(:build, :project => Factory(:project))
+    @request.env['HTTP_REFERER'] = 'http://referer/'
+    put :cancel, :project_name => build.project.name, :build_number => build.number
+    build.reload.should be_cancelled
+    response.should redirect_to(:back)
+  end
 end
 

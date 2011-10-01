@@ -173,4 +173,10 @@ describe Build do
       build.artefacts.should == []
     end
   end
+
+  it "cancels build" do
+    build = Factory(:build)
+    build.cancel
+    build.should be_cancelled
+  end
 end
