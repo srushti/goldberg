@@ -9,6 +9,8 @@ gem 'commander', '~> 4.0.4'
 gem 'childprocess', '~> 0.1.9'
 gem 'json', :platforms => [:ruby_18, :jruby]
 
+gem 'foreman', "~> 0.22.0"
+
 platform :jruby do
   gem 'jdbc-sqlite3', '~> 3.6.0'
   gem 'activerecord-jdbcsqlite3-adapter'
