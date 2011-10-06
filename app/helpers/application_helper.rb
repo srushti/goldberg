@@ -8,7 +8,7 @@ module ApplicationHelper
   end
 
   def status(s)
-    s.gsub(/ /, '_')
+    s ? s.gsub(/ /, '_') : 'unknown'
   end
 
   def format_timestamp(timestamp)
