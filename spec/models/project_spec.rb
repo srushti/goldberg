@@ -266,25 +266,27 @@ describe Project do
   end
 
   describe "culprit_revision_range" do
-    it"returns build which orignially failed " do
+    it "returns build which originally failed " do
       project = Factory(:project)
       passed_build = Factory(:build, :project => project, :status => 'passed',:revision => 'passed1')
       culprit_build = Factory(:build, :project => project, :status => 'failed',:revision => 'failed1')
       innocent_build = Factory(:build, :project => project, :status => 'failed',:revision => 'failed2')
-      project.culprit_revision_range.should == [passed_build,culprit_build]
+      project.culprit_revision_range.should == [innocent_build, culprit_build]
     end
-    it"returns last failed build if there are no passing builds" do
+
+    it "returns all failed build if there are no passing builds" do
       project = Factory(:project)
       culprit_build = Factory(:build, :project => project, :status => 'failed')
       innocent_build2 = Factory(:build, :project => project, :status => 'failed')
-      innocent_build = Factory(:build, :project => project, :status => 'failed')
-      project.culprit_revision_range.should == [culprit_build]
+      innocent_build1 = Factory(:build, :project => project, :status => 'failed')
+      project.culprit_revision_range.should == [innocent_build1, innocent_build2, culprit_build]
     end
-    it"returns nil if the latest build passed" do
+
+    it "returns nil if the latest build passed" do
       project = Factory(:project)
       failed_build = Factory(:build, :project => project, :status => 'failed')
       passed_build = Factory(:build, :project => project, :status => 'passed')
-      project.culprit_revision_range.should be_nil
+      project.culprit_revision_range.should be_empty
     end
   end
 
@@ -294,9 +296,10 @@ describe Project do
       passed_build = Factory(:build, :project => project, :status => 'passed', :revision => 'passed_revision')
       failed_build = Factory(:build, :project => project, :status => 'failed', :revision => 'failed_revision')
 
-      project.repository.should_receive(:author).with(['passed_revision','failed_revision'])
+      project.repository.should_receive(:author).with(['failed_revision'])
       project.culprits_for_failure
     end
+
     it "returns empty string if there is no culprit build" do
       project = Factory(:project)
       passed_build = Factory(:build, :project => project, :status => 'passed')

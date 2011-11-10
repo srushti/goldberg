@@ -109,10 +109,13 @@ class Project < ActiveRecord::Base
   end
 
   def culprit_revision_range
-    return nil if last_complete_build.status == 'passed'
-    culprit_build = nil
-    builds.each{|build| culprit_build = build if build.status =='failed' ; return [build, culprit_build] if build.status == 'passed'}
-    [culprit_build]
+    return [] if last_complete_build.status == 'passed'
+    result = []
+    builds.each do |build|
+      break if build.status == 'passed'
+      result << build
+    end
+    result
   end
 
   def repository
