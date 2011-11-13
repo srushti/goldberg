@@ -25,13 +25,34 @@ export BUILD_ARTEFACTS="$artifacts_path"
 
 rvm_script_sourced()
 {
-  if [ -e ~/.rvm/scripts/rvm ]; then
-    source ~/.rvm/scripts/rvm
-  elif [ -e /usr/local/rvm/scripts/rvm ]; then
-    source /usr/local/rvm/scripts/rvm
-  else
-    return -1
-  fi
+  #if [ -e ~/.rvm/scripts/rvm ]; then
+    #source ~/.rvm/scripts/rvm
+  #elif [ -e /usr/local/rvm/scripts/rvm ]; then
+    #source /usr/local/rvm/scripts/rvm
+  #else
+    #return -1
+  #fi
+  return -1
+}
+
+use_rbenv()
+{
+  (! using_rvm) && rbenv local $ruby >> $build_log_path 2>&1
+}
+
+using_rvm()
+{
+  type rvm > /dev/null 2>&1
+}
+
+using_rbenv()
+{
+  rbenv local > /dev/null 2>&1
+}
+
+install_bundler()
+{
+  (gem list | grep bundler) || gem install bundler
 }
 
 update_bundle()
@@ -43,15 +64,23 @@ update_bundle()
   fi
 }
 
+generate_shims()
+{
+  (! using_rvm) && using_rbenv && rbenv rehash
+}
+
 if rvm_script_sourced ; then 
   rvm use --create "$ruby@global"
-  (gem list | grep bundler) || gem install bundler
+  install_bundler
   rvm rvmrc trust $code_path
   rvm use $ruby@goldberg-$project >> $build_log_path 2>&1
 fi
 
 cd $code_path
+use_rbenv && echo "using rbenv: $?"
+install_bundler && generate_shims && echo "generated shims: $?"
 update_bundle >> $build_log_path 2>&1 || exit -1
+generate_shims && echo "generated shims: $?"
 mkdir -p "$artifacts_path"
 if [ -n "$environment_variables" ]; then export $environment_variables; fi
 exec nice -n $nice_value $build_command >> $build_log_path 2>&1
