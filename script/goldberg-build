@@ -76,7 +76,7 @@ update_bundle()
 
 generate_shims()
 {
-  (! using_rvm) && using_rbenv && rbenv rehash
+  using_rbenv && rbenv rehash
 }
 
 if rvm_script_sourced ; then 
@@ -87,7 +87,9 @@ if rvm_script_sourced ; then
 fi
 
 cd $code_path
-use_rbenv
+if ! using_rvm ; then
+  use_rbenv
+fi
 install_bundler && generate_shims
 update_bundle >> $build_log_path 2>&1 || exit -1
 generate_shims
