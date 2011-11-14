@@ -15,7 +15,8 @@ nice_value="$1" && shift
 environment_variables="$1" && shift
 build_command="$@"
 
-# echo $project, $ruby, $code_path, $build_log_path, $artifacts_path, $nice_value, $build_command >> $build_log_path
+#echo $project, $ruby, $code_path, $build_log_path, $artifacts_path, $nice_value, $build_command >> $build_log_path
+
 
 unset BUNDLE_GEMFILE
 unset RUBYOPT
@@ -25,19 +26,25 @@ export BUILD_ARTEFACTS="$artifacts_path"
 
 rvm_script_sourced()
 {
-  #if [ -e ~/.rvm/scripts/rvm ]; then
-    #source ~/.rvm/scripts/rvm
-  #elif [ -e /usr/local/rvm/scripts/rvm ]; then
-    #source /usr/local/rvm/scripts/rvm
-  #else
-    #return -1
-  #fi
-  return -1
+  if [ -e ~/.rvm/scripts/rvm ]; then
+    source ~/.rvm/scripts/rvm
+  elif [ -e /usr/local/rvm/scripts/rvm ]; then
+    source /usr/local/rvm/scripts/rvm
+  else
+    return -1
+  fi
+}
+
+set_rbenv_local()
+{
+  if ! rbenv local $ruby >> $build_log_path 2>&1; then
+    rbenv local `rbenv versions | grep $ruby | head -1` >> $build_log_path 2>&1
+  fi
 }
 
 use_rbenv()
 {
-  (! using_rvm) && rbenv local $ruby >> $build_log_path 2>&1
+  (! using_rvm) && set_rbenv_local
 }
 
 using_rvm()
@@ -77,10 +84,10 @@ if rvm_script_sourced ; then
 fi
 
 cd $code_path
-use_rbenv && echo "using rbenv: $?"
-install_bundler && generate_shims && echo "generated shims: $?"
+use_rbenv
+install_bundler && generate_shims
 update_bundle >> $build_log_path 2>&1 || exit -1
-generate_shims && echo "generated shims: $?"
+generate_shims
 mkdir -p "$artifacts_path"
 if [ -n "$environment_variables" ]; then export $environment_variables; fi
 exec nice -n $nice_value $build_command >> $build_log_path 2>&1
