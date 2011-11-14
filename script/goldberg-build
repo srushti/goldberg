@@ -37,14 +37,17 @@ rvm_script_sourced()
 
 set_rbenv_local()
 {
-  if ! rbenv local $ruby >> $build_log_path 2>&1; then
-    rbenv local `rbenv versions | grep $ruby | head -1` >> $build_log_path 2>&1
+  if ! rbenv local $ruby > /dev/null 2>&1; then
+    rbenv local `rbenv versions | grep $ruby | head -1` > /dev/null 2>&1
   fi
 }
 
 use_rbenv()
 {
   (! using_rvm) && set_rbenv_local
+  if rbenv local > /dev/null; then
+    echo "Using `rbenv which ruby`" >> $build_log_path
+  fi
 }
 
 using_rvm()
