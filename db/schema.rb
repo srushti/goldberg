@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110629172404) do
+ActiveRecord::Schema.define(:version => 20111125054924) do
 
   create_table "builds", :force => true do |t|
     t.integer  "project_id"
@@ -34,6 +34,26 @@ ActiveRecord::Schema.define(:version => 20110629172404) do
     t.string   "branch"
     t.datetime "next_build_at"
     t.string   "scm"
+  end
+
+  create_table "role_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "project_id"
+    t.integer  "role_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "login"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end
