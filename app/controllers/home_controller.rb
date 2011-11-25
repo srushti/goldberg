@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   before_filter :load_projects, :only => [:index, :projects_partial]
+  before_filter :authenticate_user, :only => [:index, :projects_partial]
 
   def load_projects
     all_projects = params[:group_name] ? Project.all.select{|p| p.group == params[:group_name]} : Project.all

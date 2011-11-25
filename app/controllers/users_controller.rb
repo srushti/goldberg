@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
   def new
+  end
+
+  def signin
     redirect_to "#{GITHUB_CONFIG['authorize_url'] % GITHUB_CONFIG['client_id']}"
   end
 
