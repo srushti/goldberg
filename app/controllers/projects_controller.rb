@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  before_filter :authenticate_user, :only => [:show]
   def show
     @project = Project.find_by_name(params[:project_name])
     if @project.nil?

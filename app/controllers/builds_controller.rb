@@ -1,4 +1,5 @@
 class BuildsController < ApplicationController
+  before_filter :authenticate_user, :only => [:show]
   before_filter :load_project_and_build
 
   def load_project_and_build
