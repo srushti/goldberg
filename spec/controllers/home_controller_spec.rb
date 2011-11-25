@@ -26,6 +26,16 @@ describe HomeController do
         assigns[:grouped_projects].should == { 'default' => [new_project, old_project]}
       end
 
+      it "returns a single entry per project associated with a user through mutiple roles" do
+        user = Factory(:user)
+        project = Factory(:project)
+        Factory(:viewer, :user => user, :project => project)
+        Factory(:builder, :user => user, :project => project)
+        controller.stub(:current_user).and_return(user)
+        get action
+        assigns[:grouped_projects].should == { 'default' => [project]}
+      end
+
       it "can sort projects with no latest build" do
         previously_built_project = mock('project', :group => 'default')
         real_build = mock('build')
