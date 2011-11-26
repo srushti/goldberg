@@ -7,7 +7,7 @@ Factory.sequence :build_number do |n|
 end
 
 Factory.sequence :user_login do |n|
-  n
+  "user_#{n}"
 end
 
 Factory.define :project do |p|
