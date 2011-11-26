@@ -1,0 +1,18 @@
+base: &base
+  host: "github.com"
+  access_token_path: "/login/oauth/access_token"
+  authorize_url: "https://github.com/login/oauth/authorize?client_id=%s"
+  api_endpoint: "api.github.com"
+  user_info_path: "/user?access_token=%s"
+
+development:
+  <<: *base
+# client_id and client_secret are obtained after registering with github at https://github.com/account/applications/new
+  client_id: 
+  client_secret: 
+
+production:
+  <<: *base
+# client_id and client_secret are obtained after registering with github at https://github.com/account/applications/new
+  client_id: 
+  client_secret: 
