@@ -12,7 +12,7 @@ class Init
   def add_user(username, project_name, role)
     Goldberg.logger.info "Give role is: #{role}"
     Goldberg.logger.info "RoleType is: #{RoleType.find_by_name(role)}"
-    user = User.find_by_login(username) || User.create(:login => username)
+    user = User.find_or_create_by_login(username)
     if user && user.roles.create(:role_type => RoleType.find_by_name(role), :project => Project.find_by_name(project_name))
       Goldberg.logger.info "#{username} succesfully added as #{role} to #{project_name}"
     else

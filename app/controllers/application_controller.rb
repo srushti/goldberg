@@ -10,9 +10,7 @@ class ApplicationController < ActionController::Base
 
   def set_current_user(login)
     session['user'] = login
-    if User.find_by_login(login).nil?
-      User.create(:login => login)
-    end
+    User.find_or_create_by_login(login)
   end
 
   def authenticate_user
