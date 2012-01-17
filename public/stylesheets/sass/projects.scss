@@ -145,12 +145,13 @@ li.build {
     li.build.selected.cancelled{background: $dark-grey;}
 
     li.build a{
-      color: $dark-grey;
-      font-weight: bold;
-      font-style: normal;
-      text-decoration: none;
-      float: left;
-    }
+        color: $dark-grey;
+        font-weight: bold;
+        font-style: normal;
+        text-decoration: none;
+        float:left;
+      }
+    li.build .revision a{ float: none; }
 
     li.build.selected a, li.build.selected{
       color: #fff;
