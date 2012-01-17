@@ -1,8 +1,14 @@
 class BuildsController < ApplicationController
+  before_filter :authenticate_user, :only => [:show, :cancel]
   before_filter :load_project_and_build
 
   def load_project_and_build
-    @project = Project.find_by_name(params[:project_name])
+    if current_user
+      @project = current_user.projects.find_by_name(params[:project_name])
+    else
+      @project = Project.find_by_name(params[:project_name])
+    end
+
     if @project
       @build = @project.builds.find_by_number(params[:build_number])
       render :text => 'Unknown build', :status => :not_found if @build.nil?
@@ -38,7 +44,7 @@ class BuildsController < ApplicationController
   end
 
   def cancel
-    @build.cancel
+    @build.cancel if current_user.can_build?(@build.project)
     redirect_to :back
   end
 end

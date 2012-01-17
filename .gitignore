@@ -17,3 +17,5 @@ coverage/*
 *.css
 config/goldberg.yml
 bin
+cscope.*
+tags

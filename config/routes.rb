@@ -16,4 +16,9 @@ Goldberg::Application.routes.draw do
 
   get '/projects/:project_name/builds/:build_number' => 'builds#show', :as => :project_build
   get '/projects/:project_name/builds/:build_number/artefacts/:path' => 'builds#artefact', :constraints => {:path => /.*/}, :as => :project_build_artefact
+
+  resources :users, :only => ['new']
+  get "/users/signin", :as => :signin_user
+  match "/auth/github/callback", :to => "users#github_callback", :via => "get", :as => :auth_github
+  get "/users/signout", :as => :signout_user
 end

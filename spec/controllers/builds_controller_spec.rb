@@ -3,10 +3,13 @@ require "spec_helper"
 describe BuildsController do
   let(:project) { Factory(:project, :name => 'name') }
   let(:build) { Factory.create(:build, :project => project, :number => 10) }
-
+  before :each do
+    user = Factory(:user)
+    controller.stub(:current_user).and_return(user)
+  end
   it "loads one build" do
+    Factory(:viewer, :project => project, :user => controller.current_user)
     get :show, :project_name => project.name, :build_number => build.number
-
     response.should be_ok
     assigns[:project].should == project
     assigns[:build].should == build
@@ -18,6 +21,7 @@ describe BuildsController do
   end
 
   it "denotes an unknown build" do
+    Factory(:viewer, :project => project, :user => controller.current_user)
     get :show, :project_name => project.name, :build_number => 1
     response.should be_not_found
   end
@@ -25,6 +29,7 @@ describe BuildsController do
   describe 'artefacts' do
     before(:each) do
       Paths.stub!(:projects).and_return('root')
+      controller.stub(:current_user).and_return(nil)
     end
 
     it 'sends a requested file that lives beneath the given directory' do
@@ -64,6 +69,7 @@ describe BuildsController do
 
   it "cancels the build" do
     build = Factory(:build, :project => Factory(:project))
+    Factory(:builder, :project => build.project, :user => controller.current_user)
     @request.env['HTTP_REFERER'] = 'http://referer/'
     put :cancel, :project_name => build.project.name, :build_number => build.number
     build.reload.should be_cancelled

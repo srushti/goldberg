@@ -9,6 +9,25 @@ class Init
     end
   end
 
+  def add_user(username, project_name, role)
+    Goldberg.logger.info "Give role is: #{role}"
+    Goldberg.logger.info "RoleType is: #{RoleType.find_by_name(role)}"
+    user = User.find_or_create_by_login(username)
+    if user && user.roles.create(:role_type => RoleType.find_by_name(role), :project => Project.find_by_name(project_name))
+      Goldberg.logger.info "#{username} succesfully added as #{role} to #{project_name}"
+    else
+      Goldberg.logger.info "User could not be added"
+    end
+  end
+
+  def users
+    users = []
+    Role.all.map do |role|
+      users << "#{role.user.login} is #{role.role_type.name} of #{role.project.name}"
+    end
+    Goldberg.logger.info users.join("\n")
+  end
+
   def remove(name)
     project = Project.find_by_name(name)
     if project
@@ -40,5 +59,9 @@ class Init
       Goldberg.logger.info "Sleeping for #{GlobalConfig.frequency} seconds."
       Environment.sleep(GlobalConfig.frequency)
     end
+  end
+
+  def user_roles
+    RoleType.all.map(&:name).each {|name| Goldberg.logger.info name}
   end
 end

@@ -26,6 +26,37 @@ command :add do |c|
   end
 end
 
+command :add_user do |c|
+  c.syntax = 'goldberg add_user <github_username> <project_name> [--role <role_name>]'
+  c.description = "Add a user to a project for the given role. 'goldberg roles' lists all the roles"
+  c.option '--role STRING', String, 'role of the given user, defaults to \'viewer\''
+
+  c.action do |args,options|
+    options.default :role => "viewer"
+
+    github_username = args[0]
+    project_name = args[1]
+    role = options.role
+    Init.new.add_user(github_username, project_name, role)
+  end
+end
+
+command :users do |c|
+  c.syntax = 'goldberg users'
+  c.description = "List all users alongwith their roles in projects"
+  c.action do |args,options|
+    Init.new.users
+  end
+end
+
+command :user_roles do |c|
+  c.syntax = 'goldberg user_roles'
+  c.description = "List all roles that users can be assigned"
+  c.action do |args,options|
+    Init.new.user_roles
+  end
+end
+
 command :list do |c|
   c.syntax = 'goldberg list'
   c.description = 'List all the projects being tracked & built by this goldberg instance.'

@@ -1,6 +1,7 @@
 class ProjectsController < ApplicationController
+  before_filter :authenticate_user, :only => [:show, :force]
   def show
-    @project = Project.find_by_name(params[:project_name])
+    @project = current_user.projects.find_by_name(params[:project_name])
     if @project.nil?
       render :text => 'Unknown project', :status => :not_found
     else
@@ -22,10 +23,14 @@ class ProjectsController < ApplicationController
   end
 
   def force
-    project = Project.find_by_name(params[:project_name])
+    project = current_user.projects.find_by_name(params[:project_name])
     if project
-      project.force_build
-      redirect_to :back
+      if current_user.can_build?(project)
+        project.force_build
+        redirect_to :back
+      else
+        render :text => "Forbidden", :status => :forbidden
+      end
     else
       render :text => 'Unknown project', :status => :not_found
     end

@@ -16,6 +16,11 @@
   %body
     .wrapper
       .container
+        .application-header
+          - if current_user.blank?
+            = link_to "Sign In with Github", signin_user_path
+          - else
+            = link_to "Sign Out", signout_user_path
         .header
           %h1
             = link_to 'Goldberg', root_path

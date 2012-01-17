@@ -1,6 +1,7 @@
 %div.project_heading{:class => "#{build_status(@build)}"}
-  %form.force_build{:method => 'post', :action => project_force_path(@project.name)}
-    %input{:type => 'submit', :value => "force build#{build_queued?(@project) ? ' (build queued)' : ''}"}
+  - if current_user.can_build?(@project)
+    %form.force_build{:method => 'post', :action => project_force_path(@project.name)}
+      %input{:type => 'submit', :value => "force build#{build_queued?(@project) ? ' (build queued)' : ''}"}
   %h2.project
     = @project.name
     %em.project_ruby (#{@project.ruby})

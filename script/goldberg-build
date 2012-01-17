@@ -15,7 +15,8 @@ nice_value="$1" && shift
 environment_variables="$1" && shift
 build_command="$@"
 
-# echo $project, $ruby, $code_path, $build_log_path, $artifacts_path, $nice_value, $build_command >> $build_log_path
+#echo $project, $ruby, $code_path, $build_log_path, $artifacts_path, $nice_value, $build_command >> $build_log_path
+
 
 unset BUNDLE_GEMFILE
 unset RUBYOPT
@@ -34,6 +35,36 @@ rvm_script_sourced()
   fi
 }
 
+set_rbenv_local()
+{
+  if ! rbenv local $ruby > /dev/null 2>&1; then
+    rbenv local `rbenv versions | grep $ruby | head -1` > /dev/null 2>&1
+  fi
+}
+
+use_rbenv()
+{
+  (! using_rvm) && set_rbenv_local
+  if rbenv local > /dev/null; then
+    echo "Using `rbenv which ruby`" >> $build_log_path
+  fi
+}
+
+using_rvm()
+{
+  type rvm > /dev/null 2>&1
+}
+
+using_rbenv()
+{
+  rbenv local > /dev/null 2>&1
+}
+
+install_bundler()
+{
+  (gem list | grep bundler) || gem install bundler
+}
+
 update_bundle()
 {
   if [ -e Gemfile ]; then
@@ -43,15 +74,25 @@ update_bundle()
   fi
 }
 
+generate_shims()
+{
+  using_rbenv && rbenv rehash
+}
+
 if rvm_script_sourced ; then 
   rvm use --create "$ruby@global"
-  (gem list | grep bundler) || gem install bundler
+  install_bundler
   rvm rvmrc trust $code_path
   rvm use $ruby@goldberg-$project >> $build_log_path 2>&1
 fi
 
 cd $code_path
+if ! using_rvm ; then
+  use_rbenv
+fi
+install_bundler && generate_shims
 update_bundle >> $build_log_path 2>&1 || exit -1
+generate_shims
 mkdir -p "$artifacts_path"
 if [ -n "$environment_variables" ]; then export $environment_variables; fi
 exec nice -n $nice_value $build_command >> $build_log_path 2>&1
