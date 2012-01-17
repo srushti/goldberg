@@ -12,7 +12,7 @@
         %li.build{:class => "#{build_status(build)}#{build == @build ? ' selected' : ''}"}
           = link_to "#{build.number} #{build_status(build)}", project_build_path(@project.name, build.number)
           - if build.revision
-            %span.revision= build.revision.slice(0, 6)
+            %span.revision= revision_number_text(build)
           - if build.timestamp
             %span.timeago(title="#{build.timestamp.iso8601}")
           %span.build-pointer
