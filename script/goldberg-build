@@ -43,11 +43,11 @@ update_bundle()
   fi
 }
 
-if rvm_script_sourced ; then 
+if rvm_script_sourced ; then
   rvm use --create "$ruby@global"
   (gem list | grep bundler) || gem install bundler
   rvm rvmrc trust $code_path
-  rvm use $ruby@goldberg-$project >> $build_log_path 2>&1
+  rvm use --create $ruby@goldberg-$project >> $build_log_path 2>&1
 fi
 
 cd $code_path
