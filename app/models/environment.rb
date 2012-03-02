@@ -28,6 +28,10 @@ module Environment
       result
     end
 
+    def now
+      Time.now
+    end
+
     def file_exist?(path)
       File.exist?(path)
     end

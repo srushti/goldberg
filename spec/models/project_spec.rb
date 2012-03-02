@@ -369,6 +369,12 @@ describe Project do
     Project.projects_to_build.should_not include(build_not_due_project)
   end
 
+  it "evaluates now every time while picking the projects to build" do
+    Project.projects_to_build
+    Environment.should_receive(:now).and_return(Time.now)
+    Project.projects_to_build
+  end
+
   describe "activity" do
     let(:project){Factory(:project)}
 

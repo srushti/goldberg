@@ -12,7 +12,9 @@ class Project < ActiveRecord::Base
 
   delegate :frequency, :ruby, :environment_string, :timeout, :nice, :group, :to => :config
 
-  scope :projects_to_build, where("build_requested = ? or next_build_at is null or next_build_at <= ?", true, Time.now)
+  def self.projects_to_build
+    where("build_requested = ? or next_build_at is null or next_build_at <= ?", true, Environment.now)
+  end
 
   def self.add(options)
     project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch], :scm => options[:scm])
