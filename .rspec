@@ -1,4 +1,4 @@
 --colour
---format documentation 
+--format NyanCatFormatter
 --drb
 --debug
