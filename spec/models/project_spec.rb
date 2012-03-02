@@ -296,11 +296,14 @@ describe Project do
       passed_build = Factory(:build, :project => project, :status => 'passed', :revision => 'passed_revision')
       failed_build = Factory(:build, :project => project, :status => 'failed', :revision => 'failed_revision')
 
-      project.repository.should_receive(:author).with(['failed_revision'])
+      project.repository.should_receive(:authors).with(['failed_revision'])
       project.culprits_for_failure
     end
 
     it "returns empty string if there is no culprit build" do
+      repository = mock(Repository)
+      repository.should_not_receive(:authors)
+      Repository.stub(:new).and_return(repository)
       project = Factory(:project)
       passed_build = Factory(:build, :project => project, :status => 'passed')
       project.culprits_for_failure.should  == ''

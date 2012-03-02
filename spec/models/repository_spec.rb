@@ -15,7 +15,7 @@ describe Repository do
   context "author" do
     it "gets the author information from the scm in the code path" do
     expect_command("cd code_path && git show  -s  --pretty=\"format:%an\"  12345..4567| uniq| tr \"\\n\" \" \"", :execute_with_output => "surya")
-    repo.author(["12345","4567"]).should == "surya"
+    repo.authors(["12345","4567"]).should == "surya"
     end
   end
 

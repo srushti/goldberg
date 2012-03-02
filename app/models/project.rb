@@ -107,7 +107,7 @@ class Project < ActiveRecord::Base
   end
 
   def culprits_for_failure
-    culprit_revision_range.nil? ? '' : repository.author(culprit_revision_range.collect(&:revision))
+    culprit_revision_range.empty? ? '' : repository.authors(culprit_revision_range.collect(&:revision))
   end
 
   def culprit_revision_range
