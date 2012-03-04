@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.1'
+gem 'rails', '3.2.1'
 
 gem 'sqlite3', '~> 1.3.3', :platforms => :ruby
 gem 'haml', '~> 3.1.2'
@@ -10,7 +10,7 @@ gem 'childprocess', '~> 0.1.9'
 gem 'json', :platforms => [:ruby_18, :jruby]
 
 platform :jruby do
-  gem 'jdbc-sqlite3', '~> 3.6.0'
+  gem 'jdbc-sqlite3', '~> 3.7.2'
   gem 'activerecord-jdbcsqlite3-adapter'
 end
 
