@@ -40,7 +40,11 @@ module Environment
       const_defined?('RUBY_ENGINE') ? RUBY_ENGINE : ''
     end
 
-    ['RUBY_VERSION', 'RUBY_PATCHLEVEL', 'JRUBY_VERSION'].each do |constant|
+    def ruby_version
+      RUBY_VERSION
+    end
+
+    ['RUBY_PATCHLEVEL', 'JRUBY_VERSION'].each do |constant|
       if const_defined?(constant)
         define_method constant.downcase do
           eval constant
