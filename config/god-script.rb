@@ -3,7 +3,7 @@ GOLDBERG_ROOT  = File.dirname(File.dirname(__FILE__))
 God.watch do |w|
   w.name        = "poller"
   w.interval    = 10.seconds
-  w.start       = "cd #{GOLDBERG_ROOT} && ./bin/goldberg start_poller >> ./log/poller.log"
+  w.start       = "cd #{GOLDBERG_ROOT} && RAILS_ENV=production ./bin/goldberg start_poller >> ./log/poller.log"
   w.start_grace = 10.seconds
 
   # start if process is not running
