@@ -10,7 +10,7 @@ module Scm
       end
 
       def update
-        "git reset --hard && git pull && git submodule init && git submodule update"
+        "git reset --hard && git pull && git submodule update --init --recursive"
       end
 
       def change_list(old_rev, new_rev)

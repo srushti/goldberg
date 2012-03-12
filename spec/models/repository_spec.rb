@@ -23,14 +23,14 @@ describe Repository do
     it "updates the code at given location and return true if there are updates" do
       expect_command("cd code_path && git rev-parse --verify HEAD", :execute_with_output => "old_sha")
       expect_command("cd code_path && git rev-parse --verify HEAD", :execute_with_output => "new_sha")
-      expect_command("cd code_path && git reset --hard && git pull && git submodule init && git submodule update", :execute => true)
+      expect_command("cd code_path && git reset --hard && git pull && git submodule update --init --recursive", :execute => true)
       repo.update.should be_true
     end
 
     it "returns false if code there were no updates" do
       expect_command("cd code_path && git rev-parse --verify HEAD", :execute_with_output => "old_sha")
       expect_command("cd code_path && git rev-parse --verify HEAD", :execute_with_output => "old_sha")
-      expect_command("cd code_path && git reset --hard && git pull && git submodule init && git submodule update", :execute => true)
+      expect_command("cd code_path && git reset --hard && git pull && git submodule update --init --recursive", :execute => true)
       repo.update.should be_false
     end
   end
