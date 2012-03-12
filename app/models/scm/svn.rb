@@ -10,7 +10,7 @@ module Scm
       end
       
       def update
-        "svn update"
+        "svn revert . && svn update"
       end
       
       def change_list(old_rev, new_rev)
