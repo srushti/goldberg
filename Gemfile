@@ -15,9 +15,7 @@ platform :jruby do
 end
 
 group :development, :test do
-  gem 'ruby-debug', :platforms => [:ruby_18, :jruby]
   gem 'require_relative', :platforms => [:ruby_18]
-  gem 'ruby-debug19', :platforms => :ruby_19
   gem 'ffi-ncurses', :platforms => :jruby
   gem 'rspec-rails', '~> 2.0'
   gem 'spork', '~> 0.9.0.rc'
