@@ -8,7 +8,7 @@ describe Project do
   describe "attribute validation" do
     [:name, :url, :branch].each do |mandatory_field|
       it "should be invalid without a #{mandatory_field}" do
-        project = Factory.build(:project, mandatory_field => nil)
+        project = FactoryGirl.build(:project, mandatory_field => nil)
         project.should have_at_least(1).error_on(mandatory_field)
         project.errors.full_messages.should include("#{mandatory_field.to_s.humanize} can't be blank")
       end
@@ -23,13 +23,13 @@ describe Project do
       end
 
       it "doesn't do anything if a project already exists with the same name" do
-        Factory(:project, :name => 'foo')
+        FactoryGirl.create(:project, :name => 'foo')
         lambda { Project.add(:name => 'foo').should be_nil }.should_not change(Project, :count)
       end
     end
 
     context "removing a project" do
-      let(:project) { Factory(:project, :name => 'project_to_be_removed') }
+      let(:project) { FactoryGirl.create(:project, :name => 'project_to_be_removed') }
 
       it "removes it from the DB" do
         project.destroy
@@ -42,7 +42,7 @@ describe Project do
       end
 
       it "removes all the builds from DB" do
-        build = Factory(:build, :project => project)
+        build = FactoryGirl.create(:build, :project => project)
         project.destroy
         Build.find_by_id(build.id).should be_nil
       end
@@ -80,17 +80,17 @@ describe Project do
   describe "last complete build" do
     [:timestamp].each do |field|
       it "delegates last_complete_build_#{field} to the last complete build" do
-        project = Factory(:project)
-        Factory(:build, :project => project, :number => 4, :status => 'passed').update_attribute(:created_at, 2.days.ago)
-        Factory(:build, :project => project, :number => 5, :status => 'building').update_attribute(:created_at, 1.day.ago)
-        Factory(:build, :project => project, :number => 5, :status => 'cancelled').update_attribute(:created_at, Date.today)
+        project = FactoryGirl.create(:project)
+        FactoryGirl.create(:build, :project => project, :number => 4, :status => 'passed').update_attribute(:created_at, 2.days.ago)
+        FactoryGirl.create(:build, :project => project, :number => 5, :status => 'building').update_attribute(:created_at, 1.day.ago)
+        FactoryGirl.create(:build, :project => project, :number => 5, :status => 'cancelled').update_attribute(:created_at, Date.today)
         project.last_complete_build_status.to_s.should == 'passed'
       end
     end
   end
 
   describe "command" do
-    let(:project) { Factory(:project) }
+    let(:project) { FactoryGirl.create(:project) }
 
     it "defaults the custom command to rake" do
       project.build_command.should eq('rake default')
@@ -113,7 +113,7 @@ describe Project do
 
   describe "forcing a build" do
     it "sets the build requested flag to true" do
-      project = Factory(:project, :name => 'name')
+      project = FactoryGirl.create(:project, :name => 'name')
       project.force_build
       project.build_requested.should be_true
     end
@@ -134,7 +134,7 @@ describe Project do
   end
 
   describe "run build" do
-    let(:project) { Factory(:project, :name => "goldberg") }
+    let(:project) { FactoryGirl.create(:project, :name => "goldberg") }
 
     before(:each) do
       File.stub!(:exist?).with(File.expand_path('Gemfile', project.code_path)).and_return(false)
@@ -200,7 +200,7 @@ describe Project do
       end
 
       it "creates a new build for a project with build number one greater than last build and run it" do
-        project.builds << Factory(:build, :number => 5, :revision => "old_sha", :project => project)
+        project.builds << FactoryGirl.create(:build, :number => 5, :revision => "old_sha", :project => project)
         project.should_receive(:new_build).with(hash_including(:number => 6, :previous_build_revision => "old_sha")).and_return(build)
         project.run_build
       end
@@ -248,17 +248,17 @@ describe Project do
   end
 
   it "is able to return the latest build" do
-    project = Factory(:project, :name => 'name')
-    first_build = Factory(:build, :project => project)
-    last_build = Factory(:build, :project => project)
+    project = FactoryGirl.create(:project, :name => 'name')
+    first_build = FactoryGirl.create(:build, :project => project)
+    last_build = FactoryGirl.create(:build, :project => project)
     project.latest_build.should == last_build
   end
 
   it "cleans up older 'building' builds" do
-    project = Factory(:project)
-    passed_build = Factory(:build, :project => project, :status => 'passed')
-    failed_build = Factory(:build, :project => project, :status => 'failed')
-    interrupted_build = Factory(:build, :project => project, :status => 'building')
+    project = FactoryGirl.create(:project)
+    passed_build = FactoryGirl.create(:build, :project => project, :status => 'passed')
+    failed_build = FactoryGirl.create(:build, :project => project, :status => 'failed')
+    interrupted_build = FactoryGirl.create(:build, :project => project, :status => 'building')
     project.clean_up_older_builds
     interrupted_build.reload.status.should == 'cancelled'
     passed_build.reload.status.should == 'passed'
@@ -267,34 +267,34 @@ describe Project do
 
   describe "culprit_revision_range" do
     it "returns build which originally failed " do
-      project = Factory(:project)
-      passed_build = Factory(:build, :project => project, :status => 'passed',:revision => 'passed1')
-      culprit_build = Factory(:build, :project => project, :status => 'failed',:revision => 'failed1')
-      innocent_build = Factory(:build, :project => project, :status => 'failed',:revision => 'failed2')
+      project = FactoryGirl.create(:project)
+      passed_build = FactoryGirl.create(:build, :project => project, :status => 'passed',:revision => 'passed1')
+      culprit_build = FactoryGirl.create(:build, :project => project, :status => 'failed',:revision => 'failed1')
+      innocent_build = FactoryGirl.create(:build, :project => project, :status => 'failed',:revision => 'failed2')
       project.culprit_revision_range.should == [innocent_build, culprit_build]
     end
 
     it "returns all failed build if there are no passing builds" do
-      project = Factory(:project)
-      culprit_build = Factory(:build, :project => project, :status => 'failed')
-      innocent_build2 = Factory(:build, :project => project, :status => 'failed')
-      innocent_build1 = Factory(:build, :project => project, :status => 'failed')
+      project = FactoryGirl.create(:project)
+      culprit_build = FactoryGirl.create(:build, :project => project, :status => 'failed')
+      innocent_build2 = FactoryGirl.create(:build, :project => project, :status => 'failed')
+      innocent_build1 = FactoryGirl.create(:build, :project => project, :status => 'failed')
       project.culprit_revision_range.should == [innocent_build1, innocent_build2, culprit_build]
     end
 
     it "returns nil if the latest build passed" do
-      project = Factory(:project)
-      failed_build = Factory(:build, :project => project, :status => 'failed')
-      passed_build = Factory(:build, :project => project, :status => 'passed')
+      project = FactoryGirl.create(:project)
+      failed_build = FactoryGirl.create(:build, :project => project, :status => 'failed')
+      passed_build = FactoryGirl.create(:build, :project => project, :status => 'passed')
       project.culprit_revision_range.should be_empty
     end
   end
 
   describe "culprits_for_failure" do
     it "returns authors of the culprit build" do
-      project = Factory(:project)
-      passed_build = Factory(:build, :project => project, :status => 'passed', :revision => 'passed_revision')
-      failed_build = Factory(:build, :project => project, :status => 'failed', :revision => 'failed_revision')
+      project = FactoryGirl.create(:project)
+      passed_build = FactoryGirl.create(:build, :project => project, :status => 'passed', :revision => 'passed_revision')
+      failed_build = FactoryGirl.create(:build, :project => project, :status => 'failed', :revision => 'failed_revision')
 
       project.repository.should_receive(:authors).with(['failed_revision'])
       project.culprits_for_failure
@@ -304,14 +304,14 @@ describe Project do
       repository = mock(Repository)
       repository.should_not_receive(:authors)
       Repository.stub(:new).and_return(repository)
-      project = Factory(:project)
-      passed_build = Factory(:build, :project => project, :status => 'passed')
+      project = FactoryGirl.create(:project)
+      passed_build = FactoryGirl.create(:build, :project => project, :status => 'passed')
       project.culprits_for_failure.should  == ''
     end
   end
 
   describe "build preprocessing" do
-    let(:project) { Factory(:project, :name => "goldberg") }
+    let(:project) { FactoryGirl.create(:project, :name => "goldberg") }
 
     it "removes Gemfile.lock if the file exists and is not being versioned and if it is newer than the Gemfile" do
       gemfilelock_path = File.expand_path('Gemfile.lock', project.code_path)
@@ -333,7 +333,7 @@ describe Project do
   end
 
   describe "project configuration" do
-    let(:project) { Factory(:project, :name => 'goldberg') }
+    let(:project) { FactoryGirl.create(:project, :name => 'goldberg') }
 
     it "loads a new configuration object with default values if goldberg_config.rb is not found" do
       File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(false)
@@ -362,10 +362,10 @@ describe Project do
   end
 
   it "provides list of projects to be built" do
-    new_project = Factory(:project)
-    build_due_project = Factory(:project, :next_build_at => Time.now - 10.seconds)
-    build_not_due_project = Factory(:project, :next_build_at => Time.now + 1.hour)
-    undue_but_forced_project = Factory(:project, :next_build_at => Time.now + 1.hour, :build_requested => true)
+    new_project = FactoryGirl.create(:project)
+    build_due_project = FactoryGirl.create(:project, :next_build_at => Time.now - 10.seconds)
+    build_not_due_project = FactoryGirl.create(:project, :next_build_at => Time.now + 1.hour)
+    undue_but_forced_project = FactoryGirl.create(:project, :next_build_at => Time.now + 1.hour, :build_requested => true)
     Project.projects_to_build.should include(new_project)
     Project.projects_to_build.should include(build_due_project)
     Project.projects_to_build.should include(undue_but_forced_project)
@@ -379,38 +379,38 @@ describe Project do
   end
 
   describe "activity" do
-    let(:project){Factory(:project)}
+    let(:project){FactoryGirl.create(:project)}
 
     ['passed', 'failed', 'timeout'].each do |status|
       it "is Sleeping if no build is currently happening and if the last build #{status}" do
-        Factory(:build, :project => project, :status => status)
+        FactoryGirl.create(:build, :project => project, :status => status)
         project.activity.should == 'Sleeping'
       end
     end
 
     it "is Building if a build is currently happening" do
-      Factory(:build, :project => project, :status => 'building')
+      FactoryGirl.create(:build, :project => project, :status => 'building')
       project.activity.should == 'Building'
     end
 
     it "is Unknown for any status" do
-      Factory(:build, :project => project, :status => 'foo bar')
+      FactoryGirl.create(:build, :project => project, :status => 'foo bar')
       project.activity.should == 'Unknown'
     end
   end
 
   describe "cctray project status" do
-    let(:project){Factory(:project)}
+    let(:project){FactoryGirl.create(:project)}
 
     {'passed' => 'Success', 'failed' => 'Failure', 'timeout' => 'Failure'}.each do |status, message|
       it "is '#{message}' when the last build '#{status}'" do
-        Factory(:build, :project => project, :status => status)
+        FactoryGirl.create(:build, :project => project, :status => status)
         project.map_to_cctray_project_status.should == message
       end
 
       it "is '#{message}' when the last build is building & the second to last '#{status}'" do
-        Factory(:build, :project => project, :status => status, :number => 10)
-        Factory(:build, :project => project, :status => 'building', :number => 11)
+        FactoryGirl.create(:build, :project => project, :status => status, :number => 10)
+        FactoryGirl.create(:build, :project => project, :status => 'building', :number => 11)
         project.map_to_cctray_project_status.should == message
       end
     end
@@ -419,7 +419,7 @@ describe Project do
   context "removing a failed add" do
     it "if the checkout fails" do
       Repository.stub!(:new).and_return(mock(:repository, :checkout => false))
-      project = Factory(:project)
+      project = FactoryGirl.create(:project)
       FileUtils.should_receive(:rm_rf).with(project.path)
       project.checkout
     end
@@ -428,7 +428,7 @@ describe Project do
       repository = mock(:repository)
       repository.stub!(:checkout).and_raise('an error')
       Repository.stub!(:new).and_return(repository)
-      project = Factory(:project)
+      project = FactoryGirl.create(:project)
       FileUtils.should_receive(:rm_rf).with(project.path)
       lambda {
         project.checkout
@@ -438,15 +438,15 @@ describe Project do
 
   describe "github" do
     it "doesn't think random urls are on git" do
-      Factory(:project, :url => 'git://somewhereelse.com/repo.git').github_url.should be_nil
+      FactoryGirl.create(:project, :url => 'git://somewhereelse.com/repo.git').github_url.should be_nil
     end
 
     it "detects a git protocol url" do
-      Factory(:project, :url => 'git://github.com/some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
+      FactoryGirl.create(:project, :url => 'git://github.com/some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
     end
 
     it "detects an http url" do
-      Factory(:project, :url => 'http://github.com/some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
+      FactoryGirl.create(:project, :url => 'http://github.com/some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
     end
   end
 end

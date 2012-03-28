@@ -16,12 +16,12 @@ describe Build do
   end
 
   it "sorts correctly" do
-    builds = [10, 9, 1, 500].map{|i| Factory(:build, :number => i)}
+    builds = [10, 9, 1, 500].map{|i| FactoryGirl.create(:build, :number => i)}
     builds.sort.map(&:number).map(&:to_i).should == [1, 9, 10, 500]
   end
 
   it "is able to read the build log file to retrieve associated log" do
-    build = Factory.build(:build)
+    build = FactoryGirl.build(:build)
     Environment.should_receive(:file_exist?).with(build.build_log_path).and_return(true)
     Environment.should_receive(:read_file).with(build.build_log_path).and_return("build_log")
     build.build_log.should == "build_log"
@@ -29,15 +29,15 @@ describe Build do
 
   context "paths" do
     it "knows where to store the build artefacts on the file system" do
-      project = Factory.build(:project, :name => "name")
-      build = Factory.build(:build, :project => project, :number => 5)
+      project = FactoryGirl.build(:project, :name => "name")
+      build = FactoryGirl.build(:build, :project => project, :number => 5)
       build.path.should == File.join(project.path, "builds", "5")
     end
 
     [:change_list, :build_log].each do |artefact|
       it "appends build number to the project path to create a path for #{artefact}" do
-        project = Factory.build(:project, :name => "name")
-        build = Factory.build(:build, :project => project, :number => 5)
+        project = FactoryGirl.build(:project, :name => "name")
+        build = FactoryGirl.build(:build, :project => project, :number => 5)
         build.send("#{artefact}_path").should == File.join(project.path, "builds", "5", artefact.to_s)
       end
     end
@@ -45,8 +45,8 @@ describe Build do
 
   context "after create" do
     it "creates a directory for storing build artefacts" do
-      project = Factory.build(:project, :name => 'ooga')
-      build = Factory.build(:build, :project => project, :number => 5)
+      project = FactoryGirl.build(:project, :name => 'ooga')
+      build = FactoryGirl.build(:build, :project => project, :number => 5)
       FileUtils.should_receive(:mkdir_p).with(build.path)
       build.save.should be_true
     end
@@ -54,8 +54,8 @@ describe Build do
 
   context "before create" do
     it "updates the revision of the build if it is blank" do
-      project = Factory.build(:project, :name => 'ooga')
-      build = Factory.build(:build, :project => project, :number => 5, :revision => nil)
+      project = FactoryGirl.build(:project, :name => 'ooga')
+      build = FactoryGirl.build(:build, :project => project, :number => 5, :revision => nil)
       project.repository.should_receive(:revision).and_return("new_sha")
       build.save
       build.reload
@@ -63,8 +63,8 @@ describe Build do
     end
 
     it "does not update the build revision if it is already set" do
-      project = Factory.build(:project, :name => 'ooga')
-      build = Factory.build(:build, :project => project, :number => 5, :revision => "some_sha")
+      project = FactoryGirl.build(:project, :name => 'ooga')
+      build = FactoryGirl.build(:build, :project => project, :number => 5, :revision => "some_sha")
       build.save
       build.reload
       build.revision.should == "some_sha"
@@ -73,8 +73,8 @@ describe Build do
 
   context "changes" do
     it "writes a file with all the changes since the previous build" do
-      project = Factory.build(:project, :name => 'ooga')
-      build = Factory.build(:build, :project => project, :number => 5, :previous_build_revision => "old_sha", :revision => "new_sha")
+      project = FactoryGirl.build(:project, :name => 'ooga')
+      build = FactoryGirl.build(:build, :project => project, :number => 5, :previous_build_revision => "old_sha", :revision => "new_sha")
       project.repository.should_receive(:change_list).with("old_sha", "new_sha").and_return("changes")
       file = mock(File)
       file.should_receive(:write).with("changes")
@@ -84,8 +84,8 @@ describe Build do
   end
 
   context "run" do
-    let(:project) { Factory.build(:project) }
-    let(:build) { Factory.create(:build, :number => 1, :project => project, :ruby => '1.9.2') }
+    let(:project) { FactoryGirl.build(:project) }
+    let(:build) { FactoryGirl.create(:build, :number => 1, :project => project, :ruby => '1.9.2') }
 
     before(:each) do
       build.stub(:before_build)
@@ -152,7 +152,7 @@ describe Build do
 
   context "before build" do
     it "sets build status to 'building' and persist the change list" do
-      build = Factory.build(:build)
+      build = FactoryGirl.build(:build)
       build.should_receive(:persist_change_list)
       build.before_build
       build.reload.status.should == 'building'
@@ -160,7 +160,7 @@ describe Build do
   end
 
   context "artefacts" do
-    let(:build) { Factory(:build) }
+    let(:build) { FactoryGirl.create(:build) }
 
     it "if the folder exists" do
       Environment.should_receive(:exist?).with(build.artefacts_path).and_return(true)
@@ -175,7 +175,7 @@ describe Build do
   end
 
   it "cancels build" do
-    build = Factory(:build)
+    build = FactoryGirl.create(:build)
     build.cancel
     build.should be_cancelled
   end

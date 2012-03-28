@@ -31,7 +31,7 @@ group :development do
 end
 
 group :test do
-  gem 'factory_girl_rails', '~> 1.0.1'
+  gem 'factory_girl_rails', '~> 3.0.0'
   gem 'rspec-http', '~> 0.0.2'
   gem 'simplecov'
 end

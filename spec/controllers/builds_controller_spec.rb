@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe BuildsController do
-  let(:project) { Factory(:project, :name => 'name') }
-  let(:build) { Factory.create(:build, :project => project, :number => 10) }
+  let(:project) { FactoryGirl.create(:project, :name => 'name') }
+  let(:build) { FactoryGirl.create(:build, :project => project, :number => 10) }
 
   it "loads one build" do
     get :show, :project_name => project.name, :build_number => build.number
@@ -63,7 +63,7 @@ describe BuildsController do
   end
 
   it "cancels the build" do
-    build = Factory(:build, :project => Factory(:project))
+    build = FactoryGirl.create(:build, :project => Factory(:project))
     @request.env['HTTP_REFERER'] = 'http://referer/'
     put :cancel, :project_name => build.project.name, :build_number => build.number
     build.reload.should be_cancelled
