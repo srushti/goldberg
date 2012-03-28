@@ -10,7 +10,7 @@ class Project < ActiveRecord::Base
   validates_presence_of :branch, :name, :url
   validates_uniqueness_of :name
 
-  delegate :frequency, :ruby, :environment_string, :timeout, :nice, :group, :to => :config
+  delegate :frequency, :ruby, :environment_string, :timeout, :nice, :group, :bundler_options, :to => :config
 
   def self.projects_to_build
     where("build_requested = ? or next_build_at is null or next_build_at <= ?", true, Environment.now)

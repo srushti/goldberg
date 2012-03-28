@@ -1,6 +1,6 @@
 class Project
   class Configuration
-    attr_accessor :frequency, :ruby, :rake_task, :environment_variables, :timeout, :command, :nice, :group, :use_bundle_exec
+    attr_accessor :frequency, :ruby, :rake_task, :environment_variables, :timeout, :command, :nice, :group, :use_bundle_exec, :bundler_options
     attr_reader :build_completion_callbacks, :build_failure_callbacks, :build_fixed_callbacks, :build_success_callbacks
 
     NO_TIMEOUT = Object.new
@@ -19,6 +19,7 @@ class Project
       @nice = 0
       @group = 'default'
       @use_bundle_exec = false
+      @bundler_options = ''
     end
 
     def ruby_version
@@ -50,5 +51,5 @@ class Project
     def on_build_success(&callback_block)
       build_success_callbacks << callback_block
     end
- end
+  end
 end

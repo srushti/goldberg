@@ -131,7 +131,7 @@ describe Build do
       project.stub(:config).and_return(config)
       build.environment_string = "FOO=bar"
       config.nice = 5
-      expect_command("script/goldberg-build '#{project.name}' '1.9.2' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/code' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/builds/1/build_log' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/builds/1/artefacts' '5' 'FOO=bar' rake default",
+      expect_command("script/goldberg-build '#{project.name}' '1.9.2' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/code' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/builds/1/build_log' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/builds/1/artefacts' '5' 'FOO=bar' '' rake default",
         :running? => false, :fork => nil, :success? => true
       )
       build.run

@@ -13,6 +13,7 @@ build_log_path="$1" && shift
 artifacts_path="$1" && shift
 nice_value="$1" && shift
 environment_variables="$1" && shift
+bundler_options="$1" && shift
 build_command="$@"
 
 # echo $project, $ruby, $code_path, $build_log_path, $artifacts_path, $nice_value, $build_command >> $build_log_path
@@ -37,7 +38,8 @@ rvm_script_sourced()
 update_bundle()
 {
   if [ -e Gemfile ]; then
-    bundle check --no-color || bundle install --no-color || return -1
+    echo "$bundler_options"
+    bundle check --no-color || bundle install --no-color $bundler_options || return -1
   else
     echo "No Gemfile found"
   fi
