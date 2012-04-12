@@ -144,7 +144,7 @@ describe Build do
     end
 
     it "sets build status to failed if the build command fails" do
-      Command.stub!(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => false))
+      Command.stub(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => false))
       build.run
       build.status.should == "failed"
     end
@@ -164,7 +164,7 @@ describe Build do
 
     it "if the folder exists" do
       Environment.should_receive(:exist?).with(build.artefacts_path).and_return(true)
-      Dir.stub!(:entries).with(build.artefacts_path).and_return(['.', '..', 'entry1', 'entry2'])
+      Dir.stub(:entries).with(build.artefacts_path).and_return(['.', '..', 'entry1', 'entry2'])
       build.artefacts.should == ['entry1', 'entry2']
     end
 

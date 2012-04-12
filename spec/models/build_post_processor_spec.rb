@@ -7,7 +7,7 @@ describe BuildPostProcessor do
   let(:mail_notification){ mock }
 
   before :each do
-    BuildMailNotification.stub!(:new).and_return(mail_notification)
+    BuildMailNotification.stub(:new).and_return(mail_notification)
   end
 
   context "on successfull build" do

@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Project do
   before(:each) do
-    Paths.stub!(:projects).and_return('some_path')
+    Paths.stub(:projects).and_return('some_path')
   end
 
   describe "attribute validation" do
@@ -97,16 +97,16 @@ describe Project do
     end
 
     it "is able to retrieve the custom command" do
-      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
-      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
-      Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.command = 'cmake' }")
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
+      Environment.stub(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.command = 'cmake' }")
       project.build_command.should eq('cmake')
     end
 
     it "does 'bundle exec' if asked to" do
-      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
-      File.stub!(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
-      Environment.stub!(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.use_bundle_exec = true }")
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return(true)
+      File.stub(:exists?).with(File.expand_path('goldberg_config.rb', project.path)).and_return(false)
+      Environment.stub(:read_file).with(File.expand_path('goldberg_config.rb', project.code_path)).and_return("Project.configure { |config| config.use_bundle_exec = true }")
       project.build_command.should == 'bundle exec rake default'
     end
   end
@@ -137,7 +137,7 @@ describe Project do
     let(:project) { FactoryGirl.create(:project, :name => "goldberg") }
 
     before(:each) do
-      File.stub!(:exist?).with(File.expand_path('Gemfile', project.code_path)).and_return(false)
+      File.stub(:exist?).with(File.expand_path('Gemfile', project.code_path)).and_return(false)
     end
     # all tests in this context are testing mock calls Grrrhhhhh
 
@@ -177,7 +177,7 @@ describe Project do
       it "schedules the next build based on the project's configuration" do
         project.next_build_at.should be_nil
         current_time = Time.now
-        Time.stub!(:now).and_return(current_time)
+        Time.stub(:now).and_return(current_time)
 
         project.run_build
 
@@ -208,7 +208,7 @@ describe Project do
       it "schedules the next build based on the project's configuration" do
         project.next_build_at.should be_nil
         current_time = Time.now
-        Time.stub!(:now).and_return(current_time)
+        Time.stub(:now).and_return(current_time)
 
         project.should_receive(:new_build).and_return(build)
         project.run_build
@@ -227,7 +227,7 @@ describe Project do
         callback_tester = mock
         mail_notification = mock
 
-        BuildMailNotification.stub!(:new).and_return(mail_notification)
+        BuildMailNotification.stub(:new).and_return(mail_notification)
         configuration = Project.configure do |config|
           config.on_build_completion do |build, notification, prev_build_status|
             callback_tester.test_call(build, notification, prev_build_status)
@@ -418,7 +418,7 @@ describe Project do
 
   context "removing a failed add" do
     it "if the checkout fails" do
-      Repository.stub!(:new).and_return(mock(:repository, :checkout => false))
+      Repository.stub(:new).and_return(mock(:repository, :checkout => false))
       project = FactoryGirl.create(:project)
       FileUtils.should_receive(:rm_rf).with(project.path)
       project.checkout
@@ -426,8 +426,8 @@ describe Project do
 
     it "if the checkout raises an error" do
       repository = mock(:repository)
-      repository.stub!(:checkout).and_raise('an error')
-      Repository.stub!(:new).and_return(repository)
+      repository.stub(:checkout).and_raise('an error')
+      Repository.stub(:new).and_return(repository)
       project = FactoryGirl.create(:project)
       FileUtils.should_receive(:rm_rf).with(project.path)
       lambda {

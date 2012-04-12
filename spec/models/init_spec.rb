@@ -41,9 +41,9 @@ describe Init do
     one = FactoryGirl.create(:project, :name => 'one')
     two = FactoryGirl.create(:project, :name => 'two')
     exception = Exception.new("An exception")
-    one.stub!(:run_build).and_raise(exception)
+    one.stub(:run_build).and_raise(exception)
     two.should_receive(:run_build)
-    Project.stub!(:projects_to_build).and_return([one, two])
+    Project.stub(:projects_to_build).and_return([one, two])
     Goldberg.logger.should_receive(:error).with("Build on project #{one.name} failed because of An exception")
     Goldberg.logger.should_receive(:error)
     Init.new.poll
