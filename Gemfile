@@ -12,6 +12,7 @@ gem 'json', :platforms => [:ruby_18, :jruby]
 platform :jruby do
   gem 'jdbc-sqlite3', '~> 3.7.2'
   gem 'activerecord-jdbcsqlite3-adapter'
+  gem 'jruby-openssl', '~> 0.7.6.1'
 end
 
 group :development, :test do
@@ -22,12 +23,7 @@ group :development, :test do
 end
 
 group :development do
-  if RUBY_PLATFORM == 'java'
-    # See https://github.com/carlhuda/bundler/issues/1100
-    gem 'mongrel', '~> 1.0'
-  else
-    gem 'mongrel', '~> 1.2.0.pre2'
-  end
+  gem 'puma'
 end
 
 group :test do
