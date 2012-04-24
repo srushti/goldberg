@@ -8,7 +8,7 @@ Visit [ci.c42.in][] to see a live Goldberg server.
 
 ### Installation
 
-Please refer to INSTALLATION.md
+Please refer to INSTALLATION.md. More configuration options are in CONFIGURATION.md
        
 ### Desktop Notification of Build Status
 
@@ -28,7 +28,6 @@ Please add an issue on http://github.com/c42/goldberg/issues if you find a bug, 
 
 Goldberg is brought to you by [C42 Engineering][]. We are also the people behind [RubyMonk][], the online interactive Ruby learning solution.
 
-
   [C42 Engineering]: http://c42.in
   [CruiseControl.rb]: https://github.com/thoughtworks/cruisecontrol.rb
   [ci.c42.in]: http://ci.c42.in
@@ -36,3 +35,4 @@ Goldberg is brought to you by [C42 Engineering][]. We are also the people behind
   [BuildNotify (linux)]: https://bitbucket.org/Anay/buildnotify/wiki/Home
   [RubyMonk]: http://rubymonk.com
   [Bundler]: http://gembundler.com/
+

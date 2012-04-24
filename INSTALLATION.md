@@ -33,7 +33,7 @@ Once you have the web front-end and poller working, it is time to add your repos
 
        RAILS_ENV=production bin/goldberg add <url> <name> [--branch <branch_name>] [--scm <git|svn>]
 
-By default it assumes the <code>master</code> branch.
+By default it assumes the <code>master</code> branch. Take a look at CONFIGURATION.md for other configuration options.
 
 ### Removing a repository
 
