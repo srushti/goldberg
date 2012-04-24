@@ -1,6 +1,6 @@
 ## Contributors
 
--   Srushtivratha Ambekallu ([srushti][]) [@srshti](http://twitter.com/srshti 'srshti')
+-   Srushti Ambekallu ([srushti][]) [@srshti](http://twitter.com/srshti 'srshti')
 -   Jasim A Basheer ([jasim][])
 -   Saager Mhatre ([dexterous][])
 -   Tejas Dinkar ([gja][])
