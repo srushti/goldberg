@@ -21,7 +21,7 @@
 
 3. **Start the poller:**
 
-  If you are in development mode, the poller will be automatically start when you run `rails server` in the previous step.
+  If you are in development mode, the poller will start automatically when you run `rails server` in the previous step.
 
   But for production, you have to run the poller separately as a background daemon. It can be started from the command line as `bin/goldberg start_poller`
 
