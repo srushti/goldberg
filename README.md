@@ -2,8 +2,7 @@
 
 # Goldberg
 
-Goldberg is a lightweight Continuous Integration Server that works for any language. 
-It also supports RVM and Bundler for Ruby Projects. 
+Goldberg is a lightweight Continuous Integration Server that works for any language. It also supports RVM and Bundler for Ruby Projects.
 
 Visit [ci.c42.in][] to see a live Goldberg server.
 
@@ -20,24 +19,20 @@ Goldberg generates feeds that work with all CruiseControl-compatible monitors li
       # To get man page style help
       ./bin/goldberg help [command]
 
-### Talking to us
+### We are nice people, talk to us!
 
-We are very helpful people - please add an Issue to http://github.com/c42/goldberg/issues if you find a bug, or reach us through any of the following channels:
+Please add an issue on http://github.com/c42/goldberg/issues if you find a bug, or reach us through the following channels for any help:
 
 -   Twitter: [@GoldbergCI](http://twitter.com/GoldbergCI 'GoldbergCI')
--   IRC: #goldberg
 -   email: goldberg@c42.in
 
-## Contributors
+Goldberg is brought to you by [C42 Engineering][]. We are also the people behind [RubyMonk][], the online interactive Ruby learning solution.
 
-See CONTRIBUTORS.MD
 
   [C42 Engineering]: http://c42.in
   [CruiseControl.rb]: https://github.com/thoughtworks/cruisecontrol.rb
   [ci.c42.in]: http://ci.c42.in
-  [Bundler]: http://gembundler.com/
   [CCMenu (mac)]: http://ccmenu.sourceforge.net/
   [BuildNotify (linux)]: https://bitbucket.org/Anay/buildnotify/wiki/Home
-  [ci.c42.in/XmlStatusReport.aspx]: http://ci.c42.in/XmlStatusReport.aspx
-
-© Copyright 2010–2011 [C42 Engineering][]. All Rights Reserved.
+  [RubyMonk]: http://rubymonk.com
+  [Bundler]: http://gembundler.com/
