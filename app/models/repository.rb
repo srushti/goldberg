@@ -16,7 +16,7 @@ class Repository
 
   def update
     rev_before_update = revision
-    Command.new("cd #{@code_path} && #{@provider.update}").execute
+    Command.new("cd #{@code_path} && #{@provider.update(@branch)}").execute
     rev_after_update = revision
     rev_before_update != rev_after_update
   end
