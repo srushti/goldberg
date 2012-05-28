@@ -9,8 +9,8 @@ module Scm
         "git clone --depth 1 #{url} #{code_path} --branch #{branch}"
       end
 
-      def update
-        "git reset --hard && git pull && git submodule update --init --recursive"
+      def update(branch)
+        "git fetch && git reset --hard origin/#{branch} && git submodule update --init --recursive"
       end
 
       def change_list(old_rev, new_rev)

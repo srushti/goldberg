@@ -9,7 +9,7 @@ module Scm
         "svn co #{url} #{code_path}"
       end
       
-      def update
+      def update(branch)
         "svn revert . && svn update"
       end
       
