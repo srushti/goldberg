@@ -1,6 +1,8 @@
 %html
   %head
     %title= @title || 'Goldberg'
+    -# meta tag to prevent robots to follow links for project pages
+    %meta{'name' => "robots", :content => "nofollow"}/
     = javascript_include_tag 'jquery-1.5.min'
     = stylesheet_link_tag 'reset'
     = stylesheet_link_tag 'layout'
