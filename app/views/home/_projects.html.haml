@@ -1,5 +1,3 @@
--if projects.empty?
- = "no projects added add one? do `bin/goldberg add`"
 - projects.each do |project|
   - status = project_status(project)
   .project-row{:class => status}
