@@ -1,0 +1,23 @@
+#all_projects tr.headings td {
+  font-weight: bold; }
+#all_projects tr.project_row {
+  /* Red/Green for pass/fail */ }
+  #all_projects tr.project_row td.status_icon {
+    width: 5%;
+    background-color: white; }
+  #all_projects tr.project_row td {
+    width: 40%;
+    border-top: white solid 1em;
+    background-color: white; }
+  #all_projects tr.project_row td.last_built_at {
+    width: 27%; }
+  #all_projects tr.project_row td.number_of_tests {
+    width: 20%; }
+  #all_projects tr.project_row em.project_ruby {
+    font-size: 10px; }
+  #all_projects tr.project_row.passed td {
+    background-color: #ccf0cc; }
+  #all_projects tr.project_row.failed td {
+    background-color: #f0cccc; }
+  #all_projects tr.project_row.building td {
+    background-color: yellow; }

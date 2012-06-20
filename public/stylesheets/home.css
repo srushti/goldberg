@@ -1,0 +1,83 @@
+#all-projects {
+  line-height: 30px;
+  /* Table Columns */ }
+  #all-projects .headings span {
+    font-weight: bold; }
+  #all-projects h3.group {
+    line-height: 30px;
+    margin: 0;
+    padding: 0 10px; }
+  #all-projects span.noprojects{
+    padding: 3px 0px 0px 12px;
+    display: block;
+  }
+  #all-projects .project-row {
+    display: block;
+    margin: 10px 10px 0 10px;
+    border-radius: 8px;
+    float: left;
+    width: 1000px; }
+  #all-projects .project-row.passed {
+    background-color: #ccf0cc; }
+  #all-projects .project-row.failed, #all-projects .project-row.timeout {
+    background-color: #f0cccc; }
+  #all-projects .project-row.building {
+    background-color: #f0f086; }
+  #all-projects .project-row.cancelled {
+    background-color: #cccccc; }
+  #all-projects .project-row form {
+    float: right; }
+  #all-projects .project-row form input {
+    display: block;
+    float: right;
+    height: 30px;
+    background-color: #444;
+    color: #fff;
+    border: 0;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px; }
+  #all-projects .project-row span.status-icon {
+    width: 5%;
+    background-color: white;
+    display: block;
+    float: left;
+    width: 40px;
+    margin-right: 10px;
+    background: #00b700 no-repeat 12px center;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px; }
+  #all-projects .project-row.passed span.status-icon {
+    background-color: #00b700;
+    background-image: url(/images/tick.png); }
+  #all-projects .project-row.failed span.status-icon, #all-projects .project-row.timeout span.status-icon {
+    background-color: #a90000;
+    background-image: url(/images/cross.png); }
+  #all-projects .project-row.building span.status-icon {
+    background-color: #f0f086;
+    background-image: url(/images/building.gif); }
+  #all-projects .project-row.cancelled span.status-icon {
+    background-color: #444444;
+    background-image: url(/images/cross.png); }
+  #all-projects .project-row span {
+    width: 40%; }
+  #all-projects .project-row span.last-built-at {
+    width: 27%; }
+  #all-projects .project-row span.number-of-tests {
+    width: 20%; }
+  #all-projects em.project_ruby {
+    font-size: 10px; }
+  #loading {
+    position: relative;
+    display: none;
+    margin: 60px 0px 0px;
+    padding: 3px 15px;
+    color: #ffffff;
+    line-height: 10px;
+  }
+  #loading h5,img{
+    float: left;
+    margin: 2px 5px;
+  }
+  #loading h5{
+    margin: 4px 5px;
+  }

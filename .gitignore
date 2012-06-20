@@ -14,6 +14,5 @@ goldberg.ids
 .rvmrc
 .rbenv-version
 coverage/*
-*.css
 config/goldberg.yml
 bin

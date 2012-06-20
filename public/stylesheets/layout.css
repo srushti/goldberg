@@ -1,0 +1,90 @@
+html {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  background-color: #444444;
+  background-image: url("/images/bg.png");
+  font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif; }
+
+body {
+  height: 100%;
+  min-height: 100%;
+  width: 100%; }
+
+a, a:visited {
+  color: black; }
+
+h1.a {
+  text-decoration: none; }
+
+div.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -65px; }
+
+div.container {
+  padding: 2em; }
+
+div.push {
+  height: 60px; }
+
+/* header */
+div.header {
+  padding-top: 2em;
+  width: 1000px;
+  margin: 0 auto; }
+  div.header h1, div.header h4 {
+    margin-bottom: 0;
+    font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif; }
+  div.header h1 a {
+    font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    font-weight: 100;
+    font-size: 50px;
+    text-decoration: none;
+    color: #fff; }
+  div.header h4 {
+    font-weight: 300;
+    color: #fff;
+    font-size: 16px;
+    padding-left: 4px; }
+
+div.page {
+  width: 1020px;
+  margin: 20px auto;
+  border-radius: 8px;
+  overflow: hidden; }
+
+div#all-projects {
+  width: 1020px;
+  padding: 0 0 10px 0;
+  float: left;
+  color: #444444;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  border-radius: 8px; }
+
+/* Footer */
+div.footer {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  height: 40px;
+  padding: 10px;
+  background-color: #fff; }
+  div.footer div.logo {
+    float: left;
+    padding-left: 1em; }
+  div.footer div.logo img {
+    width: 50px; }
+  div.footer div.author {
+    font-size: 1.3em;
+    background: transparent url("/images/c42-engineering-logo.png") no-repeat;
+    line-height: 40px;
+    height: 40px;
+    padding: 0 0 0 60px;
+    float: left; }
+  div.footer div.message {
+    padding-right: 2em; }
+  div.footer div.message .version {
+    float: right;
+    line-height: 40px;
+    height: 40px; }
