@@ -9,3 +9,7 @@
     - grouped_projects.keys.each do |group_name|
       %h3.group= link_to group_name, group_path(group_name)
       = render :partial => 'projects', :locals => { :projects => grouped_projects[group_name] }
+#loading
+  %img#loader{:src => "/images/ajax_loader.gif",:alt => "Ajaxloader"}
+  %h5
+    ="updating.."

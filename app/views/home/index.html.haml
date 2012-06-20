@@ -5,9 +5,12 @@
   $(document).ready(function(){
     setInterval(function(){
       console.log('foo');
+      $('#loading').show();
       $.get('#{params[:group_name] ? projects_partial_for_group_path(params[:group_name]) : projects_partial_path}', function(response){
         console.log(response);
-        $('#all-projects')[0].replaceWith(response);
+        //alert('updated');
+        $('#page').children('#all-projects').remove().append(response);
+        $('#loading').hide();
       });
     }, 5 * 1000)
   });
