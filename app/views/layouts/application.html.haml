@@ -6,15 +6,6 @@
     = javascript_include_tag 'jquery-1.5.min'
     = stylesheet_link_tag 'reset'
     = stylesheet_link_tag 'layout'
-    - keep_refreshing = true
-    -#- keep_refreshing = false if Rails.env == 'development'
-    - if defined?(keep_refreshing) && keep_refreshing
-      :javascript
-        $(document).ready(function(){
-          setTimeout(function(){ window.location.reload(); }, 15 * 1000)
-        });
-      %noscript
-        %meta{:'http-equiv' => "refresh", :content => "15"}
     = yield :head
   %body
     .wrapper

@@ -2,14 +2,24 @@
   = stylesheet_link_tag 'home'
 
 :javascript
-  -#$(document).ready(function(){
-    -#setInterval(function(){
-      -#console.log('foo');
-      -#$.get('#{params[:group_name] ? projects_partial_for_group_path(params[:group_name]) : projects_partial_path}', function(response){
-        -#console.log(response);
-        -#$('#all-projects')[0].replaceWith(response);
-      -#});
-    -#}, 5 * 1000)
-  -#});
+  $(document).ready(function(){
+    $time=new Date();
+    setInterval(function(){
+      $.ajax({
+        type: "GET",
+        url: '#{params[:group_name] ? projects_partial_for_group_path(params[:group_name]) : projects_partial_path}',
+        error: function(xhr, statusText) {
+          $('.error').remove();
+          $('#all-projects').append("<p class='error'>connection to server failed, status was last updated at " + $time + ".</p>");
+        },
+        success: function(response){
+          $('.error').remove();
+          $('#all-projects').remove();
+          $('.page').append(response);
+        }
+      });
+
+    }, 5 * 1000)
+  });
 
 = render :partial => 'group_projects', :locals => { :grouped_projects => @grouped_projects }
