@@ -10,6 +10,35 @@ Visit [ci.c42.in][] to see a live Goldberg server.
 
 Please refer to INSTALLATION.md. More configuration options are in CONFIGURATION.md
        
+#### Callbacks & Email Notifications
+
+Goldberg provides on_build_completion, on_build_failure, on_build_success & on_build_fixed callbacks, which can be used to extend Goldberg and add functionality that is not provided out of the box. All the callbacks have access to the build that was completed & an object of email notification, which can be used to configure the mails to be sent on these events. The on_build_completion callback has an extra parameter previous_build_status.
+
+The callbacks are part of goldberg_config.rb
+
+     #Goldberg callbacks
+    Project.configure do |config|
+
+      config.on_build_completion do |build,notification,previous_build_status|
+        # sending mail
+        notification.from('from@example.com').to('to@example.com').with_subject("build for #{build.project.name} #{build.status}").send
+      end
+
+      config.on_build_success do |build,notification|
+        # code to deploy on staging
+      end
+
+      config.on_build_failure do |build,notification|
+        # post to IRC channel & send mail
+      end
+
+      config.on_build_fixed do |build,notification|
+        # post to IRC channel & deploy on staging
+      end
+    end
+
+Assume you want to post a message on IRC channel & there is a gem that can be used to do so, you can simply require the gem at the start of the project_config.rb file & write the code to post message in any of the callbacks.
+
 ### Desktop Notification of Build Status
 
 Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml`. eg: [cc.xml](http://ci.c42.in/cc.xml)
