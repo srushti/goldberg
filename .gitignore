@@ -16,3 +16,4 @@ goldberg.ids
 coverage/*
 config/goldberg.yml
 bin
+*.css
