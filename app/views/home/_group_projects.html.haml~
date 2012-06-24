@@ -1,3 +1,7 @@
+#loading
+  %img#loader{:src => "/images/ajax_loader.gif",:alt => "Ajaxloader"}
+  %h5
+    ="updating.."
 #all-projects
   -if grouped_projects.keys.size == 0 #no projects to build
     %span.noprojects

@@ -5,14 +5,16 @@
   $(document).ready(function(){
     $time=new Date();
     setInterval(function(){
+      console.log('foo');
       $.ajax({
         type: "GET",
         url: '#{params[:group_name] ? projects_partial_for_group_path(params[:group_name]) : projects_partial_path}',
-        error: function(xhr, statusText) { 
-          $('.error').remove();
-          $('#all-projects').append("<p class='error'>connection to server failed, status was last updated at "+$time+".</p>"); 
-        },
-        success: function(response){  
+        //error: function(xhr, statusText) { 
+        //  alert("Error: "+statusText);
+        //  $('#all-projects').append("<p class='error'>connection to server failed, status was last updated at //"+$time+".</p>"); 
+        //},
+        success: function(msg){ 
+          alert( "Success: " + msg ); 
           $('.error').remove();
           $time=new Date();
           $('#all-projects').remove();
