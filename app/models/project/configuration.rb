@@ -1,7 +1,7 @@
 class Project
   class Configuration
-    attr_accessor :frequency, :ruby, :rake_task, :environment_variables, :timeout, :command, :nice, :group, :use_bundle_exec, :bundler_options
-    attr_reader :build_completion_callbacks, :build_failure_callbacks, :build_fixed_callbacks, :build_success_callbacks
+    attr_accessor :frequency, :ruby, :rake_task, :timeout, :command, :nice, :group, :use_bundle_exec, :bundler_options
+    attr_reader :environment_variables, :build_completion_callbacks, :build_failure_callbacks, :build_fixed_callbacks, :build_success_callbacks
 
     NO_TIMEOUT = Object.new
 
@@ -30,6 +30,10 @@ class Project
       else
         Environment.ruby_version
       end
+    end
+
+    def environment_variables=(new_variables)
+      @environment_variables.merge(new_variables)
     end
 
     def environment_string
