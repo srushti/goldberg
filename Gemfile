@@ -33,4 +33,3 @@ group :test do
   gem 'rspec-http', '~> 0.9.0'
   gem 'simplecov'
 end
-gem 'bigdecimal'
