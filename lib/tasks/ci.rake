@@ -5,5 +5,5 @@ task :setup_test_env do
 end
 
 task :copy_coverage_report do
-  FileUtils.cp_r('coverage', ENV['BUILD_ARTEFACTS'] || 'output', :verbose => true)
+  FileUtils.cp_r('coverage', ENV['BUILD_ARTEFACTS'], :verbose => true) if ENV['BUILD_ARTEFACTS'].present?
 end
