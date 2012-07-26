@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Project::Configuration do
-  context "default value" do
-    let(:config) { Project::Configuration.new }
+  let(:config) { Project::Configuration.new }
 
+  context "default value" do
     it "for build frequency should be 20 seconds" do
       config.frequency.should == 20
     end
@@ -24,13 +24,21 @@ describe Project::Configuration do
     end
   end
 
-  context "setting values" do
-    it "should be able to add environment variables" do
-      c = Project.configure do |config|
-        config.environment_variables.update("FOO" => "bar")
-      end
-      c.environment_variables.should == { "FOO" => "bar" }
-      c.environment_string.should == "FOO=bar"
+  context "environment variables" do
+    it "are settable" do
+      config.environment_variables.update("FOO" => "bar")
+      config.environment_variables.should == { "FOO" => "bar" }
+    end
+
+    it "can be merged with already set environment variables" do
+      config.environment_variables = { "foo" => 1, "bar" => 2 }
+      config.environment_variables = { "bar" => 3, "baz" => 4 }
+      config.environment_variables.should == { "foo" => 1, "bar" => 3, "baz" => 4 }
+    end
+
+    it "get formatted into a string" do
+      config.environment_variables = { "foo" => 1, "bar" => 2 }
+      config.environment_string.should == "foo=1 bar=2"
     end
   end
 
