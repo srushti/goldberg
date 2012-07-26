@@ -33,7 +33,7 @@ class Project
     end
 
     def environment_variables=(new_variables)
-      @environment_variables.merge(new_variables)
+      @environment_variables.merge!(new_variables)
     end
 
     def environment_string
