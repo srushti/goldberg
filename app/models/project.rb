@@ -145,6 +145,10 @@ class Project < ActiveRecord::Base
     (Project.temp_config ||= Configuration.new).tap{|config| yield config}
   end
 
+  def build_queued?
+    build_requested? && latest_build_status != 'building'
+  end
+
   def activity
     {'passed' => 'Sleeping', 'timeout' => 'Sleeping', 'failed' => 'Sleeping', 'building' => 'Building'}[latest_build_status] || 'Unknown'
   end

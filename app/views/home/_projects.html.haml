@@ -6,7 +6,7 @@
         = submit_tag 'cancel build'
     - else
       = form_tag project_force_path(project.name) do
-        = submit_tag "force build#{build_queued?(project) ? ' (build queued)' : ''}"
+        = submit_tag force_build_text(project), :class => 'force_build'
     %span.status-icon
       &nbsp;
     %span.project-name{:class => status}
