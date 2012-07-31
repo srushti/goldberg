@@ -17,8 +17,8 @@ command :add do |c|
     options.default :branch => 'master'
     options.default :scm => 'git'
 
-    url = argument_value(args[0], "url")
-    name = argument_value(args[1], "name")
+    url = argument_value(args[0], "Url")
+    name = argument_value(args[1], "Name")
     branch = options.branch
     scm = options.scm
     
