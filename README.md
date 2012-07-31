@@ -9,7 +9,7 @@ Visit [ci.c42.in][] to see a live Goldberg server.
 ### Installation
 
 Please refer to INSTALLATION.md. More configuration options are in CONFIGURATION.md
-       
+
 ### Desktop Notification of Build Status
 
 Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml`. eg: [cc.xml](http://ci.c42.in/cc.xml)
@@ -36,3 +36,8 @@ Goldberg is brought to you by [C42 Engineering][]. We are also the people behind
   [RubyMonk]: http://rubymonk.com
   [Bundler]: http://gembundler.com/
 
+### Why Goldberg?
+
+It was a tongue-in-cheek reference to Rube Goldberg machines.
+
+[![Goldberg](https://upload.wikimedia.org/wikipedia/en/8/88/Rubenvent.jpg "Rube Goldberg machine")](http://en.wikipedia.org/wiki/Rube_Goldberg_machine)
