@@ -10,7 +10,7 @@ module Scm
       end
       
       def update(branch)
-        "svn revert . && svn update"
+        "svn revert -R . && svn update"
       end
       
       def change_list(old_rev, new_rev)
