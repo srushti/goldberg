@@ -38,6 +38,6 @@ Goldberg is brought to you by [C42 Engineering][]. We are also the people behind
 
 ### Why Goldberg?
 
-It was a tongue-in-cheek reference to Rube Goldberg machines.
+It was an ironic reference to Rube Goldberg machines.
 
 [![Goldberg](https://upload.wikimedia.org/wikipedia/en/8/88/Rubenvent.jpg "Rube Goldberg machine")](http://en.wikipedia.org/wiki/Rube_Goldberg_machine)
