@@ -34,6 +34,7 @@ class ProjectsController < ApplicationController
   def index
     respond_to do |format|
       format.json { render :json => Project.all.to_json(:except => [:created_at, :modified_at], :methods => [:activity, :last_complete_build_status]) }
+      format.html { redirect_to root_path }
     end
   end
 end
