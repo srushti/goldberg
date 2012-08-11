@@ -1,5 +1,5 @@
 class BuildsController < ApplicationController
-  before_filter :load_project_and_build
+  before_filter :load_project_and_build, :except => [:index]
 
   def load_project_and_build
     @project = Project.find_by_name(params[:project_name])
@@ -34,7 +34,17 @@ class BuildsController < ApplicationController
   end
 
   def show
-    render :layout => (params[:_pjax] ? false : 'builds')
+    respond_to do |format|
+      format.html { render :layout => (params[:_pjax] ? false : 'builds') }
+      format.json { render :json => @build }
+    end
+  end
+
+  def index
+    respond_to do |format|
+      format.html { redirect_to project_path(params[:project_name]) }
+      format.json { render :json => Project.find_by_name(params[:project_name]).builds.to_json }
+    end
   end
 
   def cancel

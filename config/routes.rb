@@ -11,9 +11,11 @@ Goldberg::Application.routes.draw do
   resources :projects, :only => 'index'
 
   constraints :project_name => /[^\/]+/ do
-    get '/projects/:project_name.png' => 'projects#show', :as => :project, :format => :png
-    get '/projects/:project_name.html' => 'projects#show', :as => :project, :format => :html
+    get '/projects/:project_name.png' => 'projects#show', :format => :png
+    get '/projects/:project_name.html' => 'projects#show', :format => :html
+    get '/projects/:project_name.json' => 'projects#show', :format => :json
     get '/projects/:project_name' => 'projects#show', :as => :project
+    get '/projects/:project_name/builds' => "builds#index", :as => :project_builds
     post '/projects/:project_name/builds' => 'projects#force', :as => :project_force
     put '/projects/:project_name/builds/:build_number/cancel' => 'builds#cancel', :as => :build_cancel
 

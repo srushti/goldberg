@@ -4,7 +4,7 @@ class Project < ActiveRecord::Base
   has_many :builds, :dependent => :destroy
   after_destroy :remove
   delegate :number, :status, :build_log, :timestamp, :to => :latest_build, :prefix => true
-  delegate :timestamp, :status, :to => :last_complete_build, :prefix => true
+  delegate :timestamp, :status, :number, :to => :last_complete_build, :prefix => true
   cattr_accessor :temp_config
 
   validates_presence_of :branch, :name, :url

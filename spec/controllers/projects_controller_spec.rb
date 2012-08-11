@@ -24,15 +24,32 @@ describe ProjectsController do
     end
   end
 
-  it "gives a json representation of all projects" do
-    project = FactoryGirl.create(:project, :name => 'project1')
-    FactoryGirl.create(:build, :status => 'passed', :project => project)
-    get :index, :format => 'json'
-    response.should be_ok
-    builds_hash = JSON.parse(response.body)
-    builds_hash[0]['project']['name'].should == 'project1'
-    builds_hash[0]['project']['activity'].should == 'Sleeping'
-    builds_hash[0]['project']['last_complete_build_status'].should == 'passed'
+  describe "gives a json representation of" do
+    let!(:project) do
+      FactoryGirl.create(:project, :name => 'project1').tap do |project|
+        FactoryGirl.create(:build, :status => 'passed', :project => project, :number => 123)
+      end
+    end
+
+    it "all projects" do
+      get :index, :format => 'json'
+      response.should be_ok
+      projects_hash = JSON.parse(response.body)
+      projects_hash[0]['project']['name'].should == 'project1'
+      projects_hash[0]['project']['activity'].should == 'Sleeping'
+      projects_hash[0]['project']['last_complete_build_status'].should == 'passed'
+      projects_hash[0]['project']['last_complete_build_number'].should == 123
+    end
+
+    it "one project" do
+      get :show, :project_name => project.name, :format => 'json'
+      response.should be_ok
+      project_hash = JSON.parse(response.body)
+      project_hash['project']['name'].should == 'project1'
+      project_hash['project']['activity'].should == 'Sleeping'
+      project_hash['project']['last_complete_build_status'].should == 'passed'
+      project_hash['project']['last_complete_build_number'].should == 123
+    end
   end
 
   {'passed' => 'passed', 'failed' => 'failed', 'timeout' => 'failed', 'not available' => 'unknown'}.each do |status, filename|

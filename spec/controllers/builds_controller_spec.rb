@@ -6,10 +6,37 @@ describe BuildsController do
 
   it "loads one build" do
     get :show, :project_name => project.name, :build_number => build.number
-
     response.should be_ok
     assigns[:project].should == project
     assigns[:build].should == build
+  end
+
+  describe "generates a json representation" do
+    before(:each) { FactoryGirl.create(:build, :project => project, :number => 123, :status => 'passed') }
+
+    it "of one build" do
+      get :show, :project_name => project.name, :build_number => 123, :format => :json
+      response.should be_ok
+      build_hash = JSON.parse(response.body)
+      build_hash['build']['number'].should == 123
+      build_hash['build']['status'].should == 'passed'
+    end
+
+    it "of all builds" do
+      FactoryGirl.create(:build, :project => project, :number => 456, :status => 'failed')
+      get :index, :project_name => project.name, :format => :json
+      response.should be_ok
+      builds_hash = JSON.parse(response.body)
+      builds_hash[0]['build']['number'].should == 456
+      builds_hash[0]['build']['status'].should == 'failed'
+      builds_hash[1]['build']['number'].should == 123
+      builds_hash[1]['build']['status'].should == 'passed'
+    end
+  end
+
+  it "redirects to the project page if you try to load the builds index page" do
+    get :index, :project_name => project.name
+    response.should redirect_to project_path(project.name)
   end
 
   it "denotes an unknown project" do
