@@ -24,9 +24,7 @@ group :development, :test do
   gem 'spork', '~> 0.9.0'
 end
 
-group :development do
-  gem 'puma', '~> 1.5.0'
-end
+gem 'puma', '~> 1.5.0', :platforms => :rbx
 
 group :test do
   gem 'factory_girl_rails', '~> 3.5.0'
