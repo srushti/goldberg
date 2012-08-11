@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.6'
 
-gem 'sqlite3', '~> 1.3.3', :platforms => :ruby
+gem 'sqlite3', '~> 1.3.3', :platforms => [:ruby, :mswin]
 gem 'haml', '~> 3.1.4'
 gem 'sass', '~> 3.1.10'
 gem 'commander', '~> 4.1.2'
