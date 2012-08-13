@@ -15,7 +15,7 @@
           - if build.revision
             %span.revision= revision_number_text(build)
           - if build.timestamp
-            %span.timeago(title="#{build.timestamp.iso8601}")
+            = format_timestamp(build.timestamp)
           %span.build-pointer
 
   .latest-build.clearfix= yield

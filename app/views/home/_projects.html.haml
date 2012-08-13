@@ -1,3 +1,6 @@
+- content_for(:head) do
+  = javascript_include_tag 'jquery.timeago'
+
 - projects.each do |project|
   - status = project_status(project)
   .project-row{:class => status}
@@ -15,7 +18,8 @@
         %em.project_ruby (#{project.ruby})
     %span.last-built-at
       - if project.latest_build_timestamp
-        = format_timestamp(project.last_complete_build_timestamp)
+        %span.timeago(title="#{project.last_complete_build_timestamp.iso8601}")
+        -#= format_timestamp(project.last_complete_build_timestamp)
     - if project.github_url
       %span.github-url
         = link_to "on Github", project.github_url
