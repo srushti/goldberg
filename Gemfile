@@ -10,7 +10,7 @@ gem 'childprocess', '~> 0.3.1'
 gem 'json', '~> 1.7.3', :platforms => [:ruby_18, :jruby]
 
 gem 'foreman', "~> 0.53.0"
-gem 'bigdecimal', '~> 1.1.0'
+gem 'bigdecimal', '~> 1.1.0', :platforms => [:ruby]
 
 platform :jruby do
   gem 'jdbc-sqlite3', '~> 3.7.2'
