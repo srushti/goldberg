@@ -448,5 +448,9 @@ describe Project do
     it "detects an http url" do
       FactoryGirl.create(:project, :url => 'http://github.com/some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
     end
+
+    it "detects ssh accessed url" do
+      FactoryGirl.create(:project, :url => 'git@github.com:some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
+    end
   end
 end

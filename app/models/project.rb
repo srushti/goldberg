@@ -154,7 +154,11 @@ class Project < ActiveRecord::Base
   end
 
   def github_url
-    url.gsub(/^git:\/\//, 'http://').gsub(/\.git$/, '') if url.include?('//github.com')
+    if url.include?('//github.com')
+      url.gsub(/^git:\/\//, 'http://').gsub(/\.git$/, '')
+    elsif url.include?('git@github.com')
+      url.gsub(/:/, '/').gsub(/^git@/, 'http://').gsub(/\.git$/, '')
+    end
   end
 
   def building?
