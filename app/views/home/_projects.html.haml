@@ -21,7 +21,7 @@
         = format_timestamp(project.last_complete_build_timestamp)
     - if project.github_url
       %span.github-url
-        = link_to "on Github", project.github_url
+        = link_to "on GitHub", project.github_url, :class => 'external-link'
     - if !project.culprits_for_failure.empty?
       %span.culprit
         = "(Possible culprit(s): #{project.culprits_for_failure})"

@@ -102,6 +102,11 @@ $dark-grey: #444;
     span.number-of-tests {
       width: 20%;
     }
+
+    a.external-link {
+      background: url("/images/external_icon.png") no-repeat scroll right center transparent;
+      padding-right: 13px;
+    }
   }
 
   em.project_ruby {
