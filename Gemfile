@@ -1,15 +1,15 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.8'
 
 gem 'sqlite3', '~> 1.3.3', :platforms => [:ruby, :mswin]
 gem 'haml', '~> 3.1.4'
-gem 'sass', '~> 3.1.10'
+gem 'sass', '~> 3.2.0'
 gem 'commander', '~> 4.1.2'
 gem 'childprocess', '~> 0.3.1'
 gem 'json', '~> 1.7.3', :platforms => [:ruby_18, :jruby]
 
-gem 'foreman', "~> 0.53.0"
+gem 'foreman', "~> 0.57.0"
 gem 'bigdecimal', '~> 1.1.0', :platforms => [:ruby]
 
 platform :jruby do
@@ -25,10 +25,10 @@ group :development, :test do
   gem 'spork', '~> 0.9.0'
 end
 
-gem 'puma', '~> 1.5.0', :platforms => :rbx
+gem 'puma', '~> 1.6.1', :platforms => :rbx
 
 group :test do
-  gem 'factory_girl_rails', '~> 3.5.0'
+  gem 'factory_girl_rails', '~> 4.0.0'
   gem 'rspec-http', '~> 0.10.0'
   gem 'simplecov'
 end
