@@ -110,7 +110,7 @@ class Build < ActiveRecord::Base
   end
 
   def cancel
-    update_attribute(:status, 'cancelled')
+    update_attributes(:status => 'cancelled')
   end
 
   ['timeout', 'cancelled', 'passed', 'failed', 'building', ].each do |status|

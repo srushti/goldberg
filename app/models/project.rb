@@ -65,7 +65,7 @@ class Project < ActiveRecord::Base
   def run_build
     clean_up_older_builds
     if self.repository.update || build_required?
-      update_attribute :build_requested, false
+      update_column :build_requested, false
       previous_build_status = last_complete_build_status
       prepare_for_build
       new_build = new_build(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby, :environment_string => environment_string).tap(&:run)
@@ -130,13 +130,11 @@ class Project < ActiveRecord::Base
 
   def config
     self.class.temp_config = Configuration.new
-    if File.exists?(File.expand_path('goldberg_config.rb', self.code_path))
-      config_code = Environment.read_file(File.expand_path('goldberg_config.rb', self.code_path))
-      eval(config_code)
-    end
-    if File.exists?(File.expand_path('goldberg_config.rb', self.path))
-      config_code = Environment.read_file(File.expand_path('goldberg_config.rb', self.path))
-      eval(config_code)
+    [self.code_path, self.path].each do |path|
+      if File.exists?(File.expand_path('goldberg_config.rb', path))
+        config_code = Environment.read_file(File.expand_path('goldberg_config.rb', path))
+        eval(config_code)
+      end
     end
     self.class.temp_config
   end
