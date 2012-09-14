@@ -114,7 +114,11 @@ class Build < ActiveRecord::Base
   end
 
   def duration
-    updated_at - created_at
+    if building?
+      Time.now - created_at
+    else
+      updated_at - created_at
+    end
   end
 
   ['timeout', 'cancelled', 'passed', 'failed', 'building', ].each do |status|

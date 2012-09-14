@@ -180,11 +180,25 @@ describe Build do
     build.should be_cancelled
   end
 
-  it "calculates the build's duration as being between created_at & updated_at" do
-    now = Time.now
-    build = FactoryGirl.create(:build)
-    build.update_column(:updated_at, now - 2.days)
-    build.update_column(:created_at, now - 3.days)
-    expect(build.duration).to eq(1.day)
+  describe "duration" do
+    before(:each) do
+      @now = Time.now
+      Time.stub(:now).and_return(@now)
+    end
+
+    it "calculates the build's duration as being between created_at & updated_at" do
+      build = FactoryGirl.create(:build, status: 'building')
+      build.update_column(:created_at, @now - 3.minutes)
+      expect(build.duration.to_i).to eq(3.minutes.to_i)
+    end
+
+    ['passed', 'failed', 'timeout', 'cancelled'].each do |status|
+      it "calculates the build's duration when the status is #{status} to be time to now" do
+        build = FactoryGirl.create(:build, status: status)
+        build.update_column(:updated_at, @now - 2.days)
+        build.update_column(:created_at, @now - 3.days)
+        expect(build.duration.to_i).to eq(1.day.to_i)
+      end
+    end
   end
 end
