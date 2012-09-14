@@ -113,6 +113,10 @@ class Build < ActiveRecord::Base
     update_attributes(:status => 'cancelled')
   end
 
+  def duration
+    updated_at - created_at
+  end
+
   ['timeout', 'cancelled', 'passed', 'failed', 'building', ].each do |status|
     define_method("#{status}?") { self.status == status }
   end

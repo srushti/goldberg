@@ -5,6 +5,7 @@
     = link_to @project.name, project_path(@project._name)
     %em.project_ruby (#{@project.ruby})
     %strong.project_status= "#{build_status(@build)}"
+    %em.duration= distance_of_time_in_words(@build.duration, 0, include_seconds: true)
   - unless @build.artefacts.empty?
     %ul
       Build artefacts

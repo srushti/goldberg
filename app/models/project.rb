@@ -65,7 +65,7 @@ class Project < ActiveRecord::Base
   def run_build
     clean_up_older_builds
     if self.repository.update || build_required?
-      update_column :build_requested, false
+      update_attributes(build_requested: false)
       previous_build_status = last_complete_build_status
       prepare_for_build
       new_build = new_build(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby, :environment_string => environment_string).tap(&:run)
@@ -90,8 +90,7 @@ class Project < ActiveRecord::Base
 
   def force_build
     Goldberg.logger.info "forcing build for #{self.name}"
-    self.build_requested = true
-    save
+    update_attributes(build_requested: true)
   end
 
   def build_command
