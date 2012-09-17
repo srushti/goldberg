@@ -9,7 +9,7 @@ gem 'commander', '~> 4.1.2'
 gem 'childprocess', '~> 0.3.1'
 gem 'json', '~> 1.7.3', :platforms => [:ruby_18, :jruby]
 
-gem 'foreman', "~> 0.57.0"
+gem 'foreman', "~> 0.59.0"
 gem 'bigdecimal', '~> 1.1.0', :platforms => [:ruby]
 
 platform :jruby do
@@ -28,7 +28,7 @@ end
 gem 'puma', '~> 1.6.1', :platforms => :rbx
 
 group :test do
-  gem 'factory_girl_rails', '~> 4.0.0'
+  gem 'factory_girl_rails', '~> 4.1.0'
   gem 'rspec-http', '~> 0.10.0'
   gem 'simplecov'
 end
