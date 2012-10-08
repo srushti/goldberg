@@ -8,6 +8,7 @@ gem 'sass', '~> 3.2.0'
 gem 'commander', '~> 4.1.2'
 gem 'childprocess', '~> 0.3.1'
 gem 'json', '~> 1.7.3', :platforms => [:ruby_18, :jruby]
+gem 'kaminari', '~> 0.14.1'
 
 gem 'foreman', "~> 0.59.0"
 gem 'bigdecimal', '~> 1.1.0', :platforms => [:ruby]

@@ -4,9 +4,12 @@ class ProjectsController < ApplicationController
     if @project.nil?
       render :text => 'Unknown project', :status => :not_found
     else
-      @build = @project.latest_build
       respond_to do |format|
-        format.html { render 'builds/show', :layout => 'builds' }
+        format.html do
+          @builds = @project.builds.page(params[:page])
+          @build = @builds.first
+          render 'builds/show', :layout => 'builds'
+        end
         format.json { render :json => @project.to_json(:except => [:created_at, :modified_at], :methods => [:activity, :last_complete_build_status, :last_complete_build_number])}
         format.png do
           filename = status_to_filename(@project.last_complete_build_status)
