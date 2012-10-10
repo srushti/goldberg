@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe BuildsController do
+  render_views
+
   let(:project) { FactoryGirl.create(:project, :name => 'name') }
   let(:build) { FactoryGirl.create(:build, :project => project, :number => 10) }
 

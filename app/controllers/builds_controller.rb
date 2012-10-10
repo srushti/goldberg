@@ -4,6 +4,7 @@ class BuildsController < ApplicationController
   def load_project_and_build
     @project = Project.find_by_name(params[:project_name])
     if @project
+      @builds = @project.builds.page(params[:page])
       @build = @project.builds.find_by_number(params[:build_number])
       render :text => 'Unknown build', :status => :not_found if @build.nil?
     else
