@@ -22,7 +22,7 @@ Every project in Goldberg can have its own custom configuration by checking in a
                                                                   # Not relevant if you're using config.command.
         config.group = 'c42'                                      # Running a lot of projects on one server? Use this to logically group them.
         config.use_bundle_exec = true                             # Run 'bundle exec rake', recommended for Rails projects
-        config.bundle_options = '--without deployment mac'        # Command-line options for bundle install
+        config.bundler_options = '--without deployment mac'        # Command-line options for bundle install
       end
 
 If you want the project to be checked for updates every 5 seconds, you will need to change the poller frequency to less than 5 seconds by copying `config/goldberg.yml.sample` to `goldberg.yml` and change the poller frequency in the file.
