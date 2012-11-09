@@ -1,5 +1,6 @@
 class Command
-  attr_reader :cmd
+  attr_reader :cmd, :start_time
+
   def initialize(cmd)
     @cmd = cmd
   end
@@ -21,6 +22,7 @@ class Command
   end
 
   def fork
+    @start_time = DateTime.now
     command = %{/usr/bin/env bash -c "#{@cmd.gsub(/"/, '\"')}"}
     Goldberg.logger.info "Forking: #{command}"
     @process = ChildProcess.build(command)
@@ -29,6 +31,10 @@ class Command
 
   def running?
     @process.alive?
+  end
+
+  def finished?
+    !running?
   end
 
   def stop

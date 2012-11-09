@@ -58,24 +58,21 @@ class Build < ActiveRecord::Base
   end
 
   def execute_async(command)
-    start_time = DateTime.now
     command = Command.new(command)
     command.fork
-    while (!exceeded_timeout?(start_time) && command.running? && !reload.cancelled?)
+    while (!exceeded_timeout?(command.start_time) && command.running? && !reload.cancelled?)
       sleep(10)
     end
     if cancelled?
       command.stop_tree
       Goldberg.logger.info "Cancelled pid #{command.pid}, build no #{number} of #{project.name}, #{command.stopped?}"
-    end
-    if exceeded_timeout?(start_time)
+    elsif exceeded_timeout?(command.start_time)
       command.stop_tree
       Goldberg.logger.error "Timeout (#{project.timeout})- killing #{command.pid}:#{command.cmd}"
-      self.status = 'timeout'
-    elsif !cancelled?
-      self.status = command.success? ? 'passed' : 'failed'
+      update_attributes(status: 'timeout')
+    else
+      update_attributes(status: command.success? ? 'passed' : 'failed')
     end
-    save
   end
 
   def exceeded_timeout?(start_time)

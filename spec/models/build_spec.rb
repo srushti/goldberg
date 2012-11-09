@@ -138,13 +138,13 @@ describe Build do
     end
 
     it "sets build status to failed if the build command succeeds" do
-      Command.stub(:new).and_return(mock(Command, :execute => true, :running? => false, :fork => nil, :success? => true))
+      Command.stub(:new).and_return(mock(Command, :execute => true, :running? => false, :fork => nil, :success? => true, :start_time => DateTime.now))
       build.run
       build.status.should == "passed"
     end
 
     it "sets build status to failed if the build command fails" do
-      Command.stub(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => false))
+      Command.stub(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => false, :start_time => DateTime.now))
       build.run
       build.status.should == "failed"
     end
