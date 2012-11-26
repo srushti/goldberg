@@ -1,4 +1,4 @@
-<a href='http://ci.c42.in/projects/goldberg'><img src='http://ci.c42.in/projects/goldberg.png' alt='Goldberg Build Status'></a>
+<a href='http://ci.c42.in/projects/goldberg_193'><img src='http://ci.c42.in/projects/goldberg_193.png' alt='Goldberg Build Status'></a>
 
 # Goldberg
 
