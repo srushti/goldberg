@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.9'
 
 gem 'sqlite3', '~> 1.3.3', :platforms => [:ruby, :mswin]
 gem 'haml', '~> 3.1.4'
@@ -10,7 +10,7 @@ gem 'childprocess', '~> 0.3.1'
 gem 'json', '~> 1.7.3', :platforms => [:ruby_18, :jruby]
 gem 'kaminari', '~> 0.14.1'
 
-gem 'foreman', "~> 0.59.0"
+gem 'foreman', "~> 0.60.2"
 gem 'bigdecimal', '~> 1.1.0', :platforms => [:ruby]
 
 platform :jruby do
