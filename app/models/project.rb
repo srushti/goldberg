@@ -53,12 +53,11 @@ class Project < ActiveRecord::Base
   end
 
   def prepare_for_build
-    gemfile = File.expand_path('Gemfile', self.code_path)
-    gemfilelock = File.expand_path('Gemfile.lock', self.code_path)
-
-    if File.exists?(gemfilelock) && !repository.versioned?('Gemfile.lock') && (File.mtime(gemfile) > File.mtime(gemfilelock) || ruby != latest_build.ruby)
+    gemfilelock = GemfileLock.new('Gemfile.lock', code_path)
+    gemfile_path = File.expand_path('Gemfile', code_path)
+    if gemfilelock.requires_deletion?(File.mtime(gemfile_path), !repository.versioned?('Gemfile.lock')) || ruby != latest_build.ruby
       Goldberg.logger.info("removing Gemfile.lock as it's not versioned")
-      File.delete(gemfilelock)
+      gemfilelock.delete
     end
   end
 
