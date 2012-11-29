@@ -19,6 +19,6 @@ class BuildMailNotification
   end
 
   def send
-    BuildStatusMailer.status_mail(@from,@to,@subject,@build).deliver
+    BuildStatusMailer.status_mail(@from, @to, @subject, @build).deliver
   end
 end

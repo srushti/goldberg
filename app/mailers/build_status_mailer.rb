@@ -1,7 +1,7 @@
 class BuildStatusMailer < ActionMailer::Base
-  default :from => "build@goldberg.com"
+  default :from => "build@goldberg.c42.in"
 
-  def status_mail(from,to,subject,build)
+  def status_mail(from, to, subject, build)
     @build = build
     @project = build.project
     subject_line = subject || "#{@project.name} build #{build.status}"
