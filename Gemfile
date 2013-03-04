@@ -11,7 +11,7 @@ gem 'json', '~> 1.7.3', :platforms => [:ruby_18, :jruby]
 gem 'kaminari', '~> 0.14.1'
 
 gem 'foreman', "~> 0.60.2"
-gem 'bigdecimal', '~> 1.1.0', :platforms => [:ruby]
+gem 'bigdecimal', '~> 1.1.0', :platforms => [:ruby_18, :ruby_19]
 
 platform :jruby do
   gem 'jdbc-sqlite3', '~> 3.7.2'
