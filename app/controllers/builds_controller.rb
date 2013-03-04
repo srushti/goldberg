@@ -20,7 +20,7 @@ class BuildsController < ApplicationController
     @path = artefact_path(params[:path])
     if Environment.expand_path(@path).match(/^#{Regexp.escape(artefact_path)}/)
       if Environment.directory?(@path)
-        @entries = (Dir.entries(@path) - ['.', '..']).map{|entry| File.join(params[:path], entry)}
+        @entries = (Environment.dir_entries(@path) - ['.', '..']).map{|entry| File.join(params[:path], entry)}
         render 'artefact_directory'
       elsif Environment.exist?(@path)
         extension = File.extname(@path)

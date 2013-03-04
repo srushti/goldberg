@@ -18,8 +18,8 @@ class @Refresher
         success: self.success_callback
     ), @interval
 
-    success_callback: (response) ->
-      $(".error").remove()
-      $("#all-projects").remove()
-      $(".page").append response
-      @setup_timestamp_refreshing()
+  success_callback: (response) ->
+    $(".error").remove()
+    $("#all-projects").remove()
+    $(".page").append response
+    @setup_timestamp_refreshing()

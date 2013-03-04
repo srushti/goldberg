@@ -1,10 +1,10 @@
 require "spec_helper"
 
 describe BuildPostProcessor do
-  let(:callback_tester) { mock }
+  let(:callback_tester) { double }
   let(:configuration) { Project::Configuration.new }
-  let(:previous_build_status){ mock }
-  let(:mail_notification){ mock }
+  let(:previous_build_status){ double }
+  let(:mail_notification){ double }
 
   before :each do
     BuildMailNotification.stub(:new).and_return(mail_notification)

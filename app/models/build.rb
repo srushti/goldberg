@@ -106,7 +106,7 @@ class Build < ActiveRecord::Base
 
   def artefacts
     if Environment.exist?(artefacts_path)
-      Dir.entries(artefacts_path) - ['.', '..']
+      Environment.dir_entries(artefacts_path) - ['.', '..']
     else
       []
     end

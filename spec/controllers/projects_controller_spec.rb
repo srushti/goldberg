@@ -35,20 +35,20 @@ describe ProjectsController do
       get :index, :format => 'json'
       response.should be_ok
       projects_hash = JSON.parse(response.body)
-      projects_hash[0]['project']['name'].should == 'project1'
-      projects_hash[0]['project']['activity'].should == 'Sleeping'
-      projects_hash[0]['project']['last_complete_build_status'].should == 'passed'
-      projects_hash[0]['project']['last_complete_build_number'].should == 123
+      projects_hash[0]['name'].should == 'project1'
+      projects_hash[0]['activity'].should == 'Sleeping'
+      projects_hash[0]['last_complete_build_status'].should == 'passed'
+      projects_hash[0]['last_complete_build_number'].should == 123
     end
 
     it "one project" do
       get :show, :project_name => project.name, :format => 'json'
       response.should be_ok
       project_hash = JSON.parse(response.body)
-      project_hash['project']['name'].should == 'project1'
-      project_hash['project']['activity'].should == 'Sleeping'
-      project_hash['project']['last_complete_build_status'].should == 'passed'
-      project_hash['project']['last_complete_build_number'].should == 123
+      project_hash['name'].should == 'project1'
+      project_hash['activity'].should == 'Sleeping'
+      project_hash['last_complete_build_status'].should == 'passed'
+      project_hash['last_complete_build_number'].should == 123
     end
   end
 

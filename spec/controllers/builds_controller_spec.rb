@@ -1,8 +1,6 @@
 require "spec_helper"
 
 describe BuildsController do
-  render_views
-
   let(:project) { FactoryGirl.create(:project, :name => 'name') }
   let(:build) { FactoryGirl.create(:build, :project => project, :number => 10) }
 
@@ -20,8 +18,8 @@ describe BuildsController do
       get :show, :project_name => project.name, :build_number => 123, :format => :json
       response.should be_ok
       build_hash = JSON.parse(response.body)
-      build_hash['build']['number'].should == 123
-      build_hash['build']['status'].should == 'passed'
+      build_hash['number'].should == 123
+      build_hash['status'].should == 'passed'
     end
 
     it "of all builds" do
@@ -29,10 +27,10 @@ describe BuildsController do
       get :index, :project_name => project.name, :format => :json
       response.should be_ok
       builds_hash = JSON.parse(response.body)
-      builds_hash[0]['build']['number'].should == 456
-      builds_hash[0]['build']['status'].should == 'failed'
-      builds_hash[1]['build']['number'].should == 123
-      builds_hash[1]['build']['status'].should == 'passed'
+      builds_hash[0]['number'].should == 456
+      builds_hash[0]['status'].should == 'failed'
+      builds_hash[1]['number'].should == 123
+      builds_hash[1]['status'].should == 'passed'
     end
   end
 
@@ -76,7 +74,7 @@ describe BuildsController do
       full_path = 'root/name/builds/10/artefacts/assets'
       Environment.stub(:expand_path).with(full_path).and_return(full_path)
       Environment.stub(:directory?).with(full_path).and_return(true)
-      Dir.stub(:entries).with(full_path).and_return(['.', '..', 'entry1', 'entry2'])
+      Environment.stub(:dir_entries).with(full_path).and_return(['.', '..', 'entry1', 'entry2'])
       get :artefact, :project_name => project.name, :build_number => build.number, :path => 'assets'
       response.should be_ok
       assigns[:entries].should == ['assets/entry1', 'assets/entry2']

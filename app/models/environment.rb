@@ -51,5 +51,9 @@ module Environment
         end
       end
     end
+
+    def dir_entries(*args)
+      Dir.entries(*args)
+    end
   end
 end

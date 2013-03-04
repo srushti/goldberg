@@ -76,7 +76,7 @@ describe Build do
       project = FactoryGirl.build(:project, :name => 'ooga')
       build = FactoryGirl.build(:build, :project => project, :number => 5, :previous_build_revision => "old_sha", :revision => "new_sha")
       project.repository.should_receive(:change_list).with("old_sha", "new_sha").and_return("changes")
-      file = mock(File)
+      file = double(File)
       file.should_receive(:write).with("changes")
       File.should_receive(:open).with(build.change_list_path, "w+").and_yield(file)
       build.persist_change_list
@@ -138,13 +138,13 @@ describe Build do
     end
 
     it "sets build status to failed if the build command succeeds" do
-      Command.stub(:new).and_return(mock(Command, :execute => true, :running? => false, :fork => nil, :success? => true, :start_time => DateTime.now))
+      Command.stub(:new).and_return(double(Command, :execute => true, :running? => false, :fork => nil, :success? => true, :start_time => DateTime.now))
       build.run
       build.status.should == "passed"
     end
 
     it "sets build status to failed if the build command fails" do
-      Command.stub(:new).and_return(mock(:command, :execute => true, :running? => false, :fork => nil, :success? => false, :start_time => DateTime.now))
+      Command.stub(:new).and_return(double(:command, :execute => true, :running? => false, :fork => nil, :success? => false, :start_time => DateTime.now))
       build.run
       build.status.should == "failed"
     end
@@ -164,7 +164,7 @@ describe Build do
 
     it "if the folder exists" do
       Environment.should_receive(:exist?).with(build.artefacts_path).and_return(true)
-      Dir.stub(:entries).with(build.artefacts_path).and_return(['.', '..', 'entry1', 'entry2'])
+      Environment.stub(:dir_entries).with(build.artefacts_path).and_return(['.', '..', 'entry1', 'entry2'])
       build.artefacts.should == ['entry1', 'entry2']
     end
 

@@ -68,10 +68,10 @@ describe Project do
     [:number, :status, :build_log, :timestamp].each do |field|
       it "delegates latest_build_#{field} to the latest build" do
         project = Project.new
-        latest_build = mock(Build)
+        latest_build = double(Build)
         latest_build.should_receive(field).and_return('a value')
         project.should_receive(:latest_build).and_return(latest_build)
-        # testing delegation call through mocks
+        # testing delegation call through doubles
         project.send("latest_build_#{field}").should == 'a value'
       end
     end
@@ -139,7 +139,7 @@ describe Project do
     before(:each) do
       File.stub(:exist?).with(File.expand_path('Gemfile', project.code_path)).and_return(false)
     end
-    # all tests in this context are testing mock calls Grrrhhhhh
+    # all tests in this context are testing double calls Grrrhhhhh
 
     it "preprocesses the codebase before calling build" do
       build = Build.new
@@ -224,8 +224,8 @@ describe Project do
       end
 
       it "should execute the post_build hooks from the config" do
-        callback_tester = mock
-        mail_notification = mock
+        callback_tester = double
+        mail_notification = double
 
         BuildMailNotification.stub(:new).and_return(mail_notification)
         configuration = Project.configure do |config|
@@ -301,7 +301,7 @@ describe Project do
     end
 
     it "returns empty string if there is no culprit build" do
-      repository = mock(Repository)
+      repository = double(Repository)
       repository.should_not_receive(:authors)
       Repository.stub(:new).and_return(repository)
       project = FactoryGirl.create(:project)
@@ -418,14 +418,14 @@ describe Project do
 
   context "removing a failed add" do
     it "if the checkout fails" do
-      Repository.stub(:new).and_return(mock(:repository, :checkout => false))
+      Repository.stub(:new).and_return(double(:repository, :checkout => false))
       project = FactoryGirl.create(:project)
       FileUtils.should_receive(:rm_rf).with(project.path)
       project.checkout
     end
 
     it "if the checkout raises an error" do
-      repository = mock(:repository)
+      repository = double(:repository)
       repository.stub(:checkout).and_raise('an error')
       Repository.stub(:new).and_return(repository)
       project = FactoryGirl.create(:project)
