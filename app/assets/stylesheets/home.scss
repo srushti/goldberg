@@ -72,23 +72,23 @@ $dark-grey: #444;
 
     &.passed span.status-icon{
     	background-color: #00b700;
-    	background-image: url(/images/tick.png);
+    	background-image: url(/assets/tick.png);
     }
 
     &.failed span.status-icon,
     &.timeout span.status-icon{
     	background-color: $dark-red;
-    	background-image: url(/images/cross.png);
+    	background-image: url(/assets/cross.png);
     }
 
     &.building span.status-icon{
     	background-color: $dark-yellow;
-    	background-image: url(/images/building.gif);
+    	background-image: url(/assets/building.gif);
     }
 
     &.cancelled span.status-icon{
     	background-color: $dark-grey;
-    	background-image: url(/images/cross.png);
+    	background-image: url(/assets/cross.png);
     }
 
     span {
@@ -104,7 +104,7 @@ $dark-grey: #444;
     }
 
     a.external-link {
-      background: url("/images/external_icon.png") no-repeat scroll right center transparent;
+      background: url("/assets/external_icon.png") no-repeat scroll right center transparent;
       padding-right: 13px;
     }
   }

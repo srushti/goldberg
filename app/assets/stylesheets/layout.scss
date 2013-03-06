@@ -5,7 +5,7 @@ html {
   min-height: 100%;
   width: 100%;
   background-color: $dark-gray;
-  background-image: url('/images/bg.png');
+  background-image: url('/assets/bg.png');
   font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
@@ -95,7 +95,7 @@ div.footer {
 
   div.author {
     font-size: 1.3em;
-    background: transparent url('/images/c42-engineering-logo.png') no-repeat;
+    background: transparent url('/assets/c42-engineering-logo.png') no-repeat;
     line-height: 40px;
     height: 40px;
     padding: 0 0 0 60px;

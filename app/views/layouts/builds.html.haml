@@ -1,7 +1,5 @@
 - content_for(:head) do
   %meta{'name' => "robots", :content => "noindex"}/
-  = stylesheet_link_tag 'projects'
-  = javascript_include_tag 'jquery.pjax', 'jquery.timeago', 'projects'
 
 - @title = "Goldberg - #{@project.name}"
 
