@@ -23,7 +23,6 @@ group :development, :test do
   gem 'require_relative', '~> 1.0.3', :platforms => [:ruby_18]
   gem 'ffi-ncurses', '~> 0.4.0', :platforms => :jruby
   gem 'rspec-rails', '~> 2.0'
-  gem 'spork', '~> 0.9.0'
 end
 
 gem 'puma', '~> 1.6.1', :platforms => :rbx
