@@ -3,7 +3,7 @@ $:.unshift lib unless $:.include?(lib)
 
 require 'goldberg/version'
 
-Gem::Specification.new do |s|  
+Gem::Specification.new do |s|
   s.name        = "goldberg"
   s.version     = Version::STRING
   s.authors     = ["Sidu Ponnappa", "Niranjan Paranjape", "Srushti Ambekallu"]
@@ -20,12 +20,4 @@ Gem::Specification.new do |s|
   s.rdoc_options      = ["--charset=UTF-8"]
   s.executables       = ['goldberg']
   s.require_path      = 'lib'
-
-  s.add_development_dependency "rspec", ["~> 2.0.0"]
-  s.add_development_dependency "rcov", ["~> 0.9.9"]
-  s.add_development_dependency "rack-test", ["~> 0.5.0"]
-  s.add_development_dependency "ruby-debug19"
-
-  s.add_runtime_dependency "sinatra", ["~> 1.1.0"]
-  s.add_runtime_dependency "sinatra_more", ["~> 0.3.40"]
 end
