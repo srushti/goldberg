@@ -3,24 +3,9 @@
 
 :javascript
   $(document).ready(function(){
-    $time=new Date();
-    setInterval(function(){
-      $.ajax({
-        type: "GET",
-        url: '#{params[:group_name] ? projects_partial_for_group_path(params[:group_name]) : projects_partial_path}',
-        error: function(xhr, statusText) {
-          $('.error').remove();
-          $('#all-projects').append("<p class='error'>connection to server failed, status was last updated at " + $time + ".</p>");
-        },
-        success: function(response){
-          $('.error').remove();
-          $('#all-projects').remove();
-          $('.page').append(response);
-          setup_timestamp_refreshing();
-        }
-      });
-
-    }, 5 * 1000)
+    refresher = new Refresher('#{params[:group_name] ? projects_partial_for_group_path(params[:group_name]) : projects_partial_path}', 5 * 1000)
+    refresher.setup_timestamp_refreshing();
+    refresher.setup_status_refreshing();
   });
 
 = render :partial => 'group_projects', :locals => { :grouped_projects => @grouped_projects }
