@@ -1,8 +1,8 @@
 require "fileutils"
 
 class Init
-  def add(url, name, branch, scm)
-    if Project.add(:url => url, :name => name, :branch => branch, :scm => scm)
+  def add(url, name, branch, scm, env)
+    if Project.add(:url => url, :name => name, :branch => branch, :scm => scm, :project_environment_string => env)
       Goldberg.logger.info "#{name} successfully added."
     else
       Goldberg.logger.info "There was problem adding the project."

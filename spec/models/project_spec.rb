@@ -223,6 +223,14 @@ describe Project do
         project.run_build
       end
 
+      it "should concatenate the environment_string with project_environment_string set while adding new project" do
+        project.project_environment_string = 'RACK_ENV=production'
+        config = Project::Configuration.new.tap{ |c| c.stub(:environment_string).and_return("FOO=bar") }
+        project.stub(:config).and_return(config)
+        project.should_receive(:new_build).with(hash_including(:environment_string => "RACK_ENV=production FOO=bar")).and_return(build)
+        project.run_build
+      end
+
       it "should execute the post_build hooks from the config" do
         callback_tester = double
         mail_notification = double

@@ -17,7 +17,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.add(options)
-    project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch], :scm => options[:scm])
+    project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch], :scm => options[:scm], :project_environment_string => options[:project_environment_string])
     return if !project.valid?
     if project.checkout
       project.save!
@@ -68,7 +68,8 @@ class Project < ActiveRecord::Base
       update_attributes(build_requested: false)
       previous_build_status = last_complete_build_status
       prepare_for_build
-      new_build = new_build(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby, :environment_string => environment_string).tap(&:run)
+      concatenated_environment_string = "#{project_environment_string} #{environment_string}"
+      new_build = new_build(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby, :environment_string => concatenated_environment_string).tap(&:run)
       Goldberg.logger.info "Build #{ new_build.status }"
       after_build_runner.execute(new_build, previous_build_status)
     end
