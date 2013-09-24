@@ -312,22 +312,22 @@ describe Project do
 
   describe "build preprocessing" do
     let(:project) { FactoryGirl.create(:project, :name => "goldberg") }
+    let(:gemfilelock_path) { File.expand_path('Gemfile.lock', project.code_path) }
+    let(:gemfile_path) { File.expand_path('Gemfile', project.code_path) }
 
     it "removes Gemfile.lock if the file exists and is not being versioned and if it is newer than the Gemfile" do
-      gemfilelock_path = File.expand_path('Gemfile.lock', project.code_path)
-      gemfile_path = File.expand_path('Gemfile', project.code_path)
-      File.should_receive(:exists?).with(gemfilelock_path).and_return(true)
-      project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(false)
+      File.stub(:exists?).with(gemfilelock_path).and_return(true)
+      project.repository.stub(:versioned?).with(gemfilelock_path).and_return(false)
+      File.stub(:mtime).with(gemfilelock_path).and_return(2.days.ago)
+      File.stub(:mtime).with(gemfile_path).and_return(1.days.ago)
       File.should_receive(:delete).with(gemfilelock_path)
-      File.should_receive(:mtime).with(gemfilelock_path).and_return(2.days.ago)
-      File.should_receive(:mtime).with(gemfile_path).and_return(1.days.ago)
       project.prepare_for_build
     end
 
     it "does not remove Gemfile.lock if the file exists but it's being versioned" do
-      File.should_receive(:exists?).with(File.expand_path('Gemfile.lock', project.code_path)).and_return(true)
-      project.repository.should_receive(:versioned?).with('Gemfile.lock').and_return(true)
-      File.should_not_receive(:delete).with(File.expand_path('Gemfile.lock', project.code_path))
+      File.stub(:exists?).with(gemfilelock_path).and_return(true)
+      project.repository.stub(:versioned?).with(gemfilelock_path).and_return(true)
+      File.should_not_receive(:delete).with(gemfilelock_path)
       project.prepare_for_build
     end
   end

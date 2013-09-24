@@ -56,7 +56,7 @@ class Project < ActiveRecord::Base
     gemfile = ProjectFile.new('Gemfile', code_path)
     gemfile_lock = ProjectFile.new('Gemfile.lock', code_path)
 
-    if gemfile_lock.exists? && gemfile_lock.versioned?(repository) && gemfile.newer_than?(gemfile_lock) || ruby != latest_build.ruby
+    if gemfile_lock.exists? && (!gemfile_lock.versioned?(repository) && (gemfile.newer_than?(gemfile_lock) || ruby != latest_build.ruby))
       Goldberg.logger.info("removing Gemfile.lock as it's not versioned")
       gemfile_lock.delete
     end
