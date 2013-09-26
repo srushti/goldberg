@@ -11,5 +11,5 @@ Goldberg::Application.config.action_mailer.smtp_settings = {
 }
 
 Goldberg::Application.config.action_mailer.default_url_options = {
-  :host => "goldberg.example.com"
+  host: "goldberg.example.com"
 }

@@ -1,5 +1,5 @@
 - content_for(:head) do
-  %meta{'name' => "robots", :content => "noindex"}/
+  %meta{'name' => "robots", content: "noindex"}/
 
 - @title = "Goldberg - #{@project.name}"
 
@@ -9,7 +9,7 @@
     %ul
       = pagination_links @project
       - @builds.each do |build|
-        %li.build{:class => "#{build_status(build)}#{build == @build ? ' selected' : ''}"}
+        %li.build{class: "#{build_status(build)}#{build == @build ? ' selected' : ''}"}
           = link_to "#{build.number} #{build_status(build)}", project_build_path(@project.name, build.number)
           - if build.revision
             %span.revision= revision_number_text(build)
@@ -19,4 +19,4 @@
 
   .latest-build.clearfix= yield
 
-= render :file => 'layouts/application'
+= render file: 'layouts/application'

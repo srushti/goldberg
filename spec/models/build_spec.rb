@@ -16,7 +16,7 @@ describe Build do
   end
 
   it "sorts correctly" do
-    builds = [10, 9, 1, 500].map{|i| FactoryGirl.create(:build, :number => i)}
+    builds = [10, 9, 1, 500].map{|i| FactoryGirl.create(:build, number: i)}
     builds.sort.map(&:number).map(&:to_i).should == [1, 9, 10, 500]
   end
 
@@ -29,15 +29,15 @@ describe Build do
 
   context "paths" do
     it "knows where to store the build artefacts on the file system" do
-      project = FactoryGirl.build(:project, :name => "name")
-      build = FactoryGirl.build(:build, :project => project, :number => 5)
+      project = FactoryGirl.build(:project, name: "name")
+      build = FactoryGirl.build(:build, project: project, number: 5)
       build.path.should == File.join(project.path, "builds", "5")
     end
 
     [:change_list, :build_log].each do |artefact|
       it "appends build number to the project path to create a path for #{artefact}" do
-        project = FactoryGirl.build(:project, :name => "name")
-        build = FactoryGirl.build(:build, :project => project, :number => 5)
+        project = FactoryGirl.build(:project, name: "name")
+        build = FactoryGirl.build(:build, project: project, number: 5)
         build.send("#{artefact}_path").should == File.join(project.path, "builds", "5", artefact.to_s)
       end
     end
@@ -45,8 +45,8 @@ describe Build do
 
   context "after create" do
     it "creates a directory for storing build artefacts" do
-      project = FactoryGirl.build(:project, :name => 'ooga')
-      build = FactoryGirl.build(:build, :project => project, :number => 5)
+      project = FactoryGirl.build(:project, name: 'ooga')
+      build = FactoryGirl.build(:build, project: project, number: 5)
       FileUtils.should_receive(:mkdir_p).with(build.path)
       build.save.should be_true
     end
@@ -54,8 +54,8 @@ describe Build do
 
   context "before create" do
     it "updates the revision of the build if it is blank" do
-      project = FactoryGirl.build(:project, :name => 'ooga')
-      build = FactoryGirl.build(:build, :project => project, :number => 5, :revision => nil)
+      project = FactoryGirl.build(:project, name: 'ooga')
+      build = FactoryGirl.build(:build, project: project, number: 5, revision: nil)
       project.repository.should_receive(:revision).and_return("new_sha")
       build.save
       build.reload
@@ -63,8 +63,8 @@ describe Build do
     end
 
     it "does not update the build revision if it is already set" do
-      project = FactoryGirl.build(:project, :name => 'ooga')
-      build = FactoryGirl.build(:build, :project => project, :number => 5, :revision => "some_sha")
+      project = FactoryGirl.build(:project, name: 'ooga')
+      build = FactoryGirl.build(:build, project: project, number: 5, revision: "some_sha")
       build.save
       build.reload
       build.revision.should == "some_sha"
@@ -73,8 +73,8 @@ describe Build do
 
   context "changes" do
     it "writes a file with all the changes since the previous build" do
-      project = FactoryGirl.build(:project, :name => 'ooga')
-      build = FactoryGirl.build(:build, :project => project, :number => 5, :previous_build_revision => "old_sha", :revision => "new_sha")
+      project = FactoryGirl.build(:project, name: 'ooga')
+      build = FactoryGirl.build(:build, project: project, number: 5, previous_build_revision: "old_sha", revision: "new_sha")
       project.repository.should_receive(:change_list).with("old_sha", "new_sha").and_return("changes")
       file = double(File)
       file.should_receive(:write).with("changes")
@@ -85,7 +85,7 @@ describe Build do
 
   context "run" do
     let(:project) { FactoryGirl.build(:project) }
-    let(:build) { FactoryGirl.create(:build, :number => 1, :project => project, :ruby => '1.9.2') }
+    let(:build) { FactoryGirl.create(:build, number: 1, project: project, ruby: '1.9.2') }
 
     before(:each) do
       build.stub(:before_build)
@@ -132,19 +132,19 @@ describe Build do
       build.environment_string = "FOO=bar"
       config.nice = 5
       expect_command("script/goldberg-build '#{project.name}' '1.9.2' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/code' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/builds/1/build_log' '#{ENV['HOME']}/.goldberg/projects/#{project.name}/builds/1/artefacts' '5' 'FOO=bar' '' rake default",
-        :running? => false, :fork => nil, :success? => true
+        :running? => false, fork: nil, :success? => true
       )
       build.run
     end
 
     it "sets build status to failed if the build command succeeds" do
-      Command.stub(:new).and_return(double(Command, :execute => true, :running? => false, :fork => nil, :success? => true, :start_time => DateTime.now))
+      Command.stub(:new).and_return(double(Command, execute: true, :running? => false, fork: nil, :success? => true, start_time: DateTime.now))
       build.run
       build.status.should == "passed"
     end
 
     it "sets build status to failed if the build command fails" do
-      Command.stub(:new).and_return(double(:command, :execute => true, :running? => false, :fork => nil, :success? => false, :start_time => DateTime.now))
+      Command.stub(:new).and_return(double(:command, execute: true, :running? => false, fork: nil, :success? => false, start_time: DateTime.now))
       build.run
       build.status.should == "failed"
     end

@@ -39,7 +39,8 @@ update_bundle()
 {
   if [ -e Gemfile ]; then
     echo "$bundler_options"
-    bundle check --no-color || bundle install --no-color $bundler_options || return -1
+    bundle check --no-color || bundle install --no-color $bundler_options || gem uninstall bundler && gem install bundler
+    bundle install --no-color $bundler_options || return -1
   else
     echo "No Gemfile found"
   fi

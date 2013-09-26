@@ -9,19 +9,19 @@ program :version, '0.0.1'
 program :description, 'Yet another CI server. With pipelines.'
 
 command :add do |c|
-  c.syntax = 'goldberg add <url> <name> [--branch <branch_name>] [--scm <scm_type>]'  
+  c.syntax = 'goldberg add <url> <name> [--branch <branch_name>] [--scm <scm_type>]'
   c.description = 'Add a new codebase to build'
   c.option '--branch STRING', String, 'branch to build, defaults to \'master\''
   c.option '--scm STRING', String, "scm to use - 'git' and 'svn' are currently supported, defaults to 'git'"
   c.action do |args, options|
-    options.default :branch => 'master'
-    options.default :scm => 'git'
+    options.default branch: 'master'
+    options.default scm: 'git'
 
     url = argument_value(args[0], "Url")
     name = argument_value(args[1], "Name")
     branch = options.branch
     scm = options.scm
-    
+
     Init.new.add(url, name, branch, scm)
   end
 end

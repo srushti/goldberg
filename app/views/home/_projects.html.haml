@@ -1,16 +1,16 @@
 - projects.each do |project|
   - status = project_status(project)
-  .project-row{:class => status}
+  .project-row{class: status}
     - if project.building?
-      = form_tag build_cancel_path(project.name, project.latest_build.number), :method => :put do
+      = form_tag build_cancel_path(project.name, project.latest_build.number), method: :put do
         = submit_tag 'cancel build'
     - else
       = form_tag project_force_path(project.name) do
-        = submit_tag force_build_text(project), :class => 'force_build'
+        = submit_tag force_build_text(project), class: 'force_build'
     %span.status-icon
       &nbsp;
-    %span.project-name{:class => status}
-      %a{:href => project_path(project.name), :rel =>"nofollow"}
+    %span.project-name{class: status}
+      %a{href: project_path(project.name), rel:"nofollow"}
         %strong= project.name
         %em.project_ruby (#{project.ruby})
     %span.last-built-at
@@ -18,7 +18,7 @@
         = format_timestamp(project.last_complete_build_timestamp)
     - if project.github_url
       %span.github-url
-        = link_to "on GitHub", project.github_url, :class => 'external-link'
+        = link_to "on GitHub", project.github_url, class: 'external-link'
     - if !project.culprits_for_failure.empty?
       %span.culprit
         = "(Possible culprit(s): #{project.culprits_for_failure})"

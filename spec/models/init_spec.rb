@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe Init do
   it "adds a new project" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master',:scm => 'git').and_return(true)
+    Project.should_receive(:add).with(url: 'url', name: 'name', branch: 'master',scm: 'git').and_return(true)
     Goldberg.logger.should_receive(:info).with('name successfully added.')
     Init.new.add('url', 'name', 'master', 'git')
   end
 
   it "adds a new project with a custom command" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master',:scm => 'svn').and_return(true)
+    Project.should_receive(:add).with(url: 'url', name: 'name', branch: 'master',scm: 'svn').and_return(true)
     Goldberg.logger.should_receive(:info).with('name successfully added.')
     Init.new.add('url', 'name', 'master', 'svn')
   end
@@ -20,7 +20,7 @@ describe Init do
   end
 
   it "removes the specified project" do
-    project = FactoryGirl.create(:project, :name => 'name')
+    project = FactoryGirl.create(:project, name: 'name')
     Goldberg.logger.should_receive(:info).with('name successfully removed.')
     Init.new.remove('name')
     Project.find_by_id(project.id).should_not be
@@ -32,14 +32,14 @@ describe Init do
   end
 
   it "lists all projects" do
-    project = FactoryGirl.create(:project, :name => 'a_project')
+    project = FactoryGirl.create(:project, name: 'a_project')
     Goldberg.logger.should_receive(:info).with(project.name)
     Init.new.list
   end
 
   it "continues on with the next project even if one build fails" do
-    one = FactoryGirl.create(:project, :name => 'one')
-    two = FactoryGirl.create(:project, :name => 'two')
+    one = FactoryGirl.create(:project, name: 'one')
+    two = FactoryGirl.create(:project, name: 'two')
     exception = Exception.new("An exception")
     one.stub(:run_build).and_raise(exception)
     two.should_receive(:run_build)

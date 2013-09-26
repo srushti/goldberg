@@ -11,7 +11,7 @@ describe BuildPostProcessor do
   end
 
   context "on successfull build" do
-    let(:build) { OpenStruct.new(:status => 'passed') }
+    let(:build) { OpenStruct.new(status: 'passed') }
 
     it "executes build completion callbacks" do
       configuration.on_build_completion do |build_param,notification,prev_build_status_param|
@@ -57,7 +57,7 @@ describe BuildPostProcessor do
   end
 
   context "on failed build" do
-    let(:failed_build) { OpenStruct.new(:status => 'failed') }
+    let(:failed_build) { OpenStruct.new(status: 'failed') }
     it "executes build completion callbacks" do
       configuration.on_build_completion do |build_param,notification,prev_build_status_param|
         callback_tester.test_call(build_param,notification,prev_build_status_param)

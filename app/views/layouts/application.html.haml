@@ -2,8 +2,8 @@
   %head
     %title= @title || 'Goldberg'
     -# meta tag to prevent robots to follow links for project pages
-    %meta{'name' => "robots", :content => "nofollow"}/
-    = stylesheet_link_tag 'application', :media => 'all'
+    %meta{'name' => "robots", content: "nofollow"}/
+    = stylesheet_link_tag 'application', media: 'all'
     = javascript_include_tag 'application'
     = yield :head
   %body
@@ -21,7 +21,7 @@
       .logo
       .message
         .author
-          %a{:href => 'http://c42.in'} C42 Engineering
+          %a{href: 'http://c42.in'} C42 Engineering
           Open Source
         .version
           = "Version #{Version::STRING}"

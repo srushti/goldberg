@@ -19,7 +19,7 @@ class Build < ActiveRecord::Base
   paginates_per per_page
 
   def self.null
-    OpenStruct.new(:number => 0, :status => 'not available', :revision => '', :nil_build? => true, :timestamp => nil, :build_log => '', :artefacts => [])
+    OpenStruct.new(number: 0, status: 'not available', revision: '', :nil_build? => true, timestamp: nil, build_log: '', artefacts: [])
   end
 
   def timestamp
@@ -113,7 +113,7 @@ class Build < ActiveRecord::Base
   end
 
   def cancel
-    update_attributes(:status => 'cancelled')
+    update_attributes(status: 'cancelled')
   end
 
   def duration

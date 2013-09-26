@@ -1,14 +1,14 @@
 class BuildsController < ApplicationController
-  before_filter :load_project_and_build, :except => [:index]
+  before_filter :load_project_and_build, except: [:index]
 
   def load_project_and_build
     @project = Project.find_by_name(params[:project_name])
     if @project
       @builds = @project.builds.page(params[:page])
       @build = @project.builds.find_by_number(params[:build_number])
-      render :text => 'Unknown build', :status => :not_found if @build.nil?
+      render text: 'Unknown build', status: :not_found if @build.nil?
     else
-      render :text => 'Unknown project', :status => :not_found
+      render text: 'Unknown project', status: :not_found
     end
   end
 
@@ -25,26 +25,26 @@ class BuildsController < ApplicationController
       elsif Environment.exist?(@path)
         extension = File.extname(@path)
         mime_type = Mime::Type.lookup_by_extension(extension[1, extension.size])
-        send_file @path, :disposition => 'inline', :content_type => mime_type || 'application/octet-stream'
+        send_file @path, disposition: 'inline', content_type: mime_type || 'application/octet-stream'
       else
-        render :text => 'Unknown file', :status => :not_found
+        render text: 'Unknown file', status: :not_found
       end
     else
-      render :text => 'Naughty, naughty', :status => 403
+      render text: 'Naughty, naughty', status: 403
     end
   end
 
   def show
     respond_to do |format|
-      format.html { render :layout => (params[:_pjax] ? false : 'builds') }
-      format.json { render :json => @build }
+      format.html { render layout: (params[:_pjax] ? false : 'builds') }
+      format.json { render json: @build }
     end
   end
 
   def index
     respond_to do |format|
       format.html { redirect_to project_path(params[:project_name]) }
-      format.json { render :json => Project.find_by_name(params[:project_name]).builds.to_json }
+      format.json { render json: Project.find_by_name(params[:project_name]).builds.to_json }
     end
   end
 

@@ -22,7 +22,7 @@ module Scm
       end
 
       def authors(versions)
-        "git show  -s  --pretty=\"format:%an\"  #{versions.join('..')}| uniq| tr \"\\n\" \" \""
+        "git show  -s  --pretty=\"format:%an\"  #{versions.uniq.join('..')}| uniq| tr \"\\n\" \" \""
       end
     end
   end

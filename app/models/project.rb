@@ -1,23 +1,23 @@
 require 'fileutils'
 
 class Project < ActiveRecord::Base
-  has_many :builds, :dependent => :destroy
+  has_many :builds, dependent: :destroy
   after_destroy :remove
-  delegate :number, :status, :build_log, :timestamp, :to => :latest_build, :prefix => true
-  delegate :timestamp, :status, :number, :to => :last_complete_build, :prefix => true
+  delegate :number, :status, :build_log, :timestamp, to: :latest_build, prefix: true
+  delegate :timestamp, :status, :number, to: :last_complete_build, prefix: true
   cattr_accessor :temp_config
 
   validates_presence_of :branch, :name, :url
   validates_uniqueness_of :name
 
-  delegate :frequency, :ruby, :environment_string, :timeout, :nice, :group, :bundler_options, :to => :config
+  delegate :frequency, :ruby, :environment_string, :timeout, :nice, :group, :bundler_options, to: :config
 
   def self.projects_to_build
     where("build_requested = ? or next_build_at is null or next_build_at <= ?", true, Environment.now)
   end
 
   def self.add(options)
-    project = Project.new(:name => options[:name], :url => options[:url], :branch => options[:branch], :scm => options[:scm])
+    project = Project.new(name: options[:name], url: options[:url], branch: options[:branch], scm: options[:scm])
     return if !project.valid?
     if project.checkout
       project.save!
@@ -75,11 +75,11 @@ class Project < ActiveRecord::Base
   end
 
   def new_build
-    self.builds.create!(:number => latest_build.number + 1, :previous_build_revision => latest_build.revision, :ruby => ruby, :environment_string => environment_string)
+    self.builds.create!(number: latest_build.number + 1, previous_build_revision: latest_build.revision, ruby: ruby, environment_string: environment_string)
   end
 
   def clean_up_older_builds
-    builds.where(:status => 'building').each { |b| b.update_attributes(:status => 'cancelled') }
+    builds.where(status: 'building').each { |b| b.update_attributes(status: 'cancelled') }
   end
 
   def after_build_runner
