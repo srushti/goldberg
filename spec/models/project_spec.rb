@@ -143,7 +143,7 @@ describe Project do
 
     it "preprocesses the codebase before calling build" do
       build = Build.new
-      project.should_receive(:new_build).with(:number => 1, :previous_build_revision => "", :ruby => anything, :environment_string => "").and_return(build)
+      project.should_receive(:new_build).and_return(build)
       build.should respond_to(:run)
       build.should_receive(:run)
 
@@ -187,22 +187,21 @@ describe Project do
 
     context "with changes" do
       let(:build) { Build.new }
-      before(:each) do
-        project.repository.should respond_to(:update)
-        project.repository.should_receive(:update).and_return(true)
-        build.should respond_to(:run)
-        build.should_receive(:run)
-      end
 
       it "creates a new build for a project with build number set to 1 in case of first build  and run it" do
-        project.should_receive(:new_build).with(hash_including(:number => 1)).and_return(build)
-        project.run_build
+        expect {
+          build = project.new_build
+          build.number.should eq(1)
+        }.to change(project.builds, :size).by(1)
       end
 
       it "creates a new build for a project with build number one greater than last build and run it" do
         project.builds << FactoryGirl.create(:build, :number => 5, :revision => "old_sha", :project => project)
-        project.should_receive(:new_build).with(hash_including(:number => 6, :previous_build_revision => "old_sha")).and_return(build)
-        project.run_build
+        expect{
+          build = project.new_build
+          build.number.should eq(6)
+          build.previous_build_revision.should eq('old_sha')
+        }.to change(project.builds, :size).by(1)
       end
 
       it "schedules the next build based on the project's configuration" do
@@ -210,7 +209,7 @@ describe Project do
         current_time = Time.now
         Time.stub(:now).and_return(current_time)
 
-        project.should_receive(:new_build).and_return(build)
+        project.should_receive(:new_build).and_return(double(run: nil, status: 'foo'))
         project.run_build
 
         Time.parse(project.reload.next_build_at.to_s).should == Time.parse((current_time + project.config.frequency.seconds).to_s)
@@ -219,11 +218,14 @@ describe Project do
       it "should read the environment variables from the config" do
         config = Project::Configuration.new.tap{ |c| c.stub(:environment_string).and_return("FOO=bar") }
         project.stub(:config).and_return(config)
-        project.should_receive(:new_build).with(hash_including(:environment_string => "FOO=bar")).and_return(build)
-        project.run_build
+        expect{
+          build = project.new_build
+          build.environment_string.should eq('FOO=bar')
+        }.to change(project.builds, :size).by(1)
       end
 
       it "should execute the post_build hooks from the config" do
+        build = double(run: nil, status: 'foo')
         callback_tester = double
         mail_notification = double
 
@@ -237,11 +239,12 @@ describe Project do
         latest_build = Build.new :number => 8, :status => 'prev_status'
         project.builds << latest_build
 
-        callback_tester.should_receive(:test_call).with(build, mail_notification,'prev_status')
+        callback_tester.should_receive(:test_call).with(build, mail_notification, 'prev_status')
 
         project.stub(:config).and_return(configuration)
         project.stub(:new_build).and_return(build)
 
+        project.update_attributes(build_requested: true)
         project.run_build
       end
     end
