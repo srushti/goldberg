@@ -1,4 +1,4 @@
-require "ostruct"
+require 'ostruct'
 require 'fileutils'
 
 class Build < ActiveRecord::Base
@@ -10,7 +10,7 @@ class Build < ActiveRecord::Base
 
   belongs_to :project
 
-  default_scope order('number DESC')
+  default_scope { order('number DESC') }
 
   def self.per_page
     50

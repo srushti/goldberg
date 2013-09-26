@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe BuildStatusMailer do
   context "build status mail" do

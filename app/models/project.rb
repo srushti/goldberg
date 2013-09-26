@@ -1,4 +1,4 @@
-require "fileutils"
+require 'fileutils'
 
 class Project < ActiveRecord::Base
   has_many :builds, :dependent => :destroy

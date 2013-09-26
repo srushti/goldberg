@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Build do
   it "is able to fake a build" do

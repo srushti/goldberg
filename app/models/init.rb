@@ -1,4 +1,4 @@
-require "fileutils"
+require 'fileutils'
 
 class Init
   def add(url, name, branch, scm)

@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Paths do
   context "projects" do

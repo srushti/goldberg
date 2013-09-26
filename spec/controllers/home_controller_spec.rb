@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe HomeController do
   [:index, :projects_partial].each do |action|

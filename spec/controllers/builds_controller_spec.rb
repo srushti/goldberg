@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe BuildsController do
   let(:project) { FactoryGirl.create(:project, :name => 'name') }

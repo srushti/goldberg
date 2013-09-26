@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Init do
   it "adds a new project" do
