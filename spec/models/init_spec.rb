@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe Init do
   it "adds a new project" do
-    Project.should_receive(:add).with(url: 'url', name: 'name', branch: 'master',scm: 'git').and_return(true)
+    Project.should_receive(:add).with(url: 'url', name: 'name', branch: 'master', scm: 'git').and_return(true)
     Goldberg.logger.should_receive(:info).with('name successfully added.')
     Init.new.add('url', 'name', 'master', 'git')
   end
 
   it "adds a new project with a custom command" do
-    Project.should_receive(:add).with(url: 'url', name: 'name', branch: 'master',scm: 'svn').and_return(true)
+    Project.should_receive(:add).with(url: 'url', name: 'name', branch: 'master', scm: 'svn').and_return(true)
     Goldberg.logger.should_receive(:info).with('name successfully added.')
     Init.new.add('url', 'name', 'master', 'svn')
   end
@@ -16,7 +16,7 @@ describe Init do
   it "reports failure in adding a project" do
     Project.should_receive(:add).and_return(false)
     Goldberg.logger.should_receive(:info).with("There was problem adding the project.")
-    Init.new.add('url', 'name', 'master','svn')
+    Init.new.add('url', 'name', 'master', 'svn')
   end
 
   it "removes the specified project" do

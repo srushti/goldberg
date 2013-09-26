@@ -1,7 +1,7 @@
 module BuildsHelper
   def revision_number_text(build)
     if build.project.github_url
-      link_to "#{build.revision.slice(0,6)}", "#{build.project.github_url}/commit/#{build.revision}", class: 'external-link'
+      link_to "#{build.revision.slice(0, 6)}", "#{build.project.github_url}/commit/#{build.revision}", class: 'external-link'
     else
       build.revision.slice(0, 6)
     end

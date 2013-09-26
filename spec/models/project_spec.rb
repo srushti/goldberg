@@ -271,9 +271,9 @@ describe Project do
   describe "culprit_revision_range" do
     it "returns build which originally failed " do
       project = FactoryGirl.create(:project)
-      passed_build = FactoryGirl.create(:build, project: project, status: 'passed',revision: 'passed1')
-      culprit_build = FactoryGirl.create(:build, project: project, status: 'failed',revision: 'failed1')
-      innocent_build = FactoryGirl.create(:build, project: project, status: 'failed',revision: 'failed2')
+      passed_build = FactoryGirl.create(:build, project: project, status: 'passed', revision: 'passed1')
+      culprit_build = FactoryGirl.create(:build, project: project, status: 'failed', revision: 'failed1')
+      innocent_build = FactoryGirl.create(:build, project: project, status: 'failed', revision: 'failed2')
       project.culprit_revision_range.should == [innocent_build, culprit_build]
     end
 

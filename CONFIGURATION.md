@@ -40,20 +40,20 @@ The callbacks are part of goldberg_config.rb
      #Goldberg callbacks
     Project.configure do |config|
 
-      config.on_build_completion do |build,notification,previous_build_status|
+      config.on_build_completion do |build, notification, previous_build_status|
         # sending mail
         notification.from('from@example.com').to('to@example.com').with_subject("build for #{build.project.name} #{build.status}").send
       end
 
-      config.on_build_success do |build,notification|
+      config.on_build_success do |build, notification|
         # code to deploy on staging
       end
 
-      config.on_build_failure do |build,notification|
+      config.on_build_failure do |build, notification|
         # post to IRC channel & send mail
       end
 
-      config.on_build_fixed do |build,notification|
+      config.on_build_fixed do |build, notification|
         # post to IRC channel & deploy on staging
       end
     end

@@ -1,5 +1,5 @@
 class Repository
-  def initialize(code_path, url, branch,scm)
+  def initialize(code_path, url, branch, scm)
     @code_path = code_path
     @url = url
     @branch = branch
