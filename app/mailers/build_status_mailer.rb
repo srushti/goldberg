@@ -1,5 +1,5 @@
 class BuildStatusMailer < ActionMailer::Base
-  default from: "build@goldberg.c42.in"
+  default from: "build@goldberg.ambekallu.com"
 
   def status_mail(from, to, subject, build)
     @build = build

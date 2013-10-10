@@ -21,7 +21,7 @@ Goldberg generates feeds that work with all CruiseControl-compatible monitors li
 
 ### We are nice people, talk to us!
 
-Please add an issue on http://github.com/c42/goldberg/issues if you find a bug, or reach us through the following channels for any help:
+Please add an issue on http://github.com/srushti/goldberg/issues if you find a bug, or reach us through the following channels for any help:
 
 -   Twitter: [@GoldbergCI](http://twitter.com/GoldbergCI 'GoldbergCI')
 -   email: goldberg@ambekallu.com

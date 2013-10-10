@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe Repository do
-  let(:repo) { Repository.new("code_path", "git://github.com/c42/goldberg.git", "production", "git") }
+  let(:repo) { Repository.new("code_path", "git://github.com/srushti/goldberg.git", "production", "git") }
 
   it "checks out the code at the given path and return true on success" do
-    expect_command("git clone --depth 1 git://github.com/c42/goldberg.git code_path --branch production", execute: true)
+    expect_command("git clone --depth 1 git://github.com/srushti/goldberg.git code_path --branch production", execute: true)
     repo.checkout.should be_true
   end
 

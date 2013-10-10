@@ -1,10 +1,10 @@
-       
+
 ### Installing Goldberg
 
 1. **Clone and setup the app:**
 
     ```
-    git clone git://github.com/c42/goldberg.git
+    git clone git://github.com/srushti/goldberg.git
     cd goldberg
     bundle install
     rake db:setup
@@ -16,7 +16,7 @@
     `
     rails server
     `
- 
+
   For production deployment, deploy Goldberg as a typical Rails application behind Apache/nginx+Passenger.
 
 3. **Start the poller:**
@@ -49,4 +49,4 @@ By default it assumes the <code>master</code> branch. Take a look at CONFIGURATI
 Goldberg is currently tested only on Linux/Mac OS X but should run on JRuby on Windows.
 
 If you're on Ubuntu, you might need `sudo apt-get install sqlite3 libsqlite3-dev libncursesw5-dev`
-       
+

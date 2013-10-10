@@ -20,7 +20,7 @@ Every project in Goldberg can have its own custom configuration by checking in a
         config.command = 'make'                                   # To be used if you're using anything other than rake
         config.rake_task = 'ci'                                   # To be used if your CI build runs something other than the default rake.
                                                                   # Not relevant if you're using config.command.
-        config.group = 'c42'                                      # Running a lot of projects on one server? Use this to logically group them.
+        config.group = 'goldberg'                                 # Running a lot of projects on one server? Use this to logically group them.
         config.use_bundle_exec = true                             # Run 'bundle exec rake', recommended for Rails projects
         config.bundler_options = '--without deployment mac'        # Command-line options for bundle install
       end
