@@ -2,19 +2,19 @@ require "spec_helper"
 
 describe Init do
   it "adds a new project" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master',:scm => 'git', :project_environment_string => "").and_return(true)
+    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master',:scm => 'git', :local_environment_variables => {}).and_return(true)
     Goldberg.logger.should_receive(:info).with('name successfully added.')
     Init.new.add('url', 'name', 'master', 'git', '')
   end
 
   it "adds a new project with custom environment variable" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master', :scm => 'git', :project_environment_string => 'RACK_ENV=production').and_return(true)
+    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master', :scm => 'git', :local_environment_variables => {"RACK_ENV" => 'production'}).and_return(true)
     Goldberg.logger.should_receive(:info).with('name successfully added.')
     Init.new.add('url', 'name', 'master', 'git', 'RACK_ENV=production')
   end
 
   it "adds a new project with a custom command" do
-    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master',:scm => 'svn', :project_environment_string => "").and_return(true)
+    Project.should_receive(:add).with(:url => 'url', :name => 'name', :branch => 'master',:scm => 'svn', :local_environment_variables => {}).and_return(true)
     Goldberg.logger.should_receive(:info).with('name successfully added.')
     Init.new.add('url', 'name', 'master', 'svn', '')
   end

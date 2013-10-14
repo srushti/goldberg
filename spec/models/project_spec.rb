@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Project do
   before(:each) do
-    Paths.stub(:projects).and_return('some_path')
+    Paths.stub(:projects).and_return(ENV['HOME'] + '/some_path')
   end
 
   describe "attribute validation" do
@@ -17,14 +17,30 @@ describe Project do
 
   describe "lifecycle" do
     context "adding a project" do
+
+      before(:each) do
+        FileUtils.cd(ENV['HOME']) do
+          Dir.mkdir('some_path') unless File.exists?('some_path')
+          Dir.mkdir('some_path/some_project') unless File.exists?('some_path/some_project')
+          FileUtils.touch 'some_path/some_project/goldberg_config.rb'
+        end
+      end
+
       it "creates a new projects and checks out the code for it" do
-        expect_command('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master', :execute => true)
-        lambda { Project.add({:url => "git://some.url.git", :name => 'some_project', :branch => 'master', :scm => 'git'}) }.should change(Project, :count).by(1)
+        code_path = ENV['HOME'] + '/some_path/some_project/code'
+        expect_command('git clone --depth 1 git://some.url.git ' + code_path + ' --branch master', :execute => true)
+        lambda { Project.add({:url => "git://some.url.git", :name => 'some_project', :branch => 'master', :scm => 'git', :local_environment_variables => {}}) }.should change(Project, :count).by(1)
       end
 
       it "doesn't do anything if a project already exists with the same name" do
         FactoryGirl.create(:project, :name => 'foo')
         lambda { Project.add(:name => 'foo').should be_nil }.should_not change(Project, :count)
+      end
+
+      after(:each) do
+        FileUtils.cd(ENV['HOME']) do
+          FileUtils.rmtree 'some_path'
+        end
       end
     end
 
@@ -52,13 +68,15 @@ describe Project do
   describe "checkout" do
     it "checks out the code for the project" do
       project = Project.new(:url => "git://some.url.git", :name => 'some_project', :branch => 'master', :scm => 'git')
-      expect_command('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master', :execute => true)
+      code_path = ENV['HOME'] + '/some_path/some_project/code'
+      expect_command('git clone --depth 1 git://some.url.git ' + code_path + ' --branch master', :execute => true)
       project.checkout
     end
 
     it "doesn't create the project if the checkout fails" do
+      code_path = ENV['HOME'] + '/some_path/some_project/code'
       lambda {
-        expect_command('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master', :execute => false)
+        expect_command('git clone --depth 1 git://some.url.git ' + code_path + ' --branch master', :execute => false)
         Project.add(:url => 'git://some.url.git', :name => 'some_project', :branch => 'master', :scm => 'git')
       }.should_not change(Project, :count)
     end
@@ -224,8 +242,7 @@ describe Project do
       end
 
       it "should concatenate the environment_string with project_environment_string set while adding new project" do
-        project.project_environment_string = 'RACK_ENV=production'
-        config = Project::Configuration.new.tap{ |c| c.stub(:environment_string).and_return("FOO=bar") }
+        config = Project::Configuration.new.tap{ |c| c.stub(:environment_string).and_return("RACK_ENV=production FOO=bar") }
         project.stub(:config).and_return(config)
         project.should_receive(:new_build).with(hash_including(:environment_string => "RACK_ENV=production FOO=bar")).and_return(build)
         project.run_build

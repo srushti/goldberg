@@ -2,7 +2,7 @@ require "fileutils"
 
 class Init
   def add(url, name, branch, scm, env)
-    if Project.add(:url => url, :name => name, :branch => branch, :scm => scm, :project_environment_string => env)
+    if Project.add(:url => url, :name => name, :branch => branch, :scm => scm, :local_environment_variables => map_env(env))
       Goldberg.logger.info "#{name} successfully added."
     else
       Goldberg.logger.info "There was problem adding the project."
@@ -40,5 +40,14 @@ class Init
       Goldberg.logger.info "Sleeping for #{GlobalConfig.frequency} seconds."
       Environment.sleep(GlobalConfig.frequency)
     end
+  end
+
+  def map_env(env_string)
+    h = {}
+    env_string.split(" ").each do |x| 
+      k,v = x.split('=')
+      h[k] = v
+    end
+    h
   end
 end
