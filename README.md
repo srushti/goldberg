@@ -1,5 +1,3 @@
-<a href='http://goldberg.ambekallu.com/projects/goldberg_193'><img src='http://goldberg.ambekallu.com/projects/goldberg_193.png' alt='Goldberg Build Status'></a>
-
 # Goldberg
 
 Goldberg is a lightweight Continuous Integration Server that works for any language. It also supports RVM and Bundler for Ruby Projects.
@@ -12,7 +10,7 @@ Please refer to INSTALLATION.md. More configuration options are in CONFIGURATION
 
 ### Desktop Notification of Build Status
 
-Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml`. eg: [cc.xml](http://goldberg.ambekallu.com/cc.xml)
+Goldberg generates feeds that work with all CruiseControl-compatible monitors like [CCMenu (mac)][], [BuildNotify (linux)][] & CCTray (windows). The feed is located in the root and is named `cc.xml`.
 
 ### Help
 
@@ -32,7 +30,6 @@ Irony!
 
 [![Goldberg](https://upload.wikimedia.org/wikipedia/en/8/88/Rubenvent.jpg "Rube Goldberg machine")](http://en.wikipedia.org/wiki/Rube_Goldberg_machine)
 
-  [Goldberg on Goldberg]: http://goldberg.ambekallu.com
   [CCMenu (mac)]: http://ccmenu.sourceforge.net/
   [BuildNotify (linux)]: https://bitbucket.org/Anay/buildnotify/wiki/Home
 
