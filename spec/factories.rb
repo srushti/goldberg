@@ -4,6 +4,7 @@ FactoryGirl.define do
     p.url  { |project| "git://domain/#{project.name}.git" }
     p.scm 'git'
     p.branch 'master'
+    p.env_string ''
   end
 
   factory :build do |b|

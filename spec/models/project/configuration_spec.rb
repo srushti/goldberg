@@ -38,7 +38,7 @@ describe Project::Configuration do
 
     it "get formatted into a string" do
       config.environment_variables = { "foo" => 1, "bar" => 2 }
-      config.environment_string.should == "foo=1 bar=2"
+      config.environment_string.should == 'foo=1 bar=2'
     end
   end
 
