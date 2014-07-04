@@ -9,17 +9,17 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20110629172404) do
+ActiveRecord::Schema.define(version: 20140611165611) do
 
   create_table "builds", force: true do |t|
     t.integer  "project_id"
     t.integer  "number"
     t.string   "revision"
     t.string   "change_list"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "status"
     t.string   "ruby"
     t.string   "environment_string"
@@ -28,12 +28,13 @@ ActiveRecord::Schema.define(version: 20110629172404) do
   create_table "projects", force: true do |t|
     t.string   "name"
     t.string   "url"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "build_requested", default: false
     t.string   "branch"
     t.datetime "next_build_at"
     t.string   "scm"
+    t.string   "env_string",      default: ""
   end
 
 end

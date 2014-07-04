@@ -26,6 +26,18 @@ describe Project do
         FactoryGirl.create(:project, name: 'foo')
         lambda { Project.add(name: 'foo').should be_nil }.should_not change(Project, :count)
       end
+
+      it "creates a new project with custom env_string if options while creating consists of env vars" do
+        expect_command('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master', execute: true)
+        lambda { Project.add({url: "git://some.url.git", name: 'some_project', branch: 'master', scm: 'git', env: ['foo=bar']}) }.should change(Project, :count).by(1)
+        Project.find_by_name('some_project').env_string.should == {'foo' => 'bar'}.to_s
+      end
+
+      it "creates a new project empty hash env_string when no env vars are passed" do
+        expect_command('git clone --depth 1 git://some.url.git some_path/some_project/code --branch master', execute: true)
+        lambda { Project.add({url: "git://some.url.git", name: 'some_project', branch: 'master', scm: 'git', env: []}) }.should change(Project, :count).by(1)
+        Project.find_by_name('some_project').env_string.should == {}.to_s
+      end
     end
 
     context "removing a project" do
@@ -224,6 +236,12 @@ describe Project do
         }.to change(project.builds, :size).by(1)
       end
 
+      it "should read the custom environment variables from the project instance" do
+        new_project = FactoryGirl.create(:project, name: "goldberg_custom", env_string: {"zoo" => "monkey", "air" => "plane"}.to_s)
+        build = new_project.new_build
+        build.environment_string.should eq('zoo=monkey air=plane')
+      end
+
       it "should execute the post_build hooks from the config" do
         build = double(run: nil, status: 'foo')
         callback_tester = double
@@ -248,6 +266,13 @@ describe Project do
         project.run_build
       end
     end
+  end
+
+  it "should configure custom env variables to given configuration object" do
+    config = Project::Configuration.new
+    project = FactoryGirl.create(:project, env_string: {"foo" => "bar", "test" => "run build"}.to_s)
+    project.config_custom_env(config)
+    config.environment_variables.should == { "foo" => "bar", "test" => "run build" }
   end
 
   it "is able to return the latest build" do
@@ -458,6 +483,23 @@ describe Project do
 
     it "detects ssh accessed url" do
       FactoryGirl.create(:project, url: 'git@github.com:some_user/some_repo.git').github_url.should == 'http://github.com/some_user/some_repo'
+    end
+  end
+
+  describe "environment variables" do
+    it "should convert list of environment variables into hash" do
+      env_list=["RAILS_ENV=test","foo=bar"]
+      Project.project_env(env_list).should == {"RAILS_ENV" => "test", "foo" => "bar"}
+    end
+
+    it "should return empty hash if list is empty" do
+      env_list=[]
+      Project.project_env(env_list).should == {}
+    end
+
+    it "should store just key with empty value if environment variable is not in format key=value" do
+      env_list=["key"]
+      Project.project_env(env_list).should == {"key" => ""}
     end
   end
 end

@@ -17,12 +17,23 @@ class Project < ActiveRecord::Base
   end
 
   def self.add(options)
-    project = Project.new(name: options[:name], url: options[:url], branch: options[:branch], scm: options[:scm])
+    project = Project.new(name: options[:name], url: options[:url], branch: options[:branch], scm: options[:scm], env_string: project_env(options[:env]).to_s)
     return if !project.valid?
     if project.checkout
       project.save!
       project
     end
+  end
+
+  def self.project_env(env_list)
+    env_vars = {}
+    unless env_list.blank?
+      env_list.each do |env_var|
+        tmp = env_var.split('=')
+        env_vars.store(tmp[0], tmp[1] || '')
+      end
+    end
+    env_vars
   end
 
   def remove
@@ -133,7 +144,14 @@ class Project < ActiveRecord::Base
         eval(config_code)
       end
     end
+    config_custom_env(self.class.temp_config)
     self.class.temp_config
+  end
+
+  def config_custom_env(configuration)
+    if(self.env_string.present?)
+      configuration.environment_variables=eval(self.env_string)
+    end
   end
 
   def self.configure
